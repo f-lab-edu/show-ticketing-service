@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.show.showticketingservice.mapper.MemberMapper">
+    <insert id="insertMember">
+        insert
+        into user (id, password, name, phoneNum, email, address)
+        values (#{id}, #{password}, #{name}, #{phoneNum}, #{email}, '')
+    </insert>
+
+    <select id="selectMemberId" resultType="com.show.showticketingservice.model.MemberDTO">
+        select id from user where id = #{id}
+    </select>
+
+    <select id="selectMemberEmail" resultType="com.show.showticketingservice.model.MemberDTO">
+        select id from user where id = #{email}
+    </select>
+</mapper>
