@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MemberRepository {
+
     @Autowired
     MemberMapper memberMapper;
 
@@ -21,4 +22,5 @@ public class MemberRepository {
     public MemberDTO selectMemberEmail(String email) {
         return memberMapper.selectMemberEmail(email);
     }
+
 }

@@ -2,9 +2,8 @@ package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.MemberDTO;
 import com.show.showticketingservice.service.MemberService;
-import org.mindrot.jbcrypt.BCrypt;
+import com.show.showticketingservice.utils.Responses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -12,25 +11,25 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
-    @PostMapping("/membership")
-    public ResponseEntity<Void> addMember(@Valid @RequestBody MemberDTO memberDTO, BindingResult bindingResult) {
+    @PostMapping("/memberships")
+    public ResponseEntity<Void> addMember(@RequestBody @Valid MemberDTO memberDTO, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return Responses.BAD_REQUEST;
         }
 
-        if (memberService.checkMemberId(memberDTO.getId()) || memberService.checkMemberEmail(memberDTO.getEmail())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (memberService.checkDuplication(memberDTO)) {
+            return Responses.CONFLICT;
         }
 
-        String hashPassword = BCrypt.hashpw(memberDTO.getPassword(), BCrypt.gensalt());
-        memberDTO.setPassword(hashPassword);
         memberService.insertMember(memberDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return Responses.CREATED;
     }
+
 }

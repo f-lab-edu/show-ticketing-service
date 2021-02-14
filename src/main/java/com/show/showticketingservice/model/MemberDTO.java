@@ -1,33 +1,28 @@
 package com.show.showticketingservice.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Getter @Setter
+@Getter @ToString @AllArgsConstructor
 public class MemberDTO {
 
-    @NotEmpty(message = "id를 입력하세요 (5~10자리)")
+    @NotNull(message = "id를 입력하세요 (5~10자리)")
     @Size(min = 5, max = 10)
-    String id;
+    private final String id;
 
-    @NotEmpty(message = "비밀번호를 입력하세요 (8~16자리)")
+    @NotNull(message = "비밀번호를 입력하세요 (8~16자리)")
     @Size(min = 8, max = 16)
-    String password;
+    private final String password;
 
-    @NotEmpty(message = "이름을 입력하세요")
-    String name;
+    @NotNull(message = "이름을 입력하세요")
+    private final String name;
 
-    @NotEmpty(message = "전화번호를 입력하세요")
-    String phoneNum;
+    @NotNull(message = "전화번호를 입력하세요")
+    private final String phoneNum;
 
-    @NotEmpty(message = "이메일을 입력하세요")
-    @Email(message = "이메일 형식에 맞게 입력해주세요")
-    String email;
+    @NotNull(message = "이메일을 입력하세요")
+    private final String email;
 
-    String address;
 }

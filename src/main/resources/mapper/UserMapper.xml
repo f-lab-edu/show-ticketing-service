@@ -3,16 +3,16 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.MemberMapper">
     <insert id="insertMember">
-        insert
-        into user (id, password, name, phoneNum, email, address)
-        values (#{id}, #{password}, #{name}, #{phoneNum}, #{email}, '')
+        INSERT
+        INTO USER (ID, PASSWORD, NAME, PHONENUM, EMAIL, ADDRESS)
+        VALUES (#{id}, #{password}, #{name}, #{phoneNum}, #{email}, '')
     </insert>
 
     <select id="selectMemberId" resultType="com.show.showticketingservice.model.MemberDTO">
-        select id from user where id = #{id}
+        SELECT * FROM USER WHERE ID = #{id}
     </select>
 
     <select id="selectMemberEmail" resultType="com.show.showticketingservice.model.MemberDTO">
-        select id from user where id = #{email}
+        SELECT * FROM USER WHERE ID = #{email}
     </select>
 </mapper>
