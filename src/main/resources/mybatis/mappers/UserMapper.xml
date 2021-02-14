@@ -8,4 +8,9 @@
         VALUES(#{id}, #{password}, #{name}, #{phoneNum}, #{email}, #{address})
     </insert>
 
+    <select id="idDuplicated" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM User
+        WHERE id = #{id}
+    </select>
+
 </mapper>

@@ -1,19 +1,29 @@
 package com.show.showticketingservice.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 public class User {
 
-    private String id;
-    private String password;
-    private String name;
-    private String phoneNum;
-    private String email;
-    private String address;
+    private final String id;
+    private final String password;
+    private final String name;
+    private final String phoneNum;
+    private final String email;
+    private final String address;
 
+    public User pwEncryptedUser(String encryptedPw) {
+        return builder()
+                .id(getId())
+                .password(encryptedPw)
+                .name(getName())
+                .phoneNum(getPhoneNum())
+                .email(getEmail())
+                .address(getAddress())
+                .build();
+    }
 }

@@ -6,7 +6,8 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserMapper {
 
-    int insertUser(User user);
+    void insertUser(User user);
 
+    int idDuplicated(String id);
 }
 
