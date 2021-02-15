@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -18,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create_account")
-    public ResponseEntity<Void> insertUser(@RequestBody User user) {
+    public ResponseEntity<Void> insertUser(@RequestBody @Valid User user) {
 
         if (userService.isIdDuplicated(user.getId()))
             return HttpStatusResponse.HTTP_STATUS_CONFLICT;
