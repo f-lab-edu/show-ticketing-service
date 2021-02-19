@@ -24,8 +24,8 @@ public class UserController {
         return HttpStatusResponse.HTTP_STATUS_CONFLICT;
     }
 
-    @GetMapping("/idCheck/{id}")
-    public ResponseEntity<Void> checkIdDuplicated(@PathVariable String id) {
+    @GetMapping("/idCheck")
+    public ResponseEntity<Void> checkIdDuplicated(@RequestParam String id) {
         if (userService.isIdDuplicated(id))
             return HttpStatusResponse.HTTP_STATUS_CONFLICT;
 
