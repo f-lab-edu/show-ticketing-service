@@ -35,7 +35,7 @@ class UserControllerTest {
     @Test
     public void insertUser() throws Exception {
 
-        User user = new User("user1", "pw1", "user one", "010-1111-1111", "user1@example.com", "Seoul");
+        User user = new User("user1", "pwAB@1", "user one", "010-1111-1111", "user1@example.com", "Seoul");
 
         String content = objectMapper.writeValueAsString(user);
 

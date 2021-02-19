@@ -2,14 +2,14 @@ package com.show.showticketingservice.repository;
 
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public void insertUser(User user) {
         userMapper.insertUser(user);
