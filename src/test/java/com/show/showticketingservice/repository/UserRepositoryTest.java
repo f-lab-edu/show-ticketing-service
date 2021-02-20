@@ -52,14 +52,4 @@ public class UserRepositoryTest {
         assertThat(result, greaterThan(0));
     }
 
-    @Test
-    @DisplayName("회원가입을 할때 email이 중복될 경우 db에서 중복된 숫자를 반환합니다.")
-    public void checkDuplicateEmailTest() {
-
-        insertMember();
-
-        int result = userRepository.selectUserEmail(testMember.getEmail());
-
-        assertThat(result, greaterThan(0));
-    }
 }

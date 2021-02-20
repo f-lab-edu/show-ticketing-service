@@ -2,22 +2,21 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.repository.UserRepository;
-import com.show.showticketingservice.utils.hashPassword.PasswordBcryptImple;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.show.showticketingservice.utils.encoder.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordBcryptImple passwordBcryptImple;
+    private final PasswordEncoder passwordEncoder;
 
     public int insertUser(UserDTO userDTO) {
 
-        String hashPassword = passwordBcryptImple.encode(userDTO.getPassword());
+        String hashPassword = passwordEncoder.encode(userDTO.getPassword());
 
         UserDTO hashUserDTO = UserDTO.builder()
                 .id(userDTO.getId())
@@ -35,16 +34,6 @@ public class UserService {
         int result = userRepository.selectUserId(id);
 
         return result != 0;
-    }
-
-    public boolean isDuplicateUserEmail(String email) {
-        int result = userRepository.selectUserEmail(email);
-
-        return result != 0;
-    }
-
-    public boolean isCheckDuplication(UserDTO userDTO) {
-        return isDuplicateUserId(userDTO.getId()) || isDuplicateUserEmail(userDTO.getEmail());
     }
 
 }

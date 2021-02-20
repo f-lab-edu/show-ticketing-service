@@ -1,10 +1,10 @@
-package com.show.showticketingservice.utils.hashPassword;
+package com.show.showticketingservice.utils.encoder;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PasswordBcryptImple implements PasswordBycrypt {
+public class BCryptPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(String password) {

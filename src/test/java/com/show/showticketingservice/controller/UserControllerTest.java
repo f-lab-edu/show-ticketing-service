@@ -39,7 +39,7 @@ public class UserControllerTest {
 
         String content = objectMapper.writeValueAsString(userDTO);
 
-        mockMvc.perform(post("/users/memberships")
+        mockMvc.perform(post("/users/signup")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -69,30 +69,7 @@ public class UserControllerTest {
 
         String content = objectMapper.writeValueAsString(userDTO);
 
-        mockMvc.perform(post("/users/memberships")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @DisplayName("중복된 email 회원이 있을 경우 status code 409를 린턴합니다.")
-    public void checkDuplicateEmailUser() throws Exception {
-        testSingUp();
-
-        userDTO = UserDTO.builder()
-                .id("he4616")
-                .password("881D!d4d4")
-                .name("서용")
-                .email("tls7gkr@naver.com")
-                .phoneNum("010-4500-4567")
-                .address("부천시 소사구")
-                .build();
-
-        String content = objectMapper.writeValueAsString(userDTO);
-
-        mockMvc.perform(post("/users/memberships")
+        mockMvc.perform(post("/users/signup")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

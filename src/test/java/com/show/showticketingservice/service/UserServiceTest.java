@@ -36,11 +36,4 @@ public class UserServiceTest {
         assertEquals(userService.isDuplicateUserId(testMember.getId()), true);
     }
 
-    @Test
-    @DisplayName("중복된 이메일이 있을 경우 true를 리턴합니다.")
-    public void checkDuplicateEmail() {
-        when(userService.isDuplicateUserEmail(testMember.getEmail())).thenReturn(true);
-
-        assertEquals(userService.isDuplicateUserEmail(testMember.getEmail()), true);
-    }
 }

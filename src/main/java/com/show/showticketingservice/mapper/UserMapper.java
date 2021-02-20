@@ -10,5 +10,4 @@ public interface UserMapper {
 
     int selectUserId(String id);
 
-    int selectUserEmail(String email);
 }

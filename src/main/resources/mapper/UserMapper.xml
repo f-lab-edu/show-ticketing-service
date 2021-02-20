@@ -12,7 +12,4 @@
         SELECT count(id) FROM user WHERE id = #{id}
     </select>
 
-    <select id="selectUserEmail" resultType="int">
-        SELECT count(email) FROM user WHERE email = #{email}
-    </select>
 </mapper>

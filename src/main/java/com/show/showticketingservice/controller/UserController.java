@@ -3,22 +3,22 @@ package com.show.showticketingservice.controller;
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.service.UserService;
 import com.show.showticketingservice.utils.Responses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @PostMapping("/memberships")
+    @PostMapping("/signup")
     public ResponseEntity<Void> addMember(@RequestBody @Valid UserDTO userDTO) {
 
-        if (userService.isCheckDuplication(userDTO)) {
+        if (userService.isDuplicateUserId(userDTO.getId())) {
             return Responses.CONFLICT;
         }
 
