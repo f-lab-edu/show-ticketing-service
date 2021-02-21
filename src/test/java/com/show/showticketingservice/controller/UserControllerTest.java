@@ -1,6 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.model.UserDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private UserDTO userDTO;
+
+    private LoginDTO loginDTO;
 
     @Autowired
     private MockMvc mockMvc;
@@ -74,6 +77,54 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("로그인 성공시 status code 200을 리턴합니다.")
+    public void checkLoginUserSuccess() throws Exception {
+        testSingUp();
+
+        loginDTO = new LoginDTO("sin7416", "123D!d4d4");
+
+        String content = objectMapper.writeValueAsString(loginDTO);
+
+        mockMvc.perform(post("/users/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("비밀번호가 일치하지 않을시 status code 401을 리턴합니다.")
+    public void checkLoginUserPasswordFail() throws Exception {
+
+        testSingUp();
+
+        loginDTO = new LoginDTO("sin7416", "123456!A");
+
+        String content = objectMapper.writeValueAsString(loginDTO);
+
+        mockMvc.perform(post("/users/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("아이디가 존재하지 않을시 status code 401을 리턴합니다.")
+    public void checkLoginExistentUserIdFail() throws Exception {
+
+        loginDTO = new LoginDTO("he7466", "123456!A");
+
+        String content = objectMapper.writeValueAsString(loginDTO);
+
+        mockMvc.perform(post("/users/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 
 }

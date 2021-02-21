@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.repository.UserRepository;
 import com.show.showticketingservice.utils.encoder.PasswordEncoder;
@@ -34,6 +35,16 @@ public class UserService {
         int result = userRepository.selectUserId(id);
 
         return result != 0;
+    }
+
+    public boolean isCheckLoginUserId(LoginDTO loginDTO) {
+        String hashPassword = userRepository.selectLoginUserId(loginDTO.getId());
+
+        if(hashPassword == null) {
+            return false;
+        }
+
+        return passwordEncoder.isMatch(loginDTO.getPassword(), hashPassword);
     }
 
 }

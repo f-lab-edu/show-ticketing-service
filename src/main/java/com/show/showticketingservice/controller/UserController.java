@@ -1,5 +1,6 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.service.UserService;
 import com.show.showticketingservice.utils.Responses;
@@ -18,12 +19,22 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Void> addMember(@RequestBody @Valid UserDTO userDTO) {
 
-        if (userService.isDuplicateUserId(userDTO.getId())) {
+        if(userService.isDuplicateUserId(userDTO.getId())) {
             return Responses.CONFLICT;
         }
 
         userService.insertUser(userDTO);
         return Responses.CREATED;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> checkLogin(@RequestBody LoginDTO loginDTO) {
+
+        if(!userService.isCheckLoginUserId(loginDTO)) {
+            return Responses.UNAUTHORIZED;
+        }
+
+        return Responses.OK;
     }
 
 }
