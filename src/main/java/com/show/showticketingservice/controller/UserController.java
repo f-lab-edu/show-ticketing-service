@@ -11,12 +11,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<Void> insertUser(@RequestBody @Valid User user) {
         if (userService.signUp(user))
             return HttpStatusResponse.HTTP_STATUS_CREATED;
@@ -24,9 +23,9 @@ public class UserController {
         return HttpStatusResponse.HTTP_STATUS_CONFLICT;
     }
 
-    @GetMapping("/{id}/exists")
-    public ResponseEntity<Void> checkIdDuplicated(@PathVariable String id) {
-        if (userService.isIdDuplicated(id))
+    @GetMapping("/user-exists/{userId}")
+    public ResponseEntity<Void> checkIdDuplicated(@PathVariable String userId) {
+        if (userService.isIdDuplicated(userId))
             return HttpStatusResponse.HTTP_STATUS_CONFLICT;
 
         return HttpStatusResponse.HTTP_STATUS_OK;

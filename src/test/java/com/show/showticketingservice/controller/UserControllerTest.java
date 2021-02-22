@@ -72,7 +72,7 @@ class UserControllerTest {
     @Test
     @DisplayName("ID 중복체크 시 중복되지 않을 때 Http Status 200 (Ok) 리턴")
     public void idNotDuplicated() throws Exception {
-        mvc.perform(get("/users/newId1/exists"))
+        mvc.perform(get("/user-exists/newId1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -82,7 +82,7 @@ class UserControllerTest {
     public void idDuplicated() throws Exception {
         insertTestUser(testUser);
 
-        mvc.perform(get("/users/testId1/exists"))
+        mvc.perform(get("/user-exists/testId1"))
                 .andExpect(status().isConflict())
                 .andDo(print());
     }
