@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.NotUserException;
 import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.repository.UserRepository;
@@ -37,14 +38,14 @@ public class UserService {
         return result != 0;
     }
 
-    public boolean isCheckLoginUserId(LoginDTO loginDTO) {
-        String hashPassword = userRepository.selectLoginUserId(loginDTO.getId());
+    public String checkUser(LoginDTO loginDTO) throws NotUserException {
+        String hashPassword = userRepository.selectUserPassword(loginDTO.getId());
 
-        if(hashPassword == null) {
-            return false;
+        if(hashPassword == null || !passwordEncoder.isMatch(loginDTO.getPassword(), hashPassword)) {
+            throw new NotUserException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
 
-        return passwordEncoder.isMatch(loginDTO.getPassword(), hashPassword);
+        return loginDTO.getId();
     }
 
 }

@@ -81,7 +81,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("로그인 성공시 status code 200을 리턴합니다.")
-    public void checkLoginUserSuccess() throws Exception {
+    public void loginUserSuccess() throws Exception {
         testSingUp();
 
         loginDTO = new LoginDTO("sin7416", "123D!d4d4");
@@ -96,8 +96,8 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("비밀번호가 일치하지 않을시 status code 401을 리턴합니다.")
-    public void checkLoginUserPasswordFail() throws Exception {
+    @DisplayName("비밀번호가 일치하지 않을시 status code 400을 리턴합니다.")
+    public void loginUserPasswordFail() throws Exception {
 
         testSingUp();
 
@@ -109,12 +109,12 @@ public class UserControllerTest {
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName("아이디가 존재하지 않을시 status code 401을 리턴합니다.")
-    public void checkLoginExistentUserIdFail() throws Exception {
+    public void loginExistentUserIdFail() throws Exception {
 
         loginDTO = new LoginDTO("he7466", "123456!A");
 
@@ -124,7 +124,7 @@ public class UserControllerTest {
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
 }

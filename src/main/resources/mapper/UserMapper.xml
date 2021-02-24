@@ -12,7 +12,7 @@
         SELECT count(id) FROM user WHERE id = #{id}
     </select>
 
-    <select id="selectLoginUserId" resultType="string">
+    <select id="selectUserPassword" resultType="string">
         SELECT password FROM user WHERE id = #{id}
     </select>
 

@@ -10,6 +10,6 @@ public interface UserMapper {
 
     int selectUserId(String id);
 
-    String selectLoginUserId(String id);
+    String selectUserPassword(String id);
 
 }

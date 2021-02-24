@@ -19,8 +19,8 @@ public class UserRepository {
         return userMapper.selectUserId(id);
     }
 
-    public String selectLoginUserId(String id) {
-        return userMapper.selectLoginUserId(id);
+    public String selectUserPassword(String id) {
+        return userMapper.selectUserPassword(id);
     }
 
 }
