@@ -1,6 +1,5 @@
 package com.show.showticketingservice.service.loginService;
 
-import com.show.showticketingservice.exception.NotUserException;
 import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.service.UserService;
 import lombok.AllArgsConstructor;
@@ -12,15 +11,15 @@ import static com.show.showticketingservice.utils.constant.UserConstant.LOGIN_ID
 
 @Service
 @AllArgsConstructor
-public class LoginServiceSession implements LoginService{
+public class SessionLoginService implements LoginService{
 
     private final UserService userService;
 
     private final HttpSession httpSession;
 
-    public void login(LoginDTO loginDTO) throws NotUserException {
+    public void login(LoginDTO loginDTO) {
 
-        httpSession.setAttribute(LOGIN_ID, userService.checkUser(loginDTO));
+        httpSession.setAttribute(LOGIN_ID, userService.getUserId(loginDTO.getUserId(), loginDTO.getPassword()));
 
     }
 }

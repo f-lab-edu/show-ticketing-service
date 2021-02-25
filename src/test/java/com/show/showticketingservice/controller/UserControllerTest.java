@@ -32,7 +32,7 @@ public class UserControllerTest {
     private void testSingUp() throws Exception {
 
         userDTO = UserDTO.builder()
-                .id("sin7416")
+                .userId("sin7416")
                 .password("123D!d4d4")
                 .name("강신학")
                 .email("tls7gkr@naver.com")
@@ -62,7 +62,7 @@ public class UserControllerTest {
         testSingUp();
 
         userDTO = UserDTO.builder()
-                .id("sin7416")
+                .userId("sin7416")
                 .password("ff3D!d4d4")
                 .name("이용")
                 .email("le7@naver.com")

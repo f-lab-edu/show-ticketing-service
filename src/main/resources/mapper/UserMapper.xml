@@ -4,16 +4,16 @@
 <mapper namespace="com.show.showticketingservice.mapper.UserMapper">
     <insert id="insertUser">
         INSERT
-        INTO user (id, password, name, phoneNum, email, address)
-        VALUES (#{id}, #{password}, #{name}, #{phoneNum}, #{email}, '')
+        INTO user (userId, password, name, phoneNum, email, address)
+        VALUES (#{userId}, #{password}, #{name}, #{phoneNum}, #{email}, '')
     </insert>
 
     <select id="selectUserId" resultType="int">
-        SELECT count(id) FROM user WHERE id = #{id}
+        SELECT count(id) FROM user WHERE userId = #{userId}
     </select>
 
     <select id="selectUserPassword" resultType="string">
-        SELECT password FROM user WHERE id = #{id}
+        SELECT password FROM user WHERE userId = #{userId}
     </select>
 
 </mapper>

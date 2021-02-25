@@ -1,4 +1,4 @@
-package com.show.showticketingservice.repository;
+package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.UserDTO;
 import org.junit.jupiter.api.*;
@@ -10,17 +10,17 @@ import static org.hamcrest.Matchers.greaterThan;
 
 @SpringBootTest
 @Transactional
-public class UserRepositoryTest {
+public class UserMapperTest {
 
     private UserDTO testMember;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @BeforeEach
     public void setUp() {
         testMember = UserDTO.builder()
-                .id("tlsgkr7416")
+                .userId("tlsgkr7416")
                 .password("123456!aA")
                 .email("tls7gkr@naver.com")
                 .name("강신학")
@@ -30,7 +30,7 @@ public class UserRepositoryTest {
     }
 
     private int insertMember() {
-        return userRepository.insertUser(testMember);
+        return userMapper.insertUser(testMember);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class UserRepositoryTest {
 
         insertMember();
 
-        int result = userRepository.selectUserId(testMember.getId());
+        int result = userMapper.selectUserId(testMember.getUserId());
 
         assertThat(result, greaterThan(0));
     }

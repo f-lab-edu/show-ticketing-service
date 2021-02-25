@@ -12,7 +12,7 @@ public class UserDTO {
 
     @NotBlank(message = "id를 입력하세요")
     @Length(max = 20, message = "id는 20자리 이하로 입력하세요")
-    private final String id;
+    private final String userId;
 
     @NotBlank(message = "비밀번호를 입력하세요.")
     @Pattern(regexp = "((?=.*\\d)(?=.*\\W)(?=.*[a-z])(?=.*[A-Z]).{6,20})", message = "비밀번호는 숫자,특수문자,영문 대,소문자가 포함된 6~20자리로 입력하세요.")

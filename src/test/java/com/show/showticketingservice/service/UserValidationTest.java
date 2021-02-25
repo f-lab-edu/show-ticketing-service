@@ -13,7 +13,7 @@ public class UserValidationTest {
 
     private UserDTO getUserId(String id) {
         return UserDTO.builder()
-                .id(id)
+                .userId(id)
                 .password("123456!aA")
                 .email("tls7gkr@naver.com")
                 .name("강신학")
@@ -24,7 +24,7 @@ public class UserValidationTest {
 
     private UserDTO getUserPassword(String password) {
         return UserDTO.builder()
-                .id("tlsgkr7416")
+                .userId("tlsgkr7416")
                 .password(password)
                 .email("tls7gkr@naver.com")
                 .name("강신학")
@@ -35,7 +35,7 @@ public class UserValidationTest {
 
     private UserDTO getUserEmail(String email) {
         return UserDTO.builder()
-                .id("tlsgkr7416")
+                .userId("tlsgkr7416")
                 .password("123456!aA")
                 .email(email)
                 .name("강신학")
