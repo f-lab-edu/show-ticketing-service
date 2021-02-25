@@ -3,14 +3,21 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.UserMapper">
 
-    <insert id="insertUser" parameterType="com.show.showticketingservice.model.User">
+    <insert id="insertUser" parameterType="com.show.showticketingservice.model.user.User">
         INSERT INTO User(id, password, name, phoneNum, email, address)
         VALUES(#{id}, #{password}, #{name}, #{phoneNum}, #{email}, #{address})
     </insert>
 
-    <select id="idDuplicated" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM User
+    <select id="isIdExists" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM User
         WHERE id = #{id}
+    </select>
+
+    <select id="getUserByUserId" parameterType="String" resultType="com.show.showticketingservice.model.user.User">
+        SELECT id, password, name, phoneNum, email, address
+        FROM User
+        WHERE id = #{userId}
     </select>
 
 </mapper>

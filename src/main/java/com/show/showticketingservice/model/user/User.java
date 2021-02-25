@@ -1,4 +1,4 @@
-package com.show.showticketingservice.model;
+package com.show.showticketingservice.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

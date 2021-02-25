@@ -1,7 +1,8 @@
 package com.show.showticketingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.show.showticketingservice.model.User;
+import com.show.showticketingservice.model.user.User;
+import com.show.showticketingservice.model.user.UserLoginRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,57 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("로그인 성공 시 Http Status 200 (OK) 리턴")
+    public void login() throws Exception {
+        insertTestUser(testUser);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getId(), testUser.getPassword());
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 ID로 로그인 시 Http Status 400 (Bad Request) 리턴")
+    public void loginWithInvalidId() throws Exception {
+        insertTestUser(testUser);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest("invalidUserId1234", testUser.getPassword());
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("틀린 비밀번호로 로그인 시 Http Status 400 (Bad Request) 리턴")
+    public void loginWithInvalidPassword() throws Exception {
+        insertTestUser(testUser);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getId(), "wrongPw1234@");
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
