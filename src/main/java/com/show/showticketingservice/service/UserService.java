@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.DuplicateIdException;
 import com.show.showticketingservice.exception.NotUserException;
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.UserDTO;
@@ -31,14 +32,16 @@ public class UserService {
         return userMapper.insertUser(hashUserDTO);
     }
 
-    public boolean isDuplicateUserId(String userId) {
-        int result = userMapper.selectUserId(userId);
+    public void duplicateUserId(String userId) {
 
-        return result != 0;
+        if(userMapper.isDuplicateUserId(userId)) {
+            throw new DuplicateIdException("동일한 id가 존재합니다");
+        }
+
     }
 
     public String getUserId(String userId, String password) {
-        String hashPassword = userMapper.selectUserPassword(userId);
+        String hashPassword = userMapper.getUserPasswordById(userId);
 
         if(hashPassword == null || !passwordEncoder.isMatch(password, hashPassword)) {
             throw new NotUserException("아이디 또는 비밀번호가 일치하지 않습니다.");

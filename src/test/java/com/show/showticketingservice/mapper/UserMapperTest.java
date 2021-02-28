@@ -5,8 +5,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -34,22 +34,30 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공시 db에서 0이상의 숫자를 반환합니다.")
+    @DisplayName("회원가입 성공시 db에서 1 숫자를 반환합니다.")
     public void registerMemberTest() {
-        int result = insertMember();
 
-        assertThat(result, greaterThan(0));
+        assertEquals(insertMember(), 1);
     }
 
     @Test
-    @DisplayName("회원가입을 할때 id가 중복될 경우 db에서 중복된 숫자를 반환합니다.")
+    @DisplayName("회원가입을 할때 id가 중복될 경우 db에서 true를 반환합니다.")
     public void checkDuplicateIdTest() {
 
         insertMember();
 
-        int result = userMapper.selectUserId(testMember.getUserId());
+        assertEquals(userMapper.isDuplicateUserId(testMember.getUserId()), true);
 
-        assertThat(result, greaterThan(0));
+    }
+
+    @Test
+    @DisplayName("로그인시 id를 통해 비밀번호를 반환합니다.")
+    public void getUseByIdTest() {
+
+        insertMember();
+
+        assertNotNull(userMapper.getUserPasswordById(testMember.getUserId()));
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.DuplicateIdException;
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.UserDTO;
 import org.junit.jupiter.api.*;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,11 +37,15 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("중복된 아이디가 있을 경우 true를 리턴합니다.")
+    @DisplayName("중복된 아이디가 있을 경우 DuplicateIdException이 발생합니다.")
     public void checkDuplicateId() {
-        when(userMapper.selectUserId(testMember.getUserId())).thenReturn(1);
+        when(userMapper.isDuplicateUserId(testMember.getUserId())).thenReturn(true);
 
-        assertEquals(userService.isDuplicateUserId(testMember.getUserId()), true);
+        assertThrows(DuplicateIdException.class, () -> {
+            userService.duplicateUserId(testMember.getUserId());
+        });
+
+        verify(userMapper, times(1)).isDuplicateUserId(testMember.getUserId());
     }
 
 }

@@ -22,11 +22,10 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Void> addMember(@RequestBody @Valid UserDTO userDTO) {
 
-        if(userService.isDuplicateUserId(userDTO.getUserId())) {
-            return Responses.CONFLICT;
-        }
+        userService.duplicateUserId(userDTO.getUserId());
 
         userService.insertUser(userDTO);
+
         return Responses.CREATED;
     }
 

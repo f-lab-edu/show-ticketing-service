@@ -11,7 +11,7 @@ import static com.show.showticketingservice.utils.constant.UserConstant.LOGIN_ID
 
 @Service
 @AllArgsConstructor
-public class SessionLoginService implements LoginService{
+public class SessionLoginService implements LoginService {
 
     private final UserService userService;
 

@@ -5,13 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-@Repository
 public interface UserMapper {
 
     int insertUser(UserDTO userDTO);
 
-    int selectUserId(String userId);
+    boolean isDuplicateUserId(String userId);
 
-    String selectUserPassword(String userId);
+    String getUserPasswordById(String userId);
 
 }

@@ -8,11 +8,11 @@
         VALUES (#{userId}, #{password}, #{name}, #{phoneNum}, #{email}, '')
     </insert>
 
-    <select id="selectUserId" resultType="int">
-        SELECT count(id) FROM user WHERE userId = #{userId}
+    <select id="isDuplicateUserId" resultType="boolean">
+        SELECT EXISTS (SELECT userId FROM user WHERE userId = #{userId})
     </select>
 
-    <select id="selectUserPassword" resultType="string">
+    <select id="getUserPasswordById" resultType="string">
         SELECT password FROM user WHERE userId = #{userId}
     </select>
 
