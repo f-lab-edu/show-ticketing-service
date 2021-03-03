@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.authentication.UserIdAlreadyExist
 import com.show.showticketingservice.exception.authentication.UserIdNotExistsException;
 import com.show.showticketingservice.exception.authentication.UserPasswordWrongException;
 import com.show.showticketingservice.model.exception.ExceptionResponse;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,13 @@ public class AuthenticationExceptionAdvice {
         log.error("login failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateRequestException.class)
+    public ResponseEntity<ExceptionResponse> alreadyLoginException(final DuplicateRequestException e, WebRequest request) {
+        log.error("login Failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserIdAlreadyExistsException.class)

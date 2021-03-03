@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ class UserControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    MockHttpSession httpSession;
 
     @BeforeEach
     public void init() {
@@ -59,7 +63,8 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -76,7 +81,8 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -93,8 +99,27 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
                 .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이미 로그인 상태일 때 로그인 시도 시 Http 409 Status (Conflict) 리턴")
+    public void loginDuplicated() throws Exception {
+        login();
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getUserId(), testUser.getPassword());
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
+                .andExpect(status().isConflict())
                 .andDo(print());
     }
 
