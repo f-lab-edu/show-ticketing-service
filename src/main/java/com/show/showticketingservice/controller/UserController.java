@@ -1,6 +1,6 @@
 package com.show.showticketingservice.controller;
 
-import com.show.showticketingservice.model.user.User;
+import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.service.LoginService;
 import com.show.showticketingservice.service.UserService;
@@ -20,27 +20,21 @@ public class UserController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody UserLoginRequest loginRequest) {
-
-        loginService.login(loginRequest);
-
-        return HttpStatusResponse.HTTP_STATUS_OK;
+    public void login(@RequestBody UserLoginRequest userLoginRequest) {
+        loginService.login(userLoginRequest);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Void> insertUser(@RequestBody @Valid User user) {
-        if (userService.signUp(user))
-            return HttpStatusResponse.HTTP_STATUS_CREATED;
+    public ResponseEntity<Void> insertUser(@RequestBody @Valid UserRequest userRequest) {
 
-        return HttpStatusResponse.HTTP_STATUS_CONFLICT;
+        userService.signUp(userRequest);
+
+        return HttpStatusResponse.CREATED;
     }
 
     @GetMapping("/user-exists/{userId}")
-    public ResponseEntity<Void> checkIdDuplicated(@PathVariable String userId) {
-        if (userService.isIdExists(userId))
-            return HttpStatusResponse.HTTP_STATUS_CONFLICT;
-
-        return HttpStatusResponse.HTTP_STATUS_OK;
+    public void checkIdDuplicated(@PathVariable String userId) {
+        userService.checkIdExists(userId);
     }
 
 }

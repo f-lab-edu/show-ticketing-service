@@ -3,21 +3,21 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.UserMapper">
 
-    <insert id="insertUser" parameterType="com.show.showticketingservice.model.user.User">
-        INSERT INTO User(id, password, name, phoneNum, email, address)
-        VALUES(#{id}, #{password}, #{name}, #{phoneNum}, #{email}, #{address})
+    <insert id="insertUser" parameterType="com.show.showticketingservice.model.user.UserRequest">
+        INSERT INTO User(userId, password, name, phoneNum, email, address, userType)
+        VALUES(#{userId}, #{password}, #{name}, #{phoneNum}, #{email}, #{address}, #{userType})
     </insert>
 
     <select id="isIdExists" parameterType="String" resultType="int">
         SELECT COUNT(*)
         FROM User
-        WHERE id = #{id}
+        WHERE userId = #{userId}
     </select>
 
-    <select id="getUserByUserId" parameterType="String" resultType="com.show.showticketingservice.model.user.User">
-        SELECT id, password, name, phoneNum, email, address
+    <select id="getUserByUserId" parameterType="String" resultType="com.show.showticketingservice.model.user.UserResponse">
+        SELECT id, userId, password, name, phoneNum, email, address, userType
         FROM User
-        WHERE id = #{userId}
+        WHERE userId = #{userId}
     </select>
 
 </mapper>

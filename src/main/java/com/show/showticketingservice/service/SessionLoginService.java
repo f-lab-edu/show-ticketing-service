@@ -1,7 +1,7 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.model.user.User;
 import com.show.showticketingservice.model.user.UserLoginRequest;
+import com.show.showticketingservice.model.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ public class SessionLoginService implements LoginService{
     @Override
     public void login(UserLoginRequest userLoginRequest) {
 
-        User user = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
+        UserResponse userResponse = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
 
-        httpSession.setAttribute("userId", user);
+        httpSession.setAttribute("userId", userResponse);
 
     }
 

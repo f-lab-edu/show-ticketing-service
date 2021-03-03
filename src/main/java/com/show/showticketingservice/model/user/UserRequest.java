@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class User {
+public class UserRequest {
 
     @NotBlank(message = "ID를 입력하세요.")
     @Pattern(regexp = "^[\\w]{6,20}$", message = "ID는 6~20자 이내, 영문 대/소문자 또는 숫자로 입력하세요.")
-    private final String id;
+    private final String userId;
 
     @NotBlank(message = "비밀번호를 입력하세요.")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[`~!@#$%^&*+=(),._?\":{}|<>/-])(?=\\S+$).{6,20}$", message = "비밀번호는 숫자,특수문자,영문 대/소문자가 모두 포함된 6~20자리로 입력하세요.")
@@ -38,14 +36,20 @@ public class User {
     @Length(max = 100, message = "주소 입력은 최대 100자까지 가능합니다.")
     private final String address;
 
-    public User pwEncryptedUser(String encryptedPw) {
+    @NotNull(message = "회원 타입을 입력하세요.")
+    @DecimalMax(value = "2", inclusive = true)
+    @DecimalMin(value = "1", inclusive = true)
+    private final int userType;
+
+    public UserRequest pwEncryptedUser(String encryptedPw) {
         return builder()
-                .id(getId())
+                .userId(getUserId())
                 .password(encryptedPw)
                 .name(getName())
                 .phoneNum(getPhoneNum())
                 .email(getEmail())
                 .address(getAddress())
+                .userType(getUserType())
                 .build();
     }
 }

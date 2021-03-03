@@ -1,7 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.show.showticketingservice.model.user.User;
+import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class UserControllerTest {
 
-    private User testUser;
+    private UserRequest testUser;
 
     @Autowired
     MockMvc mvc;
@@ -33,10 +33,10 @@ class UserControllerTest {
 
     @BeforeEach
     public void init() {
-        testUser = new User("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea");
+        testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", 1);
     }
 
-    private void insertTestUser(User testUser) throws Exception {
+    private void insertTestUser(UserRequest testUser) throws Exception {
         String content = objectMapper.writeValueAsString(testUser);
 
         mvc.perform(post("/users")
@@ -52,7 +52,7 @@ class UserControllerTest {
     public void login() throws Exception {
         insertTestUser(testUser);
 
-        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getId(), testUser.getPassword());
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getUserId(), testUser.getPassword());
 
         String content = objectMapper.writeValueAsString(userLoginRequest);
 
@@ -86,7 +86,7 @@ class UserControllerTest {
     public void loginWithInvalidPassword() throws Exception {
         insertTestUser(testUser);
 
-        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getId(), "wrongPw1234@");
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getUserId(), "wrongPw1234@");
 
         String content = objectMapper.writeValueAsString(userLoginRequest);
 
@@ -109,7 +109,7 @@ class UserControllerTest {
     public void duplicatedIdSignUp() throws Exception {
         insertTestUser(testUser);
 
-        User newUser = new User("testId1", "testPW1111#", "New User", "010-1111-1234", "user2@example.com", "Seoul, South Korea");
+        UserRequest newUser = new UserRequest("testId1", "testPW1111#", "New UserRequest", "010-1111-1234", "user2@example.com", "Seoul, South Korea", 1);
 
         String content = objectMapper.writeValueAsString(newUser);
 

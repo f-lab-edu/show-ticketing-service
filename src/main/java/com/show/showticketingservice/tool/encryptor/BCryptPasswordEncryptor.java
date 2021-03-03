@@ -4,7 +4,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PasswordEncryptor implements Encryptor {
+public class BCryptPasswordEncryptor implements Encryptor {
 
     @Override
     public String encrypt(String rawPassword) {
