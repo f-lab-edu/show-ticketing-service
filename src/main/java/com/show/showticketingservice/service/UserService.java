@@ -6,30 +6,34 @@ import com.show.showticketingservice.exception.authentication.UserPasswordWrongE
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
-import com.show.showticketingservice.tool.encryptor.Encryptor;
+import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
 
-    private final Encryptor bcryptPasswordEncryptor;
+    private final PasswordEncryptor passwordEncryptor;
 
     public void signUp(UserRequest userRequest) {
         checkIdExists(userRequest.getUserId());
 
         insertUser(userRequest);
+
+        log.info("sign up success");
     }
 
     public void insertUser(UserRequest userRequest) {
-        userMapper.insertUser(userRequest.pwEncryptedUser(bcryptPasswordEncryptor.encrypt(userRequest.getPassword())));
+        userMapper.insertUser(userRequest.pwEncryptedUser(passwordEncryptor.encrypt(userRequest.getPassword())));
     }
 
     public void checkIdExists(String userId) {
-        if(userMapper.isIdExists(userId) > 0) {
+        if(userMapper.isIdExists(userId)) {
             throw new UserIdAlreadyExistsException();
         }
     }
@@ -49,6 +53,6 @@ public class UserService {
     }
 
     private boolean isPasswordMatches(String passwordRequest, String userPassword) {
-        return bcryptPasswordEncryptor.isMatched(passwordRequest, userPassword);
+        return passwordEncryptor.isMatched(passwordRequest, userPassword);
     }
 }

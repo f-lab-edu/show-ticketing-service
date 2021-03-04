@@ -9,7 +9,7 @@ public interface UserMapper {
 
     void insertUser(UserRequest userRequest);
 
-    int isIdExists(String id);
+    boolean isIdExists(String userId);
 
     UserResponse getUserByUserId(String userId);
 }

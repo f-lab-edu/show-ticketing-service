@@ -1,5 +1,6 @@
 package com.show.showticketingservice.model.user;
 
+import com.show.showticketingservice.model.enumerations.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,9 +38,7 @@ public class UserRequest {
     private final String address;
 
     @NotNull(message = "회원 타입을 입력하세요.")
-    @DecimalMax(value = "2", inclusive = true)
-    @DecimalMin(value = "1", inclusive = true)
-    private final int userType;
+    private final UserType userType;
 
     public UserRequest pwEncryptedUser(String encryptedPw) {
         return builder()

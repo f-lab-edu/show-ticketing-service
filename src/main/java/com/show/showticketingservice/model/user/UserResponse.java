@@ -1,5 +1,6 @@
 package com.show.showticketingservice.model.user;
 
+import com.show.showticketingservice.model.enumerations.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,6 +22,6 @@ public class UserResponse {
 
     private final String address;
 
-    private final int userType;
+    private final UserType userType;
 
 }

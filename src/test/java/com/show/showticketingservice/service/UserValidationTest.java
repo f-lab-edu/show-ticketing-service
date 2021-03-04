@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +31,7 @@ public class UserValidationTest {
                 .phoneNum("010-1234-5678")
                 .email("test@example.com")
                 .address("Seoul, South Korea")
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
     }
 
@@ -42,7 +43,7 @@ public class UserValidationTest {
                 .phoneNum("010-1234-5678")
                 .email("test@example.com")
                 .address("Seoul, South Korea")
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
     }
 
@@ -54,7 +55,7 @@ public class UserValidationTest {
                 .phoneNum(phoneNum)
                 .email("test@example.com")
                 .address("Seoul, South Korea")
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
     }
 
@@ -66,7 +67,7 @@ public class UserValidationTest {
                 .phoneNum("010-1234-5678")
                 .email(email)
                 .address("Seoul, South Korea")
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
     }
 
@@ -193,7 +194,7 @@ public class UserValidationTest {
                 .phoneNum("010-1234-5678")
                 .email("test@example.com")
                 .address("Seoul, South Korea")
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
         checkValidation(userRequest, true);
     }
@@ -247,23 +248,9 @@ public class UserValidationTest {
                 .phoneNum("010-1234-5678")
                 .email("test@example.com")
                 .address(address)
-                .userType(1)
+                .userType(UserType.GENERAL)
                 .build();
         checkValidation(userRequest, true);
     }
 
-    @Test
-    @DisplayName("userType의 범위(1~2)를 넘어가면 invalid")
-    public void invalidUserType() {
-        UserRequest userRequest = UserRequest.builder()
-                .userId("idExample123")
-                .password("password123!@")
-                .name("name")
-                .phoneNum("010-1234-5678")
-                .email("test@example.com")
-                .address("address")
-                .userType(4)
-                .build();
-        checkValidation(userRequest, false);
-    }
 }

@@ -1,6 +1,6 @@
 package com.show.showticketingservice.tool.encryptor;
 
-public interface Encryptor {
+public interface PasswordEncryptor {
 
     String encrypt(String rawPassword);
 

@@ -1,6 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ class UserControllerTest {
 
     @BeforeEach
     public void init() {
-        testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", 1);
+        testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
     }
 
     private void insertTestUser(UserRequest testUser) throws Exception {
@@ -134,7 +135,7 @@ class UserControllerTest {
     public void duplicatedIdSignUp() throws Exception {
         insertTestUser(testUser);
 
-        UserRequest newUser = new UserRequest("testId1", "testPW1111#", "New UserRequest", "010-1111-1234", "user2@example.com", "Seoul, South Korea", 1);
+        UserRequest newUser = new UserRequest("testId1", "testPW1111#", "New UserRequest", "010-1111-1234", "user2@example.com", "Seoul, South Korea", UserType.GENERAL);
 
         String content = objectMapper.writeValueAsString(newUser);
 
