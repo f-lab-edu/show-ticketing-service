@@ -20,7 +20,7 @@ public class UserController {
     private final LoginService loginService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> addMember(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<Void> addUser(@RequestBody @Valid UserDTO userDTO) {
 
         userService.duplicateUserId(userDTO.getUserId());
 
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> checkLogin(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Void> loginUser(@RequestBody LoginDTO loginDTO) {
 
         loginService.login(loginDTO);
 

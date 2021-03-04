@@ -22,4 +22,5 @@ public class SessionLoginService implements LoginService {
         httpSession.setAttribute(LOGIN_ID, userService.getUserId(loginDTO.getUserId(), loginDTO.getPassword()));
 
     }
+
 }
