@@ -17,10 +17,16 @@ public class SessionLoginService implements LoginService {
 
     private final HttpSession httpSession;
 
+    @Override
     public void login(LoginDTO loginDTO) {
 
         httpSession.setAttribute(LOGIN_ID, userService.getUserId(loginDTO.getUserId(), loginDTO.getPassword()));
+    }
 
+    @Override
+    public void logout() {
+
+        httpSession.invalidate();
     }
 
 }

@@ -113,7 +113,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("아이디가 존재하지 않을시 status code 401을 리턴합니다.")
+    @DisplayName("아이디가 존재하지 않을시 status code 400을 리턴합니다.")
     public void loginExistentUserIdFail() throws Exception {
 
         loginDTO = new LoginDTO("he7466", "123456!A");
@@ -125,6 +125,15 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그아웃 성공시 status code 200을 리턴합니다")
+    public void logoutUserSuccess() throws Exception {
+
+        mockMvc.perform(get("/users/logout"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }

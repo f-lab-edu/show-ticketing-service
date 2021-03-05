@@ -30,11 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> loginUser(@RequestBody LoginDTO loginDTO) {
+    public void loginUser(@RequestBody LoginDTO loginDTO) {
 
         loginService.login(loginDTO);
+    }
 
-        return Responses.OK;
+    @GetMapping("/logout")
+    public void logoutUser() {
+
+        loginService.logout();
     }
 
 }
