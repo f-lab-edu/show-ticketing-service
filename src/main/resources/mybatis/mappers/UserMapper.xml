@@ -14,7 +14,7 @@
     </select>
 
     <select id="getUserByUserId" parameterType="String" resultType="com.show.showticketingservice.model.user.UserResponse" >
-        SELECT *
+        SELECT id, userId, password, name, phoneNum, email, address, userType
         FROM user
         WHERE userId = #{userId}
     </select>
