@@ -1,12 +1,17 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.DuplicateIdException;
-import com.show.showticketingservice.exception.NotUserException;
+import com.show.showticketingservice.exception.IdUnconformityException;
+import com.show.showticketingservice.exception.PasswordUnconformityException;
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.UserDTO;
 import com.show.showticketingservice.utils.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
+
+import static com.show.showticketingservice.utils.constant.UserConstant.LOGIN_ID;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +20,8 @@ public class UserService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final HttpSession httpSession;
 
     public int insertUser(UserDTO userDTO) {
 
@@ -41,13 +48,34 @@ public class UserService {
     }
 
     public String getUserId(String userId, String password) {
+
         String hashPassword = userMapper.getUserPasswordById(userId);
 
-        if(hashPassword == null || !passwordEncoder.isMatch(password, hashPassword)) {
-            throw new NotUserException("아이디 또는 비밀번호가 일치하지 않습니다.");
+        if(hashPassword == null) {
+            throw new IdUnconformityException("아이디가 일치하지 않습니다.");
         }
 
+        correctPassword(password, hashPassword);
+
         return userId;
+    }
+
+    public void deleteUser(String password) {
+
+        String userId = (String)httpSession.getAttribute(LOGIN_ID);
+
+        String hashPassword = userMapper.getUserPasswordById(userId);
+
+        correctPassword(password, hashPassword);
+
+        userMapper.deleteUserByUserId(userId);
+    }
+
+    public void correctPassword(String password, String hashPassword) {
+
+        if(!passwordEncoder.isMatch(password, hashPassword)) {
+            throw new PasswordUnconformityException("비밀번호가 일치하지 않습니다.");
+        }
     }
 
 }

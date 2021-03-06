@@ -16,4 +16,8 @@
         SELECT password FROM user WHERE userId = #{userId}
     </select>
 
+    <delete id="deleteUserByUserId">
+        DELETE FROM user WHERE userId = #{userId}
+    </delete>
+
 </mapper>

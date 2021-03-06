@@ -60,4 +60,13 @@ public class UserMapperTest {
 
     }
 
+    @Test
+    @DisplayName("회원 탈퇴 성공시 1을 반환합니다.")
+    public void deleteUser() {
+
+        insertMember();
+
+        assertEquals(userMapper.deleteUserByUserId(testMember.getUserId()), 1);
+    }
+
 }
