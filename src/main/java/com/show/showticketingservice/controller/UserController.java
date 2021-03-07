@@ -23,10 +23,14 @@ public class UserController {
         loginService.login(userLoginRequest);
     }
 
+    @GetMapping("/logout")
+    public void logout() {
+        loginService.logout();
+    }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody @Valid UserRequest userRequest) {
-
         userService.signUp(userRequest);
     }
 

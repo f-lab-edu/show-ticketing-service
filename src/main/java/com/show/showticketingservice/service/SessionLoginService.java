@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.authentication.UserNotLoggedInException;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.sun.jdi.request.DuplicateRequestException;
@@ -32,6 +33,22 @@ public class SessionLoginService implements LoginService {
         httpSession.setAttribute(USER, userResponse);
 
         log.info("Login Success - userId: '" + userResponse.getUserId() + "', userType: '" + userResponse.getUserType() + "'");
+    }
+
+    @Override
+    public void logout() {
+
+        UserResponse userResponse = (UserResponse) httpSession.getAttribute(USER);
+
+        if(userResponse == null) {
+            throw new UserNotLoggedInException();
+        }
+
+        String userId = userResponse.getUserId();
+
+        httpSession.invalidate();
+
+        log.info("Logout Success - userId: '" + userId + "'");
     }
 
 }
