@@ -15,31 +15,31 @@ public class UserValidationTest {
         return UserDTO.builder()
                 .userId(id)
                 .password("123456!aA")
-                .email("tls7gkr@naver.com")
-                .name("강신학")
-                .phoneNum("010-9905-7416")
+                .email("aaaa@naver.com")
+                .name("미미")
+                .phoneNum("010-9999-9999")
                 .address("부천시 오정구")
                 .build();
     }
 
     private UserDTO getUserPassword(String password) {
         return UserDTO.builder()
-                .userId("tlsgkr7416")
+                .userId("tlsgkr5")
                 .password(password)
-                .email("tls7gkr@naver.com")
-                .name("강신학")
-                .phoneNum("010-9905-7416")
+                .email("tls7777@naver.com")
+                .name("모모")
+                .phoneNum("010-9999-9999")
                 .address("부천시 오정구")
                 .build();
     }
 
     private UserDTO getUserEmail(String email) {
         return UserDTO.builder()
-                .userId("tlsgkr7416")
+                .userId("tlsaaaa")
                 .password("123456!aA")
                 .email(email)
-                .name("강신학")
-                .phoneNum("010-9905-7416")
+                .name("모모")
+                .phoneNum("010-9999-9999")
                 .address("부천시 오정구")
                 .build();
     }

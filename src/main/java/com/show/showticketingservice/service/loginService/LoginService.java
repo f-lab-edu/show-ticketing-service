@@ -7,4 +7,9 @@ public interface LoginService {
     void login(LoginDTO loginDTO);
 
     void logout();
+
+    String getLoginUserId();
+
+    void existLoginUserId();
+
 }

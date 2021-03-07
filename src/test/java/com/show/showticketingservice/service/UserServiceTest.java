@@ -59,14 +59,14 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("비밀번호가 암호화한 비밀번호와 일치하지 않을시 PasswordUnconformityException이 발생합니다.")
-    public void correctPasswordFail() {
+    public void validatePasswordFail() {
 
         String notHashPassword = "aaaa123!azvd";
 
         when(passwordEncoder.isMatch(testMember.getPassword(), notHashPassword)).thenReturn(false);
 
         assertThrows(PasswordUnconformityException.class, () -> {
-            userService.correctPassword(testMember.getPassword(), notHashPassword);
+            userService.validatePassword(testMember.getPassword(), notHashPassword);
         });
 
         verify(passwordEncoder, times(1)).isMatch(testMember.getPassword(), notHashPassword);

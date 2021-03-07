@@ -5,6 +5,7 @@ import com.show.showticketingservice.exception.IdUnconformityException;
 import com.show.showticketingservice.exception.PasswordUnconformityException;
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.UserDTO;
+import com.show.showticketingservice.service.loginService.LoginService;
 import com.show.showticketingservice.utils.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,6 @@ public class UserService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final HttpSession httpSession;
 
     public int insertUser(UserDTO userDTO) {
 
@@ -55,23 +54,22 @@ public class UserService {
             throw new IdUnconformityException("아이디가 일치하지 않습니다.");
         }
 
-        correctPassword(password, hashPassword);
+        validatePassword(password, hashPassword);
 
         return userId;
     }
 
-    public void deleteUser(String password) {
-
-        String userId = (String)httpSession.getAttribute(LOGIN_ID);
+    public void deleteUser(String password, String userId) {
 
         String hashPassword = userMapper.getUserPasswordById(userId);
 
-        correctPassword(password, hashPassword);
+        validatePassword(password, hashPassword);
 
         userMapper.deleteUserByUserId(userId);
+
     }
 
-    public void correctPassword(String password, String hashPassword) {
+    public void validatePassword(String password, String hashPassword) {
 
         if(!passwordEncoder.isMatch(password, hashPassword)) {
             throw new PasswordUnconformityException("비밀번호가 일치하지 않습니다.");

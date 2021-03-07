@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service.loginService;
 
+import com.show.showticketingservice.exception.UnAuthorityUserException;
 import com.show.showticketingservice.model.LoginDTO;
 import com.show.showticketingservice.service.UserService;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,20 @@ public class SessionLoginService implements LoginService {
 
         httpSession.invalidate();
     }
+
+    @Override
+    public String getLoginUserId() {
+        return (String)httpSession.getAttribute(LOGIN_ID);
+    }
+
+    @Override
+    public void existLoginUserId() {
+
+        if(httpSession.getAttribute(LOGIN_ID) == null) {
+
+            throw new UnAuthorityUserException("로그인을 해야 접속이 가능합니다.");
+        }
+    }
+
 
 }

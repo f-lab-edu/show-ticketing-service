@@ -34,10 +34,10 @@ public class UserControllerTest {
         userDTO = UserDTO.builder()
                 .userId("sin7416")
                 .password("123D!d4d4")
-                .name("강신학")
-                .email("tls7gkr@naver.com")
-                .phoneNum("010-9905-7416")
-                .address("경기도 부천시 오정구")
+                .name("미미")
+                .email("aaa1@naver.com")
+                .phoneNum("010-8888-8888")
+                .address("경기도 포천시")
                 .build();
 
         String content = objectMapper.writeValueAsString(userDTO);
@@ -66,7 +66,7 @@ public class UserControllerTest {
                 .password("ff3D!d4d4")
                 .name("이용")
                 .email("le7@naver.com")
-                .phoneNum("010-9908-7567")
+                .phoneNum("010-9999-7777")
                 .address("서울특별시 강남구")
                 .build();
 
