@@ -96,7 +96,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("비밀번호가 일치하지 않을시 status code 400을 리턴합니다.")
+    @DisplayName("로그인한 비밀번호가 일치하지 않을시 status code 400을 리턴합니다.")
     public void loginUserPasswordFail() throws Exception {
 
         testSingUp();
@@ -113,8 +113,10 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("아이디가 존재하지 않을시 status code 400을 리턴합니다.")
-    public void loginExistentUserIdFail() throws Exception {
+    @DisplayName("로그인한 아이디가 일치하지 않을시 status code 400을 리턴합니다.")
+    public void loginUserIdFail() throws Exception {
+
+        testSingUp();
 
         loginDTO = new LoginDTO("he7466", "123456!A");
 
