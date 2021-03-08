@@ -1,10 +1,11 @@
 package com.show.showticketingservice.controller;
 
-import com.show.showticketingservice.model.User;
+import com.show.showticketingservice.model.user.UserLoginRequest;
+import com.show.showticketingservice.model.user.UserRequest;
+import com.show.showticketingservice.service.LoginService;
 import com.show.showticketingservice.service.UserService;
-import com.show.showticketingservice.tool.HttpStatusResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,20 +16,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
-    public ResponseEntity<Void> insertUser(@RequestBody @Valid User user) {
-        if (userService.signUp(user))
-            return HttpStatusResponse.HTTP_STATUS_CREATED;
+    private final LoginService loginService;
 
-        return HttpStatusResponse.HTTP_STATUS_CONFLICT;
+    @PostMapping("/login")
+    public void login(@RequestBody UserLoginRequest userLoginRequest) {
+        loginService.login(userLoginRequest);
+    }
+
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void insertUser(@RequestBody @Valid UserRequest userRequest) {
+
+        userService.signUp(userRequest);
     }
 
     @GetMapping("/user-exists/{userId}")
-    public ResponseEntity<Void> checkIdDuplicated(@PathVariable String userId) {
-        if (userService.isIdDuplicated(userId))
-            return HttpStatusResponse.HTTP_STATUS_CONFLICT;
-
-        return HttpStatusResponse.HTTP_STATUS_OK;
+    public void checkIdDuplicated(@PathVariable String userId) {
+        userService.checkIdExists(userId);
     }
 
 }
