@@ -5,14 +5,12 @@ import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
 import static com.show.showticketingservice.tool.constants.UserConstant.USER;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SessionLoginService implements LoginService {
@@ -31,24 +29,16 @@ public class SessionLoginService implements LoginService {
         UserResponse userResponse = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
 
         httpSession.setAttribute(USER, userResponse);
-
-        log.info("Login Success - userId: '" + userResponse.getUserId() + "', userType: '" + userResponse.getUserType() + "'");
     }
 
     @Override
     public void logout() {
 
-        UserResponse userResponse = (UserResponse) httpSession.getAttribute(USER);
-
-        if(userResponse == null) {
+        if(httpSession.getAttribute(USER) == null) {
             throw new UserNotLoggedInException();
         }
 
-        String userId = userResponse.getUserId();
-
         httpSession.invalidate();
-
-        log.info("Logout Success - userId: '" + userId + "'");
     }
 
 }
