@@ -6,4 +6,6 @@ public interface LoginService {
 
     void login(UserLoginRequest userLoginRequest);
 
+    void logout();
+
 }

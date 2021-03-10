@@ -8,10 +8,8 @@ import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,8 +22,6 @@ public class UserService {
         checkIdExists(userRequest.getUserId());
 
         insertUser(userRequest);
-
-        log.info("sign up success");
     }
 
     public void insertUser(UserRequest userRequest) {
