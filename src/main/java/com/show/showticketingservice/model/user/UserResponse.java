@@ -2,13 +2,15 @@ package com.show.showticketingservice.model.user;
 
 import com.show.showticketingservice.model.enumerations.UserType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+@Builder
 public class UserResponse {
 
-    private final int id;
+    private final Integer id;
 
     private final String userId;
 

@@ -34,4 +34,15 @@ public class SessionLoginService implements LoginService {
         log.info("Login Success - userId: '" + userResponse.getUserId() + "', userType: '" + userResponse.getUserType() + "'");
     }
 
+    @Override
+    public boolean isLoginUser() {
+
+        return httpSession.getAttribute(USER) != null;
+    }
+
+    @Override
+    public UserResponse getLoginUser() {
+        return (UserResponse) httpSession.getAttribute(USER);
+    }
+
 }

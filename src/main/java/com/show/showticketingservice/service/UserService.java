@@ -55,4 +55,13 @@ public class UserService {
     private boolean isPasswordMatches(String passwordRequest, String userPassword) {
         return passwordEncryptor.isMatched(passwordRequest, userPassword);
     }
+
+    public void deleteUser(UserResponse userResponse, String passwordRequest) {
+
+        if(!isPasswordMatches(passwordRequest, userResponse.getPassword())) {
+            throw new UserPasswordWrongException();
+        }
+
+        userMapper.deleteUserById(userResponse.getUserId());
+    }
 }

@@ -12,5 +12,6 @@ public interface UserMapper {
     boolean isIdExists(String userId);
 
     UserResponse getUserByUserId(String userId);
-}
 
+    int deleteUserById(String userId);
+}

@@ -19,4 +19,8 @@
         WHERE userId = #{userId}
     </select>
 
+    <delete id="deleteUserById" parameterType="String">
+        DELETE FROM user WHERE userId = #{userId}
+    </delete>
+
 </mapper>
