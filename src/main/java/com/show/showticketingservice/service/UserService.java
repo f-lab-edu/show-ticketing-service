@@ -6,6 +6,7 @@ import com.show.showticketingservice.exception.authentication.UserPasswordWrongE
 import com.show.showticketingservice.mapper.UserMapper;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
+import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,12 +57,14 @@ public class UserService {
         return passwordEncryptor.isMatched(passwordRequest, userPassword);
     }
 
-    public void deleteUser(UserResponse userResponse, String passwordRequest) {
+    public void deleteUser(UserSession userSession, String passwordRequest) {
 
-        if(!isPasswordMatches(passwordRequest, userResponse.getPassword())) {
+        String hashPassword = userMapper.getUserPasswordByUserId(userSession.getUserId());
+
+        if(!isPasswordMatches(passwordRequest, hashPassword)) {
             throw new UserPasswordWrongException();
         }
 
-        userMapper.deleteUserById(userResponse.getUserId());
+        userMapper.deleteUserById(userSession.getUserId());
     }
 }

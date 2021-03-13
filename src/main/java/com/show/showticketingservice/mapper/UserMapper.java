@@ -14,4 +14,6 @@ public interface UserMapper {
     UserResponse getUserByUserId(String userId);
 
     int deleteUserById(String userId);
+
+    String getUserPasswordByUserId(String UserId);
 }

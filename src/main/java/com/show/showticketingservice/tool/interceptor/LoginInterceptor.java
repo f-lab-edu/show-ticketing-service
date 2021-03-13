@@ -1,6 +1,6 @@
 package com.show.showticketingservice.tool.interceptor;
 
-import com.show.showticketingservice.exception.authentication.LoginUserNotExistsException;
+import com.show.showticketingservice.exception.authentication.UserNotLoggedInException;
 import com.show.showticketingservice.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if(!loginService.isLoginUser()) {
-            throw new LoginUserNotExistsException();
+            throw new UserNotLoggedInException();
         }
 
         return true;

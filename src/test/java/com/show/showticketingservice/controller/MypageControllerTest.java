@@ -3,8 +3,7 @@ package com.show.showticketingservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserRequest;
-import com.show.showticketingservice.model.user.UserResponse;
-import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
+import com.show.showticketingservice.model.user.UserSession;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,12 +26,9 @@ public class MypageControllerTest {
 
     private UserRequest userRequest;
 
-    private UserResponse sessionUserResponse;
+    private UserSession userSession;
 
     private MockMvc mockMvc;
-
-    @Autowired
-    private PasswordEncryptor passwordEncryptor;
 
     @Autowired
     private WebApplicationContext wac;
@@ -55,17 +51,7 @@ public class MypageControllerTest {
                 .userType(UserType.GENERAL)
                 .build();
 
-        String hashPassword = passwordEncryptor.encrypt("123D!d4d4");
-
-        sessionUserResponse = sessionUserResponse.builder()
-                .userId("sin7416")
-                .password(hashPassword)
-                .name("미미")
-                .email("taa123@naver.com")
-                .phoneNum("010-1234-5678")
-                .address("경기도 부천시 오정구")
-                .userType(UserType.GENERAL)
-                .build();
+        userSession = new UserSession("sin7416", UserType.GENERAL);
 
         String userContent = objectMapper.writeValueAsString(userRequest);
 
@@ -82,9 +68,20 @@ public class MypageControllerTest {
     public void unregisterUser() throws Exception {
 
         mockMvc.perform(post("/my-pages/unregister")
-                .sessionAttr(USER, sessionUserResponse)
+                .sessionAttr(USER, userSession)
                 .param("passwordRequest", "123D!d4d4"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("회원탈퇴를 할 때 비밀번호가 일치하지 않을 시 status code 400을 리턴합니다.")
+    public void unregisterUserfail() throws Exception {
+
+        mockMvc.perform(post("/my-pages/unregister")
+                .sessionAttr(USER, userSession)
+                .param("passwordRequest", "124d4"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

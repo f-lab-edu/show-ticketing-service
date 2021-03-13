@@ -2,6 +2,7 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserResponse;
+import com.show.showticketingservice.model.user.UserSession;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,9 @@ public class SessionLoginService implements LoginService {
 
         UserResponse userResponse = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
 
-        httpSession.setAttribute(USER, userResponse);
+        UserSession userSession = new UserSession(userResponse.getUserId(), userResponse.getUserType());
 
-        log.info("Login Success - userId: '" + userResponse.getUserId() + "', userType: '" + userResponse.getUserType() + "'");
+        httpSession.setAttribute(USER, userSession);
     }
 
     @Override
@@ -41,8 +42,8 @@ public class SessionLoginService implements LoginService {
     }
 
     @Override
-    public UserResponse getLoginUser() {
-        return (UserResponse) httpSession.getAttribute(USER);
+    public UserSession getLoginUser() {
+        return (UserSession) httpSession.getAttribute(USER);
     }
 
 }

@@ -1,11 +1,17 @@
 package com.show.showticketingservice.tool.aop;
 
 import com.show.showticketingservice.model.user.UserResponse;
+import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.service.LoginService;
+import com.show.showticketingservice.tool.annotation.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /*
@@ -23,16 +29,22 @@ public class LoginUserAspect {
     @Around("execution(* *(.., @com.show.showticketingservice.tool.annotation.LoginUser (*), ..))")
     public Object convertLoginUser(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        UserResponse userResponse = loginService.getLoginUser();
+        UserSession userSession = loginService.getLoginUser();
 
-        Object[] args = Arrays.stream(joinPoint.getArgs()).map(data -> {
+        Object[] args = joinPoint.getArgs();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
 
-            if(data instanceof UserResponse) {
-                data = userResponse;
+        Annotation[][] annotations = method.getParameterAnnotations();
+
+        for(int i = 0; i < annotations.length; i++) {
+            for(Annotation annotation : annotations[i]) {
+                if(annotation instanceof LoginUser) {
+                    args[i] = userSession;
+                    break;
+                }
             }
-
-            return data;
-        }).toArray();
+        }
 
         return joinPoint.proceed(args);
 
