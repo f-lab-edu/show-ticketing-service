@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.show.showticketingservice.tool.constants.UserConstant.USER;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,7 +68,7 @@ public class MypageControllerTest {
     @DisplayName("회원탈퇴시 status code 200을 리턴합니다.")
     public void unregisterUser() throws Exception {
 
-        mockMvc.perform(post("/my-pages/unregister")
+        mockMvc.perform(post("/my-infos/unregister")
                 .sessionAttr(USER, userSession)
                 .param("passwordRequest", "123D!d4d4"))
                 .andDo(print())
@@ -78,7 +79,7 @@ public class MypageControllerTest {
     @DisplayName("회원탈퇴를 할 때 비밀번호가 일치하지 않을 시 status code 400을 리턴합니다.")
     public void unregisterUserfail() throws Exception {
 
-        mockMvc.perform(post("/my-pages/unregister")
+        mockMvc.perform(post("/my-infos/unregister")
                 .sessionAttr(USER, userSession)
                 .param("passwordRequest", "124d4"))
                 .andDo(print())

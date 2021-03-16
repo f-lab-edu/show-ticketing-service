@@ -7,7 +7,6 @@ import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpSession;
 
 import static com.show.showticketingservice.tool.constants.UserConstant.USER;
@@ -42,7 +41,7 @@ public class SessionLoginService implements LoginService {
     }
 
     @Override
-    public UserSession getLoginUser() {
+    public UserSession getCurrentUserSession() {
         return (UserSession) httpSession.getAttribute(USER);
     }
 
