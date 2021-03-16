@@ -1,4 +1,4 @@
-package com.show.showticketingservice.model.exception;
+package com.show.showticketingservice.model.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

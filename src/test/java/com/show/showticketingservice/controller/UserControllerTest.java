@@ -2,8 +2,9 @@ package com.show.showticketingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.UserType;
-import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserLoginRequest;
+import com.show.showticketingservice.model.user.UserRequest;
+import com.show.showticketingservice.tool.response.UserAuthorityResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     private UserRequest testUser;
+    private UserRequest managerAccount;
 
     @Autowired
     MockMvc mvc;
@@ -39,10 +42,11 @@ class UserControllerTest {
     @BeforeEach
     public void init() {
         testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
+        managerAccount = new UserRequest("managerTest1", "testPW1234#", "Test Manager", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.MANAGER);
     }
 
-    private void insertTestUser(UserRequest testUser) throws Exception {
-        String content = objectMapper.writeValueAsString(testUser);
+    private void insertTestUser(UserRequest user) throws Exception {
+        String content = objectMapper.writeValueAsString(user);
 
         mvc.perform(post("/users")
                 .content(content)
@@ -67,6 +71,46 @@ class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .session(httpSession))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("일반 계정으로 로그인 성공 시 Http Status 200 (OK) 과 GENERAL 권한(1) 리턴")
+    public void loginWithGeneralAccount() throws Exception {
+        insertTestUser(testUser);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getUserId(), testUser.getPassword());
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+        String response = objectMapper.writeValueAsString(UserAuthorityResponse.OK_GENERAL.getBody());
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
+                .andExpect(status().isOk())
+                .andExpect(content().string(response))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("관리자 계정으로 로그인 성공 시 Http Status 200 (OK) 과 MANAGER 권한(2) 리턴")
+    public void loginWithManager() throws Exception {
+        insertTestUser(managerAccount);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest(managerAccount.getUserId(), managerAccount.getPassword());
+
+        String content = objectMapper.writeValueAsString(userLoginRequest);
+        String response = objectMapper.writeValueAsString(UserAuthorityResponse.OK_MANAGER.getBody());
+
+        mvc.perform(post("/login")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .session(httpSession))
+                .andExpect(status().isOk())
+                .andExpect(content().string(response))
                 .andDo(print());
     }
 
@@ -184,7 +228,5 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
-
-
 
 }

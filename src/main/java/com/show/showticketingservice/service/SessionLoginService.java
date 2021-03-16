@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.show.showticketingservice.model.user.UserSession;
@@ -20,7 +21,7 @@ public class SessionLoginService implements LoginService {
     private final UserService userService;
 
     @Override
-    public void login(UserLoginRequest userLoginRequest) {
+    public UserType login(UserLoginRequest userLoginRequest) {
 
         if (httpSession.getAttribute(USER) != null) {
             throw new DuplicateRequestException("이미 로그인 된 상태입니다.");
@@ -31,6 +32,8 @@ public class SessionLoginService implements LoginService {
         UserSession userSession = new UserSession(userResponse.getUserId(), userResponse.getUserType());
 
         httpSession.setAttribute(USER, userSession);
+
+        return userResponse.getUserType();
     }
 
     @Override
