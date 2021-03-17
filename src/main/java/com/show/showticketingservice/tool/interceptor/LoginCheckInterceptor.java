@@ -20,9 +20,11 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        UserAuthenticationNecessary userAuthentication = handlerMethod.getMethodAnnotation(UserAuthenticationNecessary.class);
+        UserAuthenticationNecessary userAuthentication =
+                handlerMethod.getMethodAnnotation(UserAuthenticationNecessary.class);
 
-        if (userAuthentication != null && !loginService.isUserLoggedIn()) {
+        if(userAuthentication != null && !loginService.isLoginUser()) {
+
             throw new UserNotLoggedInException();
         }
 
