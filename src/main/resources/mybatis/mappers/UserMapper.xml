@@ -18,6 +18,12 @@
         FROM user
         WHERE userId = #{userId}
     </select>
+    
+    <update id="updateUserInfo" parameterType="map" >
+        UPDATE user
+        SET password = #{updateRequest.newPassword}, phoneNum = #{updateRequest.newPhoneNum}, address = #{updateRequest.newAddress}
+        WHERE userId = #{userId}
+    </update>
 
     <select id="getUserPasswordByUserId" parameterType="String" resultType="String" >
         SELECT password

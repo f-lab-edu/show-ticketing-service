@@ -1,5 +1,6 @@
 package com.show.showticketingservice.mapper;
 
+import com.show.showticketingservice.model.user.UserUpdateRequest;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import org.apache.ibatis.annotations.*;
@@ -12,6 +13,8 @@ public interface UserMapper {
     boolean isIdExists(String userId);
 
     UserResponse getUserByUserId(String userId);
+
+    void updateUserInfo(@Param("userId") String userId, @Param("updateRequest") UserUpdateRequest userUpdateRequest);
 
     int deleteUserById(String userId);
 
