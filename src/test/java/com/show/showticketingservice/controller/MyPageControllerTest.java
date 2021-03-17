@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
-public class MypageControllerTest {
+public class MyPageControllerTest {
 
     private UserRequest userRequest;
 

@@ -1,6 +1,6 @@
 package com.show.showticketingservice.config;
 
-import com.show.showticketingservice.tool.interceptor.LoginCheckIntereceptor;
+import com.show.showticketingservice.tool.interceptor.LoginCheckInterceptor;
 import com.show.showticketingservice.tool.resolver.CurrentUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -14,13 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final LoginCheckIntereceptor loginCheckIntereceptor;
+    private final LoginCheckInterceptor loginCheckInterceptor;
 
     private final CurrentUserArgumentResolver currentUserArgumentResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginCheckIntereceptor);
+        registry.addInterceptor(loginCheckInterceptor);
     }
 
     @Override

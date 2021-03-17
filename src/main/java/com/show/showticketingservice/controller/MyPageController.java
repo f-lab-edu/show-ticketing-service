@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/my-infos")
-public class MypageController {
+public class MyPageController {
 
     private final UserService userService;
 
