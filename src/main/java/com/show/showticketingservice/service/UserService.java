@@ -4,8 +4,10 @@ import com.show.showticketingservice.exception.authentication.UserIdAlreadyExist
 import com.show.showticketingservice.exception.authentication.UserIdNotExistsException;
 import com.show.showticketingservice.exception.authentication.UserPasswordWrongException;
 import com.show.showticketingservice.mapper.UserMapper;
+import com.show.showticketingservice.model.user.UserUpdateRequest;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
+import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,5 +52,10 @@ public class UserService {
 
     private boolean isPasswordMatches(String passwordRequest, String userPassword) {
         return passwordEncryptor.isMatched(passwordRequest, userPassword);
+    }
+
+    public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {
+        String newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.getNewPassword());
+        userMapper.updateUserInfo(userSession.getUserId(), userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword));
     }
 }
