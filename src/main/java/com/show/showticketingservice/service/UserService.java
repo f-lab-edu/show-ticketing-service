@@ -4,15 +4,14 @@ import com.show.showticketingservice.exception.authentication.UserIdAlreadyExist
 import com.show.showticketingservice.exception.authentication.UserIdNotExistsException;
 import com.show.showticketingservice.exception.authentication.UserPasswordWrongException;
 import com.show.showticketingservice.mapper.UserMapper;
+import com.show.showticketingservice.model.user.UserUpdateRequest;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -25,8 +24,6 @@ public class UserService {
         checkIdExists(userRequest.getUserId());
 
         insertUser(userRequest);
-
-        log.info("sign up success");
     }
 
     public void insertUser(UserRequest userRequest) {
@@ -66,5 +63,10 @@ public class UserService {
         }
 
         userMapper.deleteUserById(userSession.getUserId());
+    }
+
+    public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {
+        String newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.getNewPassword());
+        userMapper.updateUserInfo(userSession.getUserId(), userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword));
     }
 }

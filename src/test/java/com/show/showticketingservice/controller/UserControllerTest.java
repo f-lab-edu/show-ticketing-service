@@ -165,4 +165,26 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("로그아웃 성공 시 Http Status 200 (OK) 리턴")
+    public void logout() throws Exception {
+        login();
+
+        mvc.perform(get("/logout")
+                .session(httpSession))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인 되지 않은 상태에서 로그아웃 시도 시 Http Status 401 (Unauthorized) 리턴")
+    public void nullUserLogout() throws Exception {
+        mvc.perform(get("/logout")
+                .session(httpSession))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
 }

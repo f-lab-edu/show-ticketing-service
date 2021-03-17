@@ -7,8 +7,9 @@ public interface LoginService {
 
     void login(UserLoginRequest userLoginRequest);
 
-    boolean isLoginUser();
+    void logout();
+
+    boolean isUserLoggedIn();
 
     UserSession getCurrentUserSession();
-
 }
