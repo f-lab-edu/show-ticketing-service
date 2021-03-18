@@ -16,7 +16,7 @@ public interface UserMapper {
 
     void updateUserInfo(@Param("userId") String userId, @Param("updateRequest") UserUpdateRequest userUpdateRequest);
 
-    int deleteUserById(String userId);
+    void deleteUserByUserId(String userId);
 
     String getUserPasswordByUserId(String UserId);
 }

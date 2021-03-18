@@ -62,7 +62,7 @@ public class UserService {
             throw new UserPasswordWrongException();
         }
 
-        userMapper.deleteUserById(userSession.getUserId());
+        userMapper.deleteUserByUserId(userSession.getUserId());
     }
 
     public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {
