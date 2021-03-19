@@ -1,11 +1,12 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserSession;
 
 public interface LoginService {
 
-    void login(UserLoginRequest userLoginRequest);
+    UserType login(UserLoginRequest userLoginRequest);
 
     void logout();
 

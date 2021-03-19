@@ -4,7 +4,7 @@ import com.show.showticketingservice.exception.authentication.UserIdAlreadyExist
 import com.show.showticketingservice.exception.authentication.UserIdNotExistsException;
 import com.show.showticketingservice.exception.authentication.UserNotLoggedInException;
 import com.show.showticketingservice.exception.authentication.UserPasswordWrongException;
-import com.show.showticketingservice.model.exception.ExceptionResponse;
+import com.show.showticketingservice.model.responses.ExceptionResponse;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.show.showticketingservice.tool;
+package com.show.showticketingservice.tool.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

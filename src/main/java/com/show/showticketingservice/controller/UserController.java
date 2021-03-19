@@ -1,12 +1,16 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.enumerations.UserType;
+import com.show.showticketingservice.model.responses.Authority;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.service.LoginService;
 import com.show.showticketingservice.service.UserService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
+import com.show.showticketingservice.tool.response.UserAuthorityResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,8 +24,15 @@ public class UserController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public void login(@RequestBody UserLoginRequest userLoginRequest) {
-        loginService.login(userLoginRequest);
+    public ResponseEntity<Authority> login(@RequestBody UserLoginRequest userLoginRequest) {
+        UserType userType = loginService.login(userLoginRequest);
+
+        if (userType == UserType.GENERAL) {
+            return UserAuthorityResponse.OK_GENERAL;
+        } else {
+            return UserAuthorityResponse.OK_MANAGER;
+        }
+
     }
 
     @GetMapping("/logout")
