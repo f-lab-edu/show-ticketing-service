@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserRequest;
+import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.response.UserAuthorityResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
+import static com.show.showticketingservice.tool.constants.UserConstant.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,6 +33,7 @@ class UserControllerTest {
 
     private UserRequest testUser;
     private UserRequest managerAccount;
+    private UserSession userSession;
 
     @Autowired
     MockMvc mvc;
@@ -39,10 +44,16 @@ class UserControllerTest {
     @Autowired
     MockHttpSession httpSession;
 
+    @Autowired
+    WebApplicationContext webApplicationContext;
+
     @BeforeEach
     public void init() {
         testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
         managerAccount = new UserRequest("managerTest1", "testPW1234#", "Test Manager", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.MANAGER);
+        userSession = new UserSession(testUser.getUserId(), testUser.getUserType());
+
+        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     private void insertTestUser(UserRequest user) throws Exception {
@@ -68,10 +79,11 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
+
+        httpSession.setAttribute(USER, userSession);
     }
 
     @Test
@@ -87,8 +99,7 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(response))
                 .andDo(print());
@@ -107,8 +118,7 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(response))
                 .andDo(print());
@@ -126,8 +136,7 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -144,8 +153,7 @@ class UserControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -223,8 +231,7 @@ class UserControllerTest {
     @Test
     @DisplayName("로그인 되지 않은 상태에서 로그아웃 시도 시 Http Status 401 (Unauthorized) 리턴")
     public void nullUserLogout() throws Exception {
-        mvc.perform(get("/logout")
-                .session(httpSession))
+        mvc.perform(get("/logout"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
