@@ -1,12 +1,9 @@
 package com.show.showticketingservice.controller;
 
-import com.show.showticketingservice.model.venue.VenueRequest;
+import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.service.VenueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -18,8 +15,8 @@ public class VenueController {
     private final VenueService venueService;
 
     @PostMapping
-    public void insertVenue(@RequestBody @Valid VenueRequest venueRequest) {
-        venueService.insertVenue(venueRequest);
+    public void insertVenue(@RequestBody @Valid Venue venue) {
+        venueService.insertVenue(venue);
     }
 
 }

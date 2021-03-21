@@ -3,9 +3,14 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.VenueMapper">
 
-    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.VenueRequest">
+    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.Venue">
         INSERT INTO venue(name, address, telNum, homepage)
         VALUES(#{name}, #{address}, #{telNum}, #{homepage})
     </insert>
+
+    <select id="isVenueExists" parameterType="String" resultType="boolean">
+        SELECT EXISTS
+        (SELECT * FROM venue WHERE name = #{venueName})
+    </select>
 
 </mapper>
