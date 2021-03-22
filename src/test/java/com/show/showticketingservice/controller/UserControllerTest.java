@@ -34,15 +34,10 @@ class UserControllerTest {
     private UserRequest testUser;
     private UserRequest managerAccount;
     private UserSession userSession;
-
-    @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    MockHttpSession httpSession;
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -54,6 +49,7 @@ class UserControllerTest {
         userSession = new UserSession(testUser.getUserId(), testUser.getUserType());
 
         this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
     }
 
     private void insertTestUser(UserRequest user) throws Exception {
@@ -83,7 +79,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        httpSession.setAttribute(USER, userSession);
     }
 
     @Test
@@ -171,7 +166,7 @@ class UserControllerTest {
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .sessionAttr(USER, userSession))
                 .andExpect(status().isConflict())
                 .andDo(print());
     }
@@ -223,7 +218,7 @@ class UserControllerTest {
         login();
 
         mvc.perform(get("/logout")
-                .session(httpSession))
+                .sessionAttr(USER, userSession))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

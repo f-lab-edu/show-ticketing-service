@@ -36,8 +36,7 @@ class MyPageControllerTest {
 
     private UserUpdateRequest updateRequest;
 
-    @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @Autowired
     WebApplicationContext context;
@@ -56,7 +55,10 @@ class MyPageControllerTest {
 
         updateRequest = new UserUpdateRequest("!validPW123", "010-1234-5678", "Busan, South Korea");
 
-        this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        httpSession.setAttribute(USER, userSession);
+
     }
 
     private void insertUser(UserRequest userRequest) throws Exception {
@@ -78,12 +80,9 @@ class MyPageControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
-
-        httpSession.setAttribute(USER, userSession);
     }
 
     @Test
