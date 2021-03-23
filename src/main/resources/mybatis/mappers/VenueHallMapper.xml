@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.show.showticketingservice.mapper.VenueHallMapper">
+
+    <insert id="insertVenueHall" parameterType="map">
+        INSERT INTO venueHall(venueId, name, rowSeats, columSeats, seatingCapacity)
+           VALUES
+              <foreach collection="venueHalls" item="venueHall" separator=",">
+                  (
+                  #{venueId},
+                  #{venueHall.name},
+                  #{venueHall.rowSeats},
+                  #{venueHall.columSeats},
+                  #{venueHall.seatingCapacity}
+                  )
+              </foreach>
+    </insert>
+
+</mapper>
