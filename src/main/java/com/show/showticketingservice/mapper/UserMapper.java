@@ -15,5 +15,8 @@ public interface UserMapper {
     UserResponse getUserByUserId(String userId);
 
     void updateUserInfo(@Param("userId") String userId, @Param("updateRequest") UserUpdateRequest userUpdateRequest);
-}
 
+    void deleteUserByUserId(String userId);
+
+    String getUserPasswordByUserId(String UserId);
+}

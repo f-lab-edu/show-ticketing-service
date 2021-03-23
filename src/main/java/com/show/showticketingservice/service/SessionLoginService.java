@@ -7,7 +7,6 @@ import com.show.showticketingservice.model.user.UserSession;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpSession;
 
 import static com.show.showticketingservice.tool.constants.UserConstant.USER;

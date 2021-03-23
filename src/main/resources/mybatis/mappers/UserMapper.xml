@@ -25,4 +25,14 @@
         WHERE userId = #{userId}
     </update>
 
+    <select id="getUserPasswordByUserId" parameterType="String" resultType="String" >
+        SELECT password
+        FROM user
+        WHERE userId = #{userId}
+    </select>
+
+    <delete id="deleteUserByUserId" parameterType="String">
+        DELETE FROM user WHERE userId = #{userId}
+    </delete>
+
 </mapper>

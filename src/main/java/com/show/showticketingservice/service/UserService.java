@@ -54,6 +54,17 @@ public class UserService {
         return passwordEncryptor.isMatched(passwordRequest, userPassword);
     }
 
+    public void deleteUser(UserSession userSession, String passwordRequest) {
+
+        String hashPassword = userMapper.getUserPasswordByUserId(userSession.getUserId());
+
+        if(!isPasswordMatches(passwordRequest, hashPassword)) {
+            throw new UserPasswordWrongException();
+        }
+
+        userMapper.deleteUserByUserId(userSession.getUserId());
+    }
+
     public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {
         String newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.getNewPassword());
         userMapper.updateUserInfo(userSession.getUserId(), userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword));
