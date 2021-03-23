@@ -9,7 +9,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/venue")
+@RequestMapping("/venues")
 public class VenueController {
 
     private final VenueService venueService;

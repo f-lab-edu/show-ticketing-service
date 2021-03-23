@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
@@ -19,10 +20,10 @@ public class Venue {
     private final String address;
 
     @NotBlank(message = "전화번호를 입력하세요.")
-    @Length(max = 20, message = "전화번호 입력은 최대 100자까지 가능합니다.")
-    private final String telNum;
+    @Length(max = 20, message = "전화번호 입력은 최대 20자까지 가능합니다.")
+    private final String tel;
 
-    @NotBlank(message = "전화번호를 입력하세요.")
+    @NotNull
     @Length(max = 100, message = "홈페이지 입력은 최대 100자까지 가능합니다.")
     private final String homepage;
 
