@@ -1,6 +1,7 @@
 package com.show.showticketingservice.tool.advice;
 
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
+import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.VenueHallDuplicationException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,13 @@ public class VenueExceptionAdvice {
 
     @ExceptionHandler(VenueHallDuplicationException.class)
     public ResponseEntity<ExceptionResponse> VenueHallDuplicationException(final VenueHallDuplicationException e, WebRequest request) {
+        log.error("venueHallName registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VenueHallAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> venueHallAlreadyExistsException(final VenueHallAlreadyExistsException e, WebRequest request) {
         log.error("venueHall registration failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
