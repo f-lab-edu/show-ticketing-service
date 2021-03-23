@@ -20,3 +20,14 @@ CREATE TABLE venue
     `homepage`  VARCHAR(100)    NULL,
     PRIMARY KEY (venueId)
 );
+
+CREATE TABLE venueHall(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   venueId INT UNSIGNED NOT NULL,
+   name VARCHAR(40) NOT NULL,
+   rowSeats VARCHAR(10) NOT NULL,
+   columSeats VARCHAR(10) NOT NULL,
+   seatingCapacity INT(10) NOT NULL,
+   PRIMARY KEY (id),
+   FOREIGN KEY (venueId) REFERENCES venue(venueId)
+);
