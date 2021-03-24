@@ -1,8 +1,8 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.service.VenueService;
-import com.show.showticketingservice.tool.annotation.ManagerAuthority;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +20,7 @@ public class VenueController {
     private final VenueService venueService;
 
     @PostMapping
-    @ManagerAuthority
-    @UserAuthenticationNecessary
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void insertVenue(@RequestBody @Valid Venue venue) {
         venueService.insertVenue(venue);
     }

@@ -34,8 +34,6 @@ class VenueControllerTest {
 
     private Venue venue;
 
-    private UserSession userSession;
-
     private MockMvc mvc;
 
     @Autowired
@@ -59,7 +57,7 @@ class VenueControllerTest {
     }
 
     private void loginUser(UserRequest userRequest) throws Exception {
-        userSession = new UserSession(userRequest.getUserId(), userRequest.getUserType());
+        UserSession userSession = new UserSession(userRequest.getUserId(), userRequest.getUserType());
 
         httpSession.setAttribute(USER, userSession);
     }
