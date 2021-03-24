@@ -15,7 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import static com.show.showticketingservice.tool.constants.UserConstant.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,8 +36,10 @@ class MyPageControllerTest {
 
     private UserUpdateRequest updateRequest;
 
+    private MockMvc mvc;
+
     @Autowired
-    MockMvc mvc;
+    WebApplicationContext context;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -50,6 +54,11 @@ class MyPageControllerTest {
         userSession = new UserSession(testUser.getUserId(), testUser.getUserType());
 
         updateRequest = new UserUpdateRequest("!validPW123", "010-1234-5678", "Busan, South Korea");
+
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        httpSession.setAttribute(USER, userSession);
+
     }
 
     private void insertUser(UserRequest userRequest) throws Exception {
@@ -71,8 +80,7 @@ class MyPageControllerTest {
         mvc.perform(post("/login")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -84,7 +92,7 @@ class MyPageControllerTest {
         loginUser(testUser);
 
         mvc.perform(post("/my-infos/unregister")
-                .sessionAttr(USER, userSession)
+                .session(httpSession)
                 .param("passwordRequest", testUser.getPassword()))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -97,7 +105,7 @@ class MyPageControllerTest {
         loginUser(testUser);
 
         mvc.perform(post("/my-infos/unregister")
-                .sessionAttr(USER, userSession)
+                .session(httpSession)
                 .param("passwordRequest", "124d4"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -130,8 +138,7 @@ class MyPageControllerTest {
         mvc.perform(put("/my-infos")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .session(httpSession))
+                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
