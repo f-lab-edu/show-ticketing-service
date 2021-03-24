@@ -13,12 +13,17 @@ CREATE TABLE `user` (
 
 CREATE TABLE venue
 (
-    `venueId`   INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `id`        INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
     `name`      VARCHAR(45)     NOT NULL,
     `address`   VARCHAR(100)    NOT NULL,
-    `telNum`    VARCHAR(20)     NOT NULL,
+    `tel`       VARCHAR(20)     NOT NULL,
     `homepage`  VARCHAR(100)    NULL,
-    PRIMARY KEY (venueId)
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX venue_Index ON venue
+(
+    name
 );
 
 CREATE TABLE venueHall(

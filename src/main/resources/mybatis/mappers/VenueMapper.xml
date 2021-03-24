@@ -4,8 +4,8 @@
 <mapper namespace="com.show.showticketingservice.mapper.VenueMapper">
 
     <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.Venue">
-        INSERT INTO venue(name, address, telNum, homepage)
-        VALUES(#{name}, #{address}, #{telNum}, #{homepage})
+        INSERT INTO venue(name, address, tel, homepage)
+        VALUES(#{name}, #{address}, #{tel}, #{homepage})
     </insert>
 
     <select id="isVenueExists" parameterType="String" resultType="boolean">

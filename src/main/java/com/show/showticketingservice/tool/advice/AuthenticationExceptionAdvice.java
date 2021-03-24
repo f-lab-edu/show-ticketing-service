@@ -1,9 +1,6 @@
 package com.show.showticketingservice.tool.advice;
 
-import com.show.showticketingservice.exception.authentication.UserIdAlreadyExistsException;
-import com.show.showticketingservice.exception.authentication.UserIdNotExistsException;
-import com.show.showticketingservice.exception.authentication.UserNotLoggedInException;
-import com.show.showticketingservice.exception.authentication.UserPasswordWrongException;
+import com.show.showticketingservice.exception.authentication.*;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +45,13 @@ public class AuthenticationExceptionAdvice {
     @ExceptionHandler(UserNotLoggedInException.class)
     public ResponseEntity<ExceptionResponse> userNotLoggedInException(final UserNotLoggedInException e, WebRequest request) {
         log.error("Unable to find User - User is not logged in", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserHaveNoAuthorityException.class)
+    public ResponseEntity<ExceptionResponse> userHaveNoAuthorityException(final UserHaveNoAuthorityException e, WebRequest request) {
+        log.error("Unable to execute request", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
     }
