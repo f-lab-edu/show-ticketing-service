@@ -10,6 +10,6 @@ public interface VenueHallMapper {
 
     void insertVenueHall(List<VenueHall> venueHalls, String venueId);
 
-    boolean isVenueHallExists(List<VenueHall> venueHalls, String venueId);
+    boolean isVenueHallsExists(List<VenueHall> venueHalls, String venueId);
 
 }
