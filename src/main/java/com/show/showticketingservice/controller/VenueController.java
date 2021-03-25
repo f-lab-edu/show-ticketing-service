@@ -5,10 +5,7 @@ import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.service.VenueService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,6 +20,12 @@ public class VenueController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void insertVenue(@RequestBody @Valid Venue venue) {
         venueService.insertVenue(venue);
+    }
+
+    @PutMapping("/{venueId}")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid Venue venueUpdateRequest) {
+        venueService.updateVenueInfo(venueId, venueUpdateRequest);
     }
 
 }
