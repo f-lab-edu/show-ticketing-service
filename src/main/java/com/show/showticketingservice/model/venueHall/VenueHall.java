@@ -1,22 +1,31 @@
 package com.show.showticketingservice.model.venueHall;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@AllArgsConstructor
 public class VenueHall {
 
     @NotBlank(message = "공연홀 이름을 입력하세요.")
     private final String name;
 
-    @NotBlank(message = "공연홀 좌석 열을 입력하세요.")
-    private final String rowSeats;
+    @Min(1)
+    @NotBlank(message = "공연홀 좌석 최소 1 이상 행을 입력하세요.")
+    private final int columSeats;
 
-    @NotBlank(message = "공연홀 좌석 행을 입력하세요.")
-    private final String columSeats;
+    @Min(1)
+    @NotBlank(message = "공연홀 좌석 최소 1 이상 열을 입력하세요.")
+    private final int rowSeats;
 
-    @NotBlank(message = "공연홀 좌석 수를 입력하세요.")
-    private final String seatingCapacity;
+    @JsonIgnore
+    private final int seatingCapacity;
+
+    public VenueHall(String name, int columSeats, int rowSeats) {
+        this.name = name;
+        this.columSeats = columSeats;
+        this.rowSeats = rowSeats;
+        this.seatingCapacity = columSeats * rowSeats;
+    }
 }

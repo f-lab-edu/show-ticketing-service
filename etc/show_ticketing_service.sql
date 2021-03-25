@@ -30,9 +30,9 @@ CREATE TABLE venueHall(
    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
    venueId INT UNSIGNED NOT NULL,
    name VARCHAR(40) NOT NULL,
-   rowSeats VARCHAR(10) NOT NULL,
-   columSeats VARCHAR(10) NOT NULL,
-   seatingCapacity INT(10) NOT NULL,
+   rowSeats INT(10) NOT NULL,
+   columSeats INT(10) NOT NULL,
+   seatingCapacity INT(100) NOT NULL,
    PRIMARY KEY (id),
-   FOREIGN KEY (venueId) REFERENCES venue(venueId)
+   FOREIGN KEY (venueId) REFERENCES venue(id)
 );

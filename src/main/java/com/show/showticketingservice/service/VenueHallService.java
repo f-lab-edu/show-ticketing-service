@@ -1,11 +1,13 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
-import com.show.showticketingservice.exception.venueHall.VenueHallDuplicationException;
+import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
 import com.show.showticketingservice.model.venueHall.VenueHall;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +28,14 @@ public class VenueHallService {
     }
 
     public void checkDuplicationVenueHallName(List<VenueHall> venueHalls) {
-        Map<String, Integer> hashMap = new HashMap<>();
+        Map<String, Integer> hallNameMap = new HashMap<>();
 
         for(VenueHall venueHall : venueHalls) {
-            if(hashMap.containsKey(venueHall.getName())) {
-                throw new VenueHallDuplicationException();
+            if(hallNameMap.containsKey(venueHall.getName())) {
+                throw new SameVenueHallAdditionException();
             }
 
-            hashMap.put(venueHall.getName(), 1);
+            hallNameMap.put(venueHall.getName(), 1);
         }
     }
 
