@@ -40,7 +40,7 @@ public class VenueHallService {
     }
 
     public void checkVenueHallExists(List<VenueHall> venueHalls, String venueId) {
-        if(venueHallMapper.isVenueHallExists(venueHalls, venueId)) {
+        if(venueHallMapper.isVenueHallsExists(venueHalls, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
     }
