@@ -26,4 +26,18 @@
         )
     </select>
 
+    <select id="isVenueHallExists" parameterType="map" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM venueHall WHERE name = #{venueHall.name} AND venueId = #{venueId})
+    </select>
+
+    <update id="updateVenueHall" parameterType="map" >
+        UPDATE venueHall
+        SET
+           name = #{venueHall.name},
+           rowSeats = #{venueHall.rowSeats},
+           columSeats = #{venueHall.columSeats},
+           seatingCapacity = #{venueHall.seatingCapacity}
+        WHERE id = #{hallId} AND venueId = #{venueId}
+    </update>
+
 </mapper>

@@ -45,6 +45,16 @@ public class VenueHallService {
         }
     }
 
-    public void checkVenueHallExists(VenueHall venueHall, String venueId, String hallId) {
+    public void checkVenueHallExists(VenueHall venueHall, String venueId) {
+        if(venueHallMapper.isVenueHallExists(venueHall, venueId)) {
+            throw new VenueHallAlreadyExistsException();
+        }
+    }
+
+    public void updateVenueHall(VenueHall venueHall, String venueId, String hallId) {
+
+        checkVenueHallExists(venueHall, venueId);
+
+        venueHallMapper.updateVenueHall(venueHall, venueId, hallId);
     }
 }

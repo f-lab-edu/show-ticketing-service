@@ -36,5 +36,6 @@ public class VenueController {
                                 @PathVariable String venueId,
                                 @PathVariable String hallId) {
 
+        venueHallService.updateVenueHall(venueHall, venueId, hallId);
     }
 }
