@@ -44,4 +44,7 @@ public class VenueHallService {
             throw new VenueHallAlreadyExistsException();
         }
     }
+
+    public void checkVenueHallExists(VenueHall venueHall, String venueId, String hallId) {
+    }
 }

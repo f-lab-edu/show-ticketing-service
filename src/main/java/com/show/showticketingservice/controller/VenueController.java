@@ -31,4 +31,10 @@ public class VenueController {
         venueHallService.insertVenueHall(venueHalls, venueId);
     }
 
+    @PutMapping("{venueId}/halls/{hallId}")
+    public void updateVenueHall(@RequestBody @Valid VenueHall venueHall,
+                                @PathVariable String venueId,
+                                @PathVariable String hallId) {
+
+    }
 }
