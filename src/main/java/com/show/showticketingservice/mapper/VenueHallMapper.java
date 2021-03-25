@@ -11,7 +11,7 @@ public interface VenueHallMapper {
     void insertVenueHall(List<VenueHall> venueHalls, String venueId);
 
     boolean isVenueHallsExists(List<VenueHall> venueHalls, String venueId);
-
+    
     boolean isVenueHallExists(VenueHall venueHall, String venueId);
 
     void updateVenueHall(VenueHall venueHall, String venueId, String hallId);

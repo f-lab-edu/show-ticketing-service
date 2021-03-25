@@ -22,7 +22,7 @@ public class VenueHallService {
 
         checkDuplicationVenueHallName(venueHalls);
 
-        checkVenueHallExists(venueHalls, venueId);
+        checkVenueHallsExists(venueHalls, venueId);
 
         venueHallMapper.insertVenueHall(venueHalls, venueId);
     }
@@ -39,7 +39,7 @@ public class VenueHallService {
         }
     }
 
-    public void checkVenueHallExists(List<VenueHall> venueHalls, String venueId) {
+    public void checkVenueHallsExists(List<VenueHall> venueHalls, String venueId) {
         if(venueHallMapper.isVenueHallsExists(venueHalls, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
