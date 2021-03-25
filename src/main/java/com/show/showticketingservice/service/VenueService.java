@@ -5,6 +5,7 @@ import com.show.showticketingservice.mapper.VenueMapper;
 import com.show.showticketingservice.model.venue.Venue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +13,7 @@ public class VenueService {
 
     private final VenueMapper venueMapper;
 
+    @Transactional
     public void insertVenue(Venue venue) {
         checkVenueExists(venue.getName());
         venueMapper.insertVenue(venue);
