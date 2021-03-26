@@ -38,4 +38,9 @@ public class VenueController {
 
         venueHallService.updateVenueHall(venueHall, venueId, hallId);
     }
+
+    @DeleteMapping("{venueId}/halls")
+    public void deleteVenueHall(@PathVariable String venueId, @RequestBody List<String> hallIds) {
+        venueHallService.deleteVenueHall(venueId, hallIds);
+    }
 }

@@ -58,4 +58,10 @@ public class VenueHallService {
 
         venueHallMapper.updateVenueHall(venueHall, venueId, hallId);
     }
+
+    public void deleteVenueHall(String venueId, List<String> hallIds) {
+
+        venueHallMapper.deleteVenueHall(venueId, hallIds);
+    }
+
 }
