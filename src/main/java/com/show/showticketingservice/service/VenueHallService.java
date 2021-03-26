@@ -51,6 +51,7 @@ public class VenueHallService {
         }
     }
 
+    @Transactional
     public void updateVenueHall(VenueHall venueHall, String venueId, String hallId) {
 
         checkVenueHallExists(venueHall, venueId);
