@@ -48,4 +48,8 @@
         AND venueId = #{venueId}
     </delete>
 
+    <select id="getVenueHalls" parameterType="String" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
+        SELECT * FROM venueHall WHERE venueId = #{venueId}
+    </select>
+
 </mapper>

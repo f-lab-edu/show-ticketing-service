@@ -3,6 +3,7 @@ package com.show.showticketingservice.controller;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.model.venueHall.VenueHall;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.service.VenueHallService;
 import com.show.showticketingservice.service.VenueService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
@@ -42,5 +43,10 @@ public class VenueController {
     @DeleteMapping("{venueId}/halls")
     public void deleteVenueHall(@PathVariable String venueId, @RequestBody List<String> hallIds) {
         venueHallService.deleteVenueHall(venueId, hallIds);
+    }
+
+    @GetMapping("{venueId}/halls")
+    public List<VenueHallResponse> getVenueHalls(@PathVariable String venueId) {
+        return venueHallService.getVenueHalls(venueId);
     }
 }

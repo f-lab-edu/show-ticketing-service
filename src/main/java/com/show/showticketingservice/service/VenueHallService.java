@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsE
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
 import com.show.showticketingservice.model.venueHall.VenueHall;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +63,11 @@ public class VenueHallService {
     public void deleteVenueHall(String venueId, List<String> hallIds) {
 
         venueHallMapper.deleteVenueHall(venueId, hallIds);
+    }
+
+    public List<VenueHallResponse> getVenueHalls(String venueId) {
+
+        return venueHallMapper.getVenueHalls(venueId);
     }
 
 }
