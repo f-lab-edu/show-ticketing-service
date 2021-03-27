@@ -19,4 +19,9 @@
         WHERE id = #{venueId}
     </update>
 
+    <delete id="deleteVenue">
+        DELETE FROM venue
+        WHERE id = #{venueId}
+    </delete>
+
 </mapper>

@@ -28,4 +28,10 @@ public class VenueController {
         venueService.updateVenueInfo(venueId, venueUpdateRequest);
     }
 
+    @DeleteMapping("/{venueId}")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void deleteVenue(@PathVariable int venueId) {
+        venueService.deleteVenue(venueId);
+    }
+
 }

@@ -13,4 +13,5 @@ public interface VenueMapper {
 
     void updateVenueInfo(@Param("venueId") int venueId, @Param("updateRequest") Venue venueUpdateRequest);
 
+    void deleteVenue(int venueId);
 }
