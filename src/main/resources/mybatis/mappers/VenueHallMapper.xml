@@ -40,7 +40,7 @@
         WHERE id = #{hallId} AND venueId = #{venueId}
     </update>
 
-    <delete id="deleteVenueHall" parameterType="map">
+    <delete id="deleteVenueHalls" parameterType="map">
         DELETE FROM venueHall WHERE id IN
             <foreach collection="hallIds" item="hallId" open="(" close=")" separator=",">
                 #{hallId}

@@ -40,7 +40,7 @@ public class VenueController {
     }
 
     @DeleteMapping("{venueId}/halls")
-    public void deleteVenueHall(@PathVariable String venueId, @RequestBody List<String> hallIds) {
-        venueHallService.deleteVenueHall(venueId, hallIds);
+    public void deleteVenueHalls(@PathVariable String venueId, @RequestBody List<String> hallIds) {
+        venueHallService.deleteVenueHalls(venueId, hallIds);
     }
 }

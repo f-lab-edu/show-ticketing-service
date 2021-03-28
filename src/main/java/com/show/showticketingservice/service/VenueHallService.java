@@ -59,9 +59,9 @@ public class VenueHallService {
         venueHallMapper.updateVenueHall(venueHall, venueId, hallId);
     }
 
-    public void deleteVenueHall(String venueId, List<String> hallIds) {
+    public void deleteVenueHalls(String venueId, List<String> hallIds) {
 
-        venueHallMapper.deleteVenueHall(venueId, hallIds);
+        venueHallMapper.deleteVenueHalls(venueId, hallIds);
     }
 
 }
