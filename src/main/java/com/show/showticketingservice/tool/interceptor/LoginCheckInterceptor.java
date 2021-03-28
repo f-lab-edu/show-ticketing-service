@@ -33,7 +33,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
             UserSession userSession = (UserSession) request.getSession().getAttribute(USER);
 
-            checkUserTypeMatchRole(userAuthentication, userSession);
+            validateUserRole(userAuthentication, userSession);
         }
 
         return true;
@@ -44,7 +44,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             throw new UserNotLoggedInException();
     }
 
-    private void checkUserTypeMatchRole(UserAuthenticationNecessary userAuthentication, UserSession userSession) {
+    private void validateUserRole(UserAuthenticationNecessary userAuthentication, UserSession userSession) {
         if ((userAuthentication.role() == AccessRoles.GENERAL && userSession.getUserType() != UserType.GENERAL) ||
                 (userAuthentication.role() == AccessRoles.MANAGER && userSession.getUserType() != UserType.MANAGER))
             throw new UserHaveNoAuthorityException();
