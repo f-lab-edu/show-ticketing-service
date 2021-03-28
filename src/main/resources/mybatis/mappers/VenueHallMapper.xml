@@ -3,7 +3,7 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.VenueHallMapper">
 
-    <insert id="insertVenueHall" parameterType="map">
+    <insert id="insertVenueHalls" parameterType="map">
         INSERT INTO venueHall(venueId, name, rowSeats, columnSeats, seatingCapacity)
            VALUES
               <foreach collection="venueHallRequests" item="venueHallRequest" separator=",">

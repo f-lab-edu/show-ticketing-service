@@ -18,13 +18,13 @@ public class VenueHallService {
     private final VenueHallMapper venueHallMapper;
 
     @Transactional
-    public void insertVenueHall(List<VenueHallRequest> venueHallRequests, String venueId) {
+    public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, String venueId) {
 
         checkDuplicationVenueHallName(venueHallRequests);
 
         checkVenueHallsExists(venueHallRequests, venueId);
 
-        venueHallMapper.insertVenueHall(venueHallRequests, venueId);
+        venueHallMapper.insertVenueHalls(venueHallRequests, venueId);
     }
 
     public void checkDuplicationVenueHallName(List<VenueHallRequest> venueHallRequests) {

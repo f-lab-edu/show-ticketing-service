@@ -27,8 +27,8 @@ public class VenueController {
     }
 
     @PostMapping("{venueId}/halls")
-    public void insertVenueHall(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
-        venueHallService.insertVenueHall(venueHallRequests, venueId);
+    public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
+        venueHallService.insertVenueHalls(venueHallRequests, venueId);
     }
 
 }

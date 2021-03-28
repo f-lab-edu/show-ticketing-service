@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface VenueHallMapper {
 
-    void insertVenueHall(List<VenueHallRequest> venueHallRequests, String venueId);
+    void insertVenueHalls(List<VenueHallRequest> venueHallRequests, String venueId);
 
     boolean isVenueHallsExists(List<VenueHallRequest> venueHallRequests, String venueId);
 }
