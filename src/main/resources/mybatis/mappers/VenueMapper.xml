@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.show.showticketingservice.mapper.VenueMapper">
+
+    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.Venue">
+        INSERT INTO venue(name, address, tel, homepage)
+        VALUES(#{name}, #{address}, #{tel}, #{homepage})
+    </insert>
+
+    <select id="isVenueExists" parameterType="String" resultType="boolean">
+        SELECT EXISTS
+        (SELECT * FROM venue WHERE name = #{venueName})
+    </select>
+
+    <update id="updateVenueInfo" parameterType="map">
+        UPDATE venue
+        SET name = #{updateRequest.name}, address = #{updateRequest.address}, tel = #{updateRequest.tel}, homepage = #{updateRequest.homepage}
+        WHERE id = #{venueId}
+    </update>
+
+</mapper>
