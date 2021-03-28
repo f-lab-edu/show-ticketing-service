@@ -6,14 +6,14 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-public class VenueHall {
+public class VenueHallRequest {
 
     @NotBlank(message = "공연홀 이름을 입력하세요.")
     private final String name;
 
     @Min(1)
     @NotBlank(message = "공연홀 좌석 최소 1 이상 행을 입력하세요.")
-    private final int columSeats;
+    private final int columnSeats;
 
     @Min(1)
     @NotBlank(message = "공연홀 좌석 최소 1 이상 열을 입력하세요.")
@@ -22,10 +22,10 @@ public class VenueHall {
     @JsonIgnore
     private final int seatingCapacity;
 
-    public VenueHall(String name, int columSeats, int rowSeats) {
+    public VenueHallRequest(String name, int columnSeats, int rowSeats) {
         this.name = name;
-        this.columSeats = columSeats;
+        this.columnSeats = columnSeats;
         this.rowSeats = rowSeats;
-        this.seatingCapacity = columSeats * rowSeats;
+        this.seatingCapacity = columnSeats * rowSeats;
     }
 }

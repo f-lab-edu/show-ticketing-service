@@ -3,7 +3,7 @@ package com.show.showticketingservice.service;
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
-import com.show.showticketingservice.model.venueHall.VenueHall;
+import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,29 +18,29 @@ public class VenueHallService {
     private final VenueHallMapper venueHallMapper;
 
     @Transactional
-    public void insertVenueHall(List<VenueHall> venueHalls, String venueId) {
+    public void insertVenueHall(List<VenueHallRequest> venueHallRequests, String venueId) {
 
-        checkDuplicationVenueHallName(venueHalls);
+        checkDuplicationVenueHallName(venueHallRequests);
 
-        checkVenueHallsExists(venueHalls, venueId);
+        checkVenueHallsExists(venueHallRequests, venueId);
 
-        venueHallMapper.insertVenueHall(venueHalls, venueId);
+        venueHallMapper.insertVenueHall(venueHallRequests, venueId);
     }
 
-    public void checkDuplicationVenueHallName(List<VenueHall> venueHalls) {
+    public void checkDuplicationVenueHallName(List<VenueHallRequest> venueHallRequests) {
         Map<String, Integer> hallNameMap = new HashMap<>();
 
-        for(VenueHall venueHall : venueHalls) {
-            if(hallNameMap.containsKey(venueHall.getName())) {
+        for(VenueHallRequest venueHallRequest : venueHallRequests) {
+            if(hallNameMap.containsKey(venueHallRequest.getName())) {
                 throw new SameVenueHallAdditionException();
             }
 
-            hallNameMap.put(venueHall.getName(), 1);
+            hallNameMap.put(venueHallRequest.getName(), 1);
         }
     }
 
-    public void checkVenueHallsExists(List<VenueHall> venueHalls, String venueId) {
-        if(venueHallMapper.isVenueHallsExists(venueHalls, venueId)) {
+    public void checkVenueHallsExists(List<VenueHallRequest> venueHallRequests, String venueId) {
+        if(venueHallMapper.isVenueHallsExists(venueHallRequests, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
     }
