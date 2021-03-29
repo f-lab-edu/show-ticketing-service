@@ -66,7 +66,6 @@ public class VenueHallService {
     }
 
     public List<VenueHallResponse> getVenueHalls(String venueId) {
-
         return venueHallMapper.getVenueHalls(venueId);
     }
 

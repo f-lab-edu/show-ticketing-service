@@ -49,7 +49,7 @@
     </delete>
 
     <select id="getVenueHalls" parameterType="String" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
-        SELECT * FROM venueHall WHERE venueId = #{venueId}
+        SELECT id, venueId, name, columSeats, rowSeats, seatingCapacity FROM venueHall WHERE venueId = #{venueId}
     </select>
 
 </mapper>
