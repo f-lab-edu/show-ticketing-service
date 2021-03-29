@@ -24,4 +24,12 @@ public class VenueService {
             throw new VenueAlreadyExistsException();
         }
     }
+
+    public void updateVenueInfo(int venueId, Venue venueUpdateRequest) {
+        venueMapper.updateVenueInfo(venueId, venueUpdateRequest);
+    }
+
+    public void deleteVenue(int venueId) {
+        venueMapper.deleteVenue(venueId);
+    }
 }

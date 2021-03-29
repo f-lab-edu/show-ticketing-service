@@ -29,18 +29,24 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         UserAuthenticationNecessary userAuthentication = handlerMethod.getMethodAnnotation(UserAuthenticationNecessary.class);
 
         if (userAuthentication != null) {
-
-            if (!loginService.isUserLoggedIn())
-                throw new UserNotLoggedInException();
+            loginCheck();
 
             UserSession userSession = (UserSession) request.getSession().getAttribute(USER);
 
-            if ((userAuthentication.role() == AccessRoles.GENERAL && userSession.getUserType() != UserType.GENERAL) ||
-                    (userAuthentication.role() == AccessRoles.MANAGER && userSession.getUserType() != UserType.MANAGER))
-                throw new UserHaveNoAuthorityException();
-
+            validateUserRole(userAuthentication, userSession);
         }
 
         return true;
+    }
+
+    private void loginCheck() {
+        if (!loginService.isUserLoggedIn())
+            throw new UserNotLoggedInException();
+    }
+
+    private void validateUserRole(UserAuthenticationNecessary userAuthentication, UserSession userSession) {
+        if ((userAuthentication.role() == AccessRoles.GENERAL && userSession.getUserType() != UserType.GENERAL) ||
+                (userAuthentication.role() == AccessRoles.MANAGER && userSession.getUserType() != UserType.MANAGER))
+            throw new UserHaveNoAuthorityException();
     }
 }

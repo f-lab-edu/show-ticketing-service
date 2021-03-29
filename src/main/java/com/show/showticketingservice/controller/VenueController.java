@@ -27,6 +27,18 @@ public class VenueController {
         venueService.insertVenue(venue);
     }
 
+    @PutMapping("/{venueId}")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid Venue venueUpdateRequest) {
+        venueService.updateVenueInfo(venueId, venueUpdateRequest);
+    }
+
+    @DeleteMapping("/{venueId}")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void deleteVenue(@PathVariable int venueId) {
+        venueService.deleteVenue(venueId);
+    }
+
     @PostMapping("{venueId}/halls")
     public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
         venueHallService.insertVenueHalls(venueHallRequests, venueId);
@@ -49,4 +61,5 @@ public class VenueController {
     public List<VenueHallResponse> getVenueHalls(@PathVariable String venueId) {
         return venueHallService.getVenueHalls(venueId);
     }
+
 }

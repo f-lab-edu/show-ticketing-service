@@ -13,4 +13,15 @@
         (SELECT * FROM venue WHERE name = #{venueName})
     </select>
 
+    <update id="updateVenueInfo" parameterType="map">
+        UPDATE venue
+        SET name = #{updateRequest.name}, address = #{updateRequest.address}, tel = #{updateRequest.tel}, homepage = #{updateRequest.homepage}
+        WHERE id = #{venueId}
+    </update>
+
+    <delete id="deleteVenue">
+        DELETE FROM venue
+        WHERE id = #{venueId}
+    </delete>
+
 </mapper>
