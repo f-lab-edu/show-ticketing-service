@@ -40,4 +40,16 @@
         WHERE id = #{hallId} AND venueId = #{venueId}
     </update>
 
+    <delete id="deleteVenueHalls" parameterType="map">
+        DELETE FROM venueHall WHERE id IN
+            <foreach collection="hallIds" item="hallId" open="(" close=")" separator=",">
+                #{hallId}
+            </foreach>
+        AND venueId = #{venueId}
+    </delete>
+
+    <select id="getVenueHalls" parameterType="String" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
+        SELECT id, venueId, name, columSeats, rowSeats, seatingCapacity FROM venueHall WHERE venueId = #{venueId}
+    </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.venueHall.VenueHall;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,5 +16,9 @@ public interface VenueHallMapper {
     boolean isVenueHallExists(VenueHall venueHall, String venueId);
 
     void updateVenueHall(VenueHall venueHall, String venueId, String hallId);
+
+    void deleteVenueHalls(String venueId, List<String> hallIds);
+
+    List<VenueHallResponse> getVenueHalls(String venueId);
 
 }
