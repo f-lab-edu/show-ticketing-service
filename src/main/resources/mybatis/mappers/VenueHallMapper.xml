@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.show.showticketingservice.mapper.VenueHallMapper">
+
+    <insert id="insertVenueHalls" parameterType="map">
+        INSERT INTO venueHall(venueId, name, rowSeats, columnSeats, seatingCapacity)
+           VALUES
+              <foreach collection="venueHallRequests" item="venueHallRequest" separator=",">
+                  (
+                  #{venueId},
+                  #{venueHallRequest.name},
+                  #{venueHallRequest.rowSeats},
+                  #{venueHallRequest.columnSeats},
+                  #{venueHallRequest.seatingCapacity}
+                  )
+              </foreach>
+    </insert>
+    
+    <select id="isVenueHallsExists" parameterType="map" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
+           <foreach collection="venueHallRequests" item="venueHallRequest" open="(" close=")" separator=",">
+               #{venueHallRequest.name}
+           </foreach>
+           AND venueId = #{venueId}
+        )
+    </select>
+
+    <select id="isVenueHallExists" parameterType="map" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM venueHall WHERE name = #{venueHallRequest.name} AND venueId = #{venueId})
+    </select>
+
+    <update id="updateVenueHall" parameterType="map" >
+        UPDATE venueHall
+        SET
+           name = #{venueHallRequest.name},
+           rowSeats = #{venueHallRequest.rowSeats},
+           columnSeats = #{venueHallRequest.columnSeats},
+           seatingCapacity = #{venueHallRequest.seatingCapacity}
+        WHERE id = #{hallId} AND venueId = #{venueId}
+    </update>
+
+    <delete id="deleteVenueHalls" parameterType="map">
+        DELETE FROM venueHall WHERE id IN
+            <foreach collection="hallIds" item="hallId" open="(" close=")" separator=",">
+                #{hallId}
+            </foreach>
+        AND venueId = #{venueId}
+    </delete>
+
+    <select id="getVenueHalls" parameterType="String" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
+        SELECT id, venueId, name, columnSeats, rowSeats, seatingCapacity FROM venueHall WHERE venueId = #{venueId}
+    </select>
+
+</mapper>

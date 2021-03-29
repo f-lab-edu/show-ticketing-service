@@ -25,3 +25,14 @@ CREATE INDEX venue_Index ON venue
 (
     name
 );
+
+CREATE TABLE venueHall(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   venueId INT UNSIGNED NOT NULL,
+   name VARCHAR(40) NOT NULL,
+   rowSeats INT(10) NOT NULL,
+   columnSeats INT(10) NOT NULL,
+   seatingCapacity INT(100) NOT NULL,
+   PRIMARY KEY (id),
+   FOREIGN KEY (venueId) REFERENCES venue(id)
+);
