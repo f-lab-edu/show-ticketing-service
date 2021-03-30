@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserSession;
-import com.show.showticketingservice.model.venue.Venue;
+import com.show.showticketingservice.model.venue.VenueRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class VenueControllerTest {
 
     private UserRequest generalUser;
 
-    private Venue venue;
+    private VenueRequest venueRequest;
 
     private MockMvc mvc;
 
@@ -51,7 +51,7 @@ class VenueControllerTest {
 
         generalUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
 
-        venue = new Venue("공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
+        venueRequest = new VenueRequest("공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
@@ -67,7 +67,7 @@ class VenueControllerTest {
     public void normalVenueInsertion() throws Exception {
         loginUser(managerAccount);
 
-        String content = objectMapper.writeValueAsString(venue);
+        String content = objectMapper.writeValueAsString(venueRequest);
 
         mvc.perform(post("/venues")
                 .content(content)
@@ -81,7 +81,7 @@ class VenueControllerTest {
     @Test
     @DisplayName("로그인 하지 않은 상태로 공연장 정보 추가 요청 시 실패 - Http Status 401 (Unauthorized)")
     public void insertVenueWithoutLogin() throws Exception {
-        String content = objectMapper.writeValueAsString(venue);
+        String content = objectMapper.writeValueAsString(venueRequest);
 
         mvc.perform(post("/venues")
                 .content(content)
@@ -96,7 +96,7 @@ class VenueControllerTest {
     public void insertVenueByGeneralUser() throws Exception {
         loginUser(generalUser);
 
-        String content = objectMapper.writeValueAsString(venue);
+        String content = objectMapper.writeValueAsString(venueRequest);
 
         mvc.perform(post("/venues")
                 .content(content)
@@ -112,7 +112,7 @@ class VenueControllerTest {
     public void insertDuplicatedVenue() throws Exception {
         loginUser(managerAccount);
 
-        String content = objectMapper.writeValueAsString(venue);
+        String content = objectMapper.writeValueAsString(venueRequest);
 
         mvc.perform(post("/venues")
                 .content(content)
@@ -134,11 +134,11 @@ class VenueControllerTest {
     @Test
     @DisplayName("주요 공연장 정보(ex. 전화번호)가 누락된 상태로 정보 추가 요청 시 실패 - Http Status 400 (Bad Request)")
     public void insertVenueWithMissingInfo() throws Exception {
-        Venue incompleteVenue = Venue.builder()
-                .name(venue.getName())
-                .address(venue.getAddress())
+        VenueRequest incompleteVenue = VenueRequest.builder()
+                .name(venueRequest.getName())
+                .address(venueRequest.getAddress())
                 .tel("")
-                .homepage(venue.getHomepage())
+                .homepage(venueRequest.getHomepage())
                 .build();
 
         loginUser(managerAccount);

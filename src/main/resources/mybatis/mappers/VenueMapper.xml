@@ -3,7 +3,7 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.VenueMapper">
 
-    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.Venue">
+    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.VenueRequest">
         INSERT INTO venue(name, address, tel, homepage)
         VALUES(#{name}, #{address}, #{tel}, #{homepage})
     </insert>
@@ -23,5 +23,10 @@
         DELETE FROM venue
         WHERE id = #{venueId}
     </delete>
+
+    <select id="getAllVenues" resultType="com.show.showticketingservice.model.venue.VenueResponse">
+        SELECT id, name, address, tel, homepage
+        FROM venue
+    </select>
 
 </mapper>

@@ -1,7 +1,8 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
-import com.show.showticketingservice.model.venue.Venue;
+import com.show.showticketingservice.model.venue.VenueRequest;
+import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.service.VenueHallService;
@@ -9,6 +10,7 @@ import com.show.showticketingservice.service.VenueService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,13 +25,13 @@ public class VenueController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertVenue(@RequestBody @Valid Venue venue) {
-        venueService.insertVenue(venue);
+    public void insertVenue(@RequestBody @Valid VenueRequest venueRequest) {
+        venueService.insertVenue(venueRequest);
     }
 
     @PutMapping("/{venueId}")
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid Venue venueUpdateRequest) {
+    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid VenueRequest venueUpdateRequest) {
         venueService.updateVenueInfo(venueId, venueUpdateRequest);
     }
 
@@ -37,6 +39,12 @@ public class VenueController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void deleteVenue(@PathVariable int venueId) {
         venueService.deleteVenue(venueId);
+    }
+
+    @GetMapping
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public List<VenueResponse> getAllVenues() {
+        return venueService.getAllVenues();
     }
 
     @PostMapping("{venueId}/halls")

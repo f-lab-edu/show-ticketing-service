@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Builder
 @AllArgsConstructor
-public class Venue {
+public class VenueRequest {
 
     @NotBlank(message = "공연장 이름을 입력하세요.")
     @Length(max = 45, message = "공연장 이름 입력은 최대 45자까지 가능합니다.")
