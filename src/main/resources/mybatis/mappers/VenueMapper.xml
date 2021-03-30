@@ -3,7 +3,11 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.VenueMapper">
 
-    <insert id="insertVenue" parameterType="com.show.showticketingservice.model.venue.Venue">
+    <insert id="insertVenue"
+            parameterType="com.show.showticketingservice.model.venue.Venue"
+            useGeneratedKeys="true"
+            keyProperty="id">
+
         INSERT INTO venue(name, address, tel, homepage)
         VALUES(#{name}, #{address}, #{tel}, #{homepage})
     </insert>

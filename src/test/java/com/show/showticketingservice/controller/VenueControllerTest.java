@@ -51,7 +51,7 @@ class VenueControllerTest {
 
         generalUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
 
-        venue = new Venue("공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
+        venue = new Venue(0,"공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }

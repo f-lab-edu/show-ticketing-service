@@ -19,7 +19,7 @@ public class VenueHallService {
     private final VenueHallMapper venueHallMapper;
 
     @Transactional
-    public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, String venueId) {
+    public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, int venueId) {
 
         checkDuplicationVenueHallName(venueHallRequests);
 
@@ -40,7 +40,7 @@ public class VenueHallService {
         }
     }
 
-    public void checkVenueHallsExists(List<VenueHallRequest> venueHallRequests, String venueId) {
+    public void checkVenueHallsExists(List<VenueHallRequest> venueHallRequests, int venueId) {
         if(venueHallMapper.isVenueHallsExists(venueHallRequests, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }

@@ -23,8 +23,8 @@ public class VenueController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertVenue(@RequestBody @Valid Venue venue) {
-        venueService.insertVenue(venue);
+    public void insertVenue(@RequestBody @Valid Venue venue, @RequestBody @Valid List<VenueHallRequest> venueHallRequests) {
+        venueService.insertVenue(venue, venueHallRequests);
     }
 
     @PutMapping("/{venueId}")
@@ -37,11 +37,6 @@ public class VenueController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void deleteVenue(@PathVariable int venueId) {
         venueService.deleteVenue(venueId);
-    }
-
-    @PostMapping("{venueId}/halls")
-    public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
-        venueHallService.insertVenueHalls(venueHallRequests, venueId);
     }
 
     @PutMapping("{venueId}/halls/{hallId}")
