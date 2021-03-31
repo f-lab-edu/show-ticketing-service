@@ -1,6 +1,9 @@
 package com.show.showticketingservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
@@ -23,8 +26,8 @@ public class VenueController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertVenue(@RequestBody @Valid Venue venue, @RequestBody @Valid List<VenueHallRequest> venueHallRequests) {
-        venueService.insertVenue(venue, venueHallRequests);
+    public void insertVenue(@RequestBody @Valid ShowPlace showPlace) {
+        venueService.insertVenue(showPlace.getVenue(), showPlace.getVenueHallRequests());
     }
 
     @PutMapping("/{venueId}")
