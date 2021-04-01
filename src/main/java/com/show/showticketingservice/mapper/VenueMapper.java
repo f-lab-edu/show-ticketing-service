@@ -11,7 +11,7 @@ public interface VenueMapper {
 
     boolean isVenueExists(String venueName);
 
-    void updateVenueInfo(@Param("venueId") int venueId, @Param("updateRequest") Venue venueUpdateRequest);
+    void updateVenueInfo(@Param("venueId") int venueId, @Param("updateRequest") Venue venue);
 
     void deleteVenue(int venueId);
 }

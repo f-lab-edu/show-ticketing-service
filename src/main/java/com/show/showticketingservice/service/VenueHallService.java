@@ -5,6 +5,7 @@ import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionEx
 import com.show.showticketingservice.mapper.VenueHallMapper;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
+import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,23 +38,24 @@ public class VenueHallService {
         }
     }
 
-    public void checkVenueHallExists(VenueHallRequest venueHallRequest, String venueId) {
-        if(venueHallMapper.isVenueHallExists(venueHallRequest, venueId)) {
+    public void checkVenueHallsExists(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
+        if(venueHallMapper.isVenueHallsExists(venueHallUpdateRequests, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
     }
 
     @Transactional
-    public void updateVenueHall(VenueHallRequest venueHallRequest, String venueId, String hallId) {
+    public void  updateVenueHalls(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
 
-        checkVenueHallExists(venueHallRequest, venueId);
-
-        venueHallMapper.updateVenueHall(venueHallRequest, venueId, hallId);
+        if(!venueHallUpdateRequests.isEmpty()) {
+            checkVenueHallsExists(venueHallUpdateRequests, venueId);
+            venueHallMapper.updateVenueHalls(venueHallUpdateRequests, venueId);
+        }
     }
 
-    public void deleteVenueHalls(String venueId, List<String> hallIds) {
+    public void deleteVenueHalls(int venueId, List<Integer> deleteHallIds) {
 
-        venueHallMapper.deleteVenueHalls(venueId, hallIds);
+        if(!deleteHallIds.isEmpty()) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
     }
 
     public List<VenueHallResponse> getVenueHalls(String venueId) {

@@ -17,24 +17,32 @@
               </foreach>
     </insert>
 
-    <select id="isVenueHallExists" parameterType="map" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM venueHall WHERE name = #{venueHallRequest.name} AND venueId = #{venueId})
+    <select id="isVenueHallsExists" parameterType="map" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
+        <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="(" close=")" separator=",">
+            #{venueHallUpdate.name}
+        </foreach>
+        AND venueId = #{venueId}
+        )
     </select>
 
-    <update id="updateVenueHall" parameterType="map" >
-        UPDATE venueHall
-        SET
-           name = #{venueHallRequest.name},
-           rowSeats = #{venueHallRequest.rowSeats},
-           columnSeats = #{venueHallRequest.columnSeats},
-           seatingCapacity = #{venueHallRequest.seatingCapacity}
-        WHERE id = #{hallId} AND venueId = #{venueId}
+    <update id="updateVenueHalls" parameterType="map" >
+        <foreach collection="venueHallsUpdate" item="venueHallUpdate" separator=";">
+                UPDATE venueHall
+                <set>
+                    name=#{venueHallUpdate.name},
+                    rowSeats=#{venueHallUpdate.rowSeats},
+                    columnSeats=#{venueHallUpdate.columnSeats},
+                    seatingCapacity=#{venueHallUpdate.seatingCapacity}
+                </set>
+                WHERE venueId = #{venueId} AND id = #{venueHallUpdate.id}
+        </foreach>
     </update>
 
     <delete id="deleteVenueHalls" parameterType="map">
         DELETE FROM venueHall WHERE id IN
-            <foreach collection="hallIds" item="hallId" open="(" close=")" separator=",">
-                #{hallId}
+            <foreach collection="deleteHallIds" item="deleteHallId" open="(" close=")" separator=",">
+                #{deleteHallId}
             </foreach>
         AND venueId = #{venueId}
     </delete>
