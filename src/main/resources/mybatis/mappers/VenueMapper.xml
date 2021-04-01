@@ -29,4 +29,10 @@
         FROM venue
     </select>
 
+    <select id="getVenueInfo" resultType="com.show.showticketingservice.model.venue.VenueResponse">
+        SELECT id, name, address, tel, homepage
+        FROM venue
+        WHERE id = #{venueId}
+    </select>
+
 </mapper>

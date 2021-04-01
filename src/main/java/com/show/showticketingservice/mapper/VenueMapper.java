@@ -20,4 +20,5 @@ public interface VenueMapper {
 
     List<VenueResponse> getAllVenues();
 
+    VenueResponse getVenueInfo(int venueId);
 }

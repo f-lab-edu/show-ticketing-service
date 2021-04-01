@@ -1,20 +1,21 @@
 package com.show.showticketingservice.model.venue;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VenueResponse {
 
-    private final int id;
+    private int id;
 
-    private final String name;
+    private String name;
 
-    private final String address;
+    private String address;
 
-    private final String tel;
+    private String tel;
 
-    private final String homepage;
+    private String homepage;
 
 }

@@ -47,6 +47,11 @@ public class VenueController {
         return venueService.getAllVenues();
     }
 
+    @GetMapping("/{venueId}")
+    public VenueResponse getVenueInfo(@PathVariable int venueId) {
+        return venueService.getVenueInfo(venueId);
+    }
+
     @PostMapping("{venueId}/halls")
     public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
         venueHallService.insertVenueHalls(venueHallRequests, venueId);
