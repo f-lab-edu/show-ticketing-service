@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 public class Venue {
+
+    private final int id;
 
     @NotBlank(message = "공연장 이름을 입력하세요.")
     @Length(max = 45, message = "공연장 이름 입력은 최대 45자까지 가능합니다.")

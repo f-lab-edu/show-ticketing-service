@@ -16,15 +16,6 @@
                   )
               </foreach>
     </insert>
-    
-    <select id="isVenueHallsExists" parameterType="map" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
-           <foreach collection="venueHallRequests" item="venueHallRequest" open="(" close=")" separator=",">
-               #{venueHallRequest.name}
-           </foreach>
-           AND venueId = #{venueId}
-        )
-    </select>
 
     <select id="isVenueHallExists" parameterType="map" resultType="boolean">
         SELECT EXISTS (SELECT * FROM venueHall WHERE name = #{venueHallRequest.name} AND venueId = #{venueId})

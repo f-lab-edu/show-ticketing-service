@@ -1,6 +1,9 @@
 package com.show.showticketingservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
@@ -23,8 +26,8 @@ public class VenueController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertVenue(@RequestBody @Valid Venue venue) {
-        venueService.insertVenue(venue);
+    public void insertVenue(@RequestBody @Valid ShowPlace showPlace) {
+        venueService.insertVenue(showPlace.getVenue(), showPlace.getVenueHallRequests());
     }
 
     @PutMapping("/{venueId}")
@@ -37,11 +40,6 @@ public class VenueController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void deleteVenue(@PathVariable int venueId) {
         venueService.deleteVenue(venueId);
-    }
-
-    @PostMapping("{venueId}/halls")
-    public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
-        venueHallService.insertVenueHalls(venueHallRequests, venueId);
     }
 
     @PutMapping("{venueId}/halls/{hallId}")
