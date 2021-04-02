@@ -1,6 +1,7 @@
 package com.show.showticketingservice.tool.advice;
 
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
+import com.show.showticketingservice.exception.venue.VenueListPageOutOfRangeException;
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
@@ -32,6 +33,13 @@ public class VenueExceptionAdvice {
     @ExceptionHandler(VenueHallAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> venueHallAlreadyExistsException(final VenueHallAlreadyExistsException e, WebRequest request) {
         log.error("venueHall registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VenueListPageOutOfRangeException.class)
+    public ResponseEntity<ExceptionResponse> VenueListPageOutOfRangeException(final VenueListPageOutOfRangeException e, WebRequest request) {
+        log.error("venue list acquisition failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }

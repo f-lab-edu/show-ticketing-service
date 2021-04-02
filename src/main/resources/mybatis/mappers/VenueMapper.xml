@@ -24,15 +24,22 @@
         WHERE id = #{venueId}
     </delete>
 
-    <select id="getAllVenues" resultType="com.show.showticketingservice.model.venue.VenueResponse">
+    <select id="getVenueList" parameterType="com.show.showticketingservice.model.criteria.VenuePagingCriteria"
+            resultType="com.show.showticketingservice.model.venue.VenueResponse">
         SELECT id, name, address, tel, homepage
         FROM venue
+        LIMIT #{startPage}, #{amount}
     </select>
 
     <select id="getVenueInfo" resultType="com.show.showticketingservice.model.venue.VenueResponse">
         SELECT id, name, address, tel, homepage
         FROM venue
         WHERE id = #{venueId}
+    </select>
+
+    <select id="getVenueTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM venue
     </select>
 
 </mapper>

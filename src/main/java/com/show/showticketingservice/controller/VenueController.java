@@ -1,6 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,10 +43,10 @@ public class VenueController {
         venueService.deleteVenue(venueId);
     }
 
-    @GetMapping
+    @GetMapping(value = {"/list", "/list/{page}"})
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public List<VenueResponse> getAllVenues() {
-        return venueService.getAllVenues();
+    public VenueListResponse getVenueList(@PathVariable Optional<Integer> page) {
+        return venueService.getVenueList(page.orElse(1));
     }
 
     @GetMapping("/{venueId}")

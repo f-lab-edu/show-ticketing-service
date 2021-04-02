@@ -1,7 +1,10 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
+import com.show.showticketingservice.exception.venue.VenueListPageOutOfRangeException;
 import com.show.showticketingservice.mapper.VenueMapper;
+import com.show.showticketingservice.model.venue.VenueListResponse;
+import com.show.showticketingservice.model.criteria.VenuePagingCriteria;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.tool.constants.CacheConstant;
@@ -41,12 +44,35 @@ public class VenueService {
         venueMapper.deleteVenue(venueId);
     }
 
-    public List<VenueResponse> getAllVenues() {
-        return venueMapper.getAllVenues();
+    public VenueListResponse getVenueList(int page) {
+        if (page <= 0)
+            throw new VenueListPageOutOfRangeException();
+
+        int venueTotalCount = venueMapper.getVenueTotalCount();
+
+        int venueTotalPage = 0;
+
+        List<VenueResponse> venueResponseList = null;
+
+        VenuePagingCriteria pagingCriteria = new VenuePagingCriteria(page);
+
+        if (venueTotalCount > 0) {
+            int mod = venueTotalCount % pagingCriteria.getAmount();
+
+            venueTotalPage = venueTotalCount / pagingCriteria.getAmount() + (mod != 0 ? 1 : 0);
+
+            if (page <= venueTotalPage)
+                venueResponseList = venueMapper.getVenueList(pagingCriteria);
+            else
+                throw new VenueListPageOutOfRangeException();
+        }
+
+        return new VenueListResponse(venueTotalPage, venueResponseList);
     }
 
     @Cacheable(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public VenueResponse getVenueInfo(int venueId) {
         return venueMapper.getVenueInfo(venueId);
     }
+
 }
