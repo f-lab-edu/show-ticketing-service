@@ -5,7 +5,6 @@ import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionEx
 import com.show.showticketingservice.mapper.VenueHallMapper;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
-import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,24 +37,25 @@ public class VenueHallService {
         }
     }
 
-    public void checkVenueHallsExists(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
-        if(venueHallMapper.isVenueHallsExists(venueHallUpdateRequests, venueId)) {
+    public void checkVenueHallsExists(List<VenueHallRequest> venueHallRequests, int venueId) {
+        if(venueHallMapper.isVenueHallsExists(venueHallRequests, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
     }
 
     @Transactional
-    public void  updateVenueHalls(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
+    public void  updateVenueHalls(List<Integer> updateHallIds, List<VenueHallRequest> venueHallRequests, int venueId) {
 
-        if(!venueHallUpdateRequests.isEmpty()) {
-            checkVenueHallsExists(venueHallUpdateRequests, venueId);
-            venueHallMapper.updateVenueHalls(venueHallUpdateRequests, venueId);
+        if(venueHallRequests != null) {
+            checkDuplicationVenueHallName(venueHallRequests);
+            checkVenueHallsExists(venueHallRequests, venueId);
+            venueHallMapper.updateVenueHalls(updateHallIds, venueHallRequests, venueId);
         }
     }
 
     public void deleteVenueHalls(int venueId, List<Integer> deleteHallIds) {
 
-        if(!deleteHallIds.isEmpty()) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
+        if(deleteHallIds != null) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
     }
 
     public List<VenueHallResponse> getVenueHalls(String venueId) {

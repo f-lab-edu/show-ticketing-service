@@ -34,7 +34,7 @@ public class VenueController {
     @PutMapping("/{venueId}")
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid VenueUpdateRequest venueUpdateRequest) {
-        venueService.updateVenueInfo(venueId, venueUpdateRequest, venueUpdateRequest.isVenueInfoChanged());
+        venueService.updateVenueInfo(venueId, venueUpdateRequest);
     }
 
     @DeleteMapping("/{venueId}")

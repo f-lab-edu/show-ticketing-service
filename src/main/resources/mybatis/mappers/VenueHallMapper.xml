@@ -27,7 +27,7 @@
     </select>
 
     <update id="updateVenueHalls" parameterType="map" >
-        <foreach collection="venueHallsUpdate" item="venueHallUpdate" separator=";">
+        <foreach collection="venueHallsUpdate" item="venueHallUpdate" index="index" separator=";">
                 UPDATE venueHall
                 <set>
                     name=#{venueHallUpdate.name},
@@ -35,7 +35,7 @@
                     columnSeats=#{venueHallUpdate.columnSeats},
                     seatingCapacity=#{venueHallUpdate.seatingCapacity}
                 </set>
-                WHERE venueId = #{venueId} AND id = #{venueHallUpdate.id}
+                WHERE venueId = #{venueId} AND id = #{updateHallIds[${index}]}
         </foreach>
     </update>
 

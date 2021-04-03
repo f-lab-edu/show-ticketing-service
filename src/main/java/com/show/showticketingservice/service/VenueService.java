@@ -34,14 +34,13 @@ public class VenueService {
     }
 
     @Transactional
-    public void updateVenueInfo(int venueId, VenueUpdateRequest venueUpdateRequest, boolean isVenueInfoChanged) {
-
-        if(isVenueInfoChanged) {
+    public void updateVenueInfo(int venueId, VenueUpdateRequest venueUpdateRequest) {
+        if(venueUpdateRequest.getVenue() != null) {
             checkVenueExists(venueUpdateRequest.getVenue().getName());
             venueMapper.updateVenueInfo(venueId, venueUpdateRequest.getVenue());
         }
 
-        venueHallService.updateVenueHalls(venueUpdateRequest.getVenueHallUpdateRequests(), venueId);
+        venueHallService.updateVenueHalls(venueUpdateRequest.getUpdateHallIds(), venueUpdateRequest.getVenueHallRequests(), venueId);
 
         venueHallService.deleteVenueHalls(venueId, venueUpdateRequest.getDeleteHallIds());
     }
