@@ -56,7 +56,7 @@ public class VenueController {
     }
 
     @GetMapping("{venueId}/halls")
-    public List<VenueHallResponse> getVenueHalls(@PathVariable String venueId) {
+    public List<VenueHallResponse> getVenueHalls(@PathVariable int venueId) {
         return venueHallService.getVenueHalls(venueId);
     }
 

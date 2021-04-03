@@ -17,6 +17,6 @@ public interface VenueHallMapper {
 
     void deleteVenueHalls(String venueId, List<String> hallIds);
 
-    List<VenueHallResponse> getVenueHalls(String venueId);
+    List<VenueHallResponse> getVenueHalls(int venueId);
 
 }
