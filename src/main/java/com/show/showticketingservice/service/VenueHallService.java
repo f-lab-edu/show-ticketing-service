@@ -58,7 +58,7 @@ public class VenueHallService {
         if(deleteHallIds != null) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
     }
 
-    public List<VenueHallResponse> getVenueHalls(String venueId) {
+    public List<VenueHallResponse> getVenueHalls(int venueId) {
         return venueHallMapper.getVenueHalls(venueId);
     }
 
