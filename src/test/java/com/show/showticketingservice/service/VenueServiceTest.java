@@ -67,4 +67,15 @@ public class VenueServiceTest {
             venueService.updateVenueInfo(venue.getId(), venueUpdateRequest);
         });
     }
+
+    @Test
+    @DisplayName("공연장 정보를 삭제합니다.")
+    public void venueInfoDeleteSuccess() {
+
+        doNothing().when(venueMapper).deleteVenue(venue.getId());
+
+        venueService.deleteVenue(venue.getId());
+
+        verify(venueMapper, times(1)).deleteVenue(venue.getId());
+    }
 }
