@@ -5,15 +5,18 @@ import lombok.Getter;
 @Getter
 public class VenuePagingCriteria {
 
-    private final int page;
+    private int page;
+
+    private int startPage;
 
     private final int amount = 10;
-
-    private final int startPage;
 
     public VenuePagingCriteria(int page) {
         this.page = page;
         this.startPage = (page - 1) * amount;
     }
-
+    public void setPage(int page) {
+        this.page = page;
+        this.startPage = (page - 1) * amount;
+    }
 }
