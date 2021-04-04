@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,10 +42,10 @@ public class VenueController {
         venueService.deleteVenue(venueId);
     }
 
-    @GetMapping(value = {"/list", "/list/{page}"})
+    @GetMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public VenueListResponse getVenueList(@PathVariable Optional<Integer> page) {
-        return venueService.getVenueList(page.orElse(1));
+    public VenueListResponse getVenueList(@RequestParam(value = "page", defaultValue = "1") int page) {
+        return venueService.getVenueList(page);
     }
 
     @GetMapping("/{venueId}")
