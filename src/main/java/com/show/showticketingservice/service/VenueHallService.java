@@ -46,7 +46,7 @@ public class VenueHallService {
     @Transactional
     public void  updateVenueHalls(List<Integer> updateHallIds, List<VenueHallRequest> venueHallRequests, int venueId) {
 
-        if(venueHallRequests != null) {
+        if(!venueHallRequests.isEmpty() && !updateHallIds.isEmpty()) {
             checkDuplicationVenueHallName(venueHallRequests);
             checkVenueHallsExists(venueHallRequests, venueId);
             venueHallMapper.updateVenueHalls(updateHallIds, venueHallRequests, venueId);
@@ -55,7 +55,7 @@ public class VenueHallService {
 
     public void deleteVenueHalls(int venueId, List<Integer> deleteHallIds) {
 
-        if(deleteHallIds != null) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
+        if(!deleteHallIds.isEmpty()) venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
     }
 
     public List<VenueHallResponse> getVenueHalls(int venueId) {

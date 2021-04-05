@@ -4,6 +4,7 @@ import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -14,10 +15,13 @@ public class VenueUpdateRequest {
     private final Venue venue;
 
     @Valid
+    @NotNull
     private final List<VenueHallRequest> venueHallRequests;
 
+    @NotNull
     private final List<Integer> updateHallIds;
 
+    @NotNull
     private final List<Integer> deleteHallIds;
 
 }
