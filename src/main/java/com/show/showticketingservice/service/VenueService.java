@@ -48,7 +48,7 @@ public class VenueService {
 
         int venueTotalCount = venueMapper.getVenueTotalCount();
 
-        int venueTotalPage = 0;
+        int venueTotalPage = 1;
 
         List<VenueResponse> venueResponseList = Collections.emptyList();
 
