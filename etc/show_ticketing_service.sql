@@ -35,4 +35,5 @@ CREATE TABLE venueHall(
    seatingCapacity INT(100) NOT NULL,
    PRIMARY KEY (id),
    FOREIGN KEY (venueId) REFERENCES venue(id)
+   ON DELETE CASCADE
 );
