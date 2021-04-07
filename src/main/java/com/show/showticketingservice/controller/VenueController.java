@@ -1,6 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
@@ -26,8 +27,8 @@ public class VenueController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertVenue(@RequestBody @Valid VenueRequest venueRequest) {
-        venueService.insertVenue(venueRequest);
+    public void insertVenue(@RequestBody @Valid ShowPlace showPlace) {
+        venueService.insertVenue(showPlace.getVenueRequest(), showPlace.getVenueHallRequests());
     }
 
     @PutMapping("/{venueId}")
@@ -53,11 +54,6 @@ public class VenueController {
         return venueService.getVenueInfo(venueId);
     }
 
-    @PostMapping("{venueId}/halls")
-    public void insertVenueHalls(@RequestBody @Valid List<VenueHallRequest> venueHallRequests, @PathVariable String venueId) {
-        venueHallService.insertVenueHalls(venueHallRequests, venueId);
-    }
-
     @PutMapping("{venueId}/halls/{hallId}")
     public void updateVenueHall(@RequestBody @Valid VenueHallRequest venueHallRequest,
                                 @PathVariable String venueId,
@@ -72,7 +68,7 @@ public class VenueController {
     }
 
     @GetMapping("{venueId}/halls")
-    public List<VenueHallResponse> getVenueHalls(@PathVariable String venueId) {
+    public List<VenueHallResponse> getVenueHalls(@PathVariable int venueId) {
         return venueHallService.getVenueHalls(venueId);
     }
 

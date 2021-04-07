@@ -6,6 +6,7 @@ import com.show.showticketingservice.model.criteria.VenuePagingCriteria;
 import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
+import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,10 +23,15 @@ public class VenueService {
 
     private final VenueMapper venueMapper;
 
+    private final VenueHallService venueHallService;
+
     @Transactional
-    public void insertVenue(VenueRequest venueRequest) {
+    public void insertVenue(VenueRequest venueRequest, List<VenueHallRequest> venueHallRequests) {
         checkVenueExists(venueRequest.getName());
+
         venueMapper.insertVenue(venueRequest);
+
+        venueHallService.insertVenueHalls(venueHallRequests, venueRequest.getId());
     }
 
     public void checkVenueExists(String venueName) {

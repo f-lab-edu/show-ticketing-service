@@ -18,12 +18,9 @@ public class VenueHallService {
 
     private final VenueHallMapper venueHallMapper;
 
-    @Transactional
-    public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, String venueId) {
+    public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, int venueId) {
 
         checkDuplicationVenueHallName(venueHallRequests);
-
-        checkVenueHallsExists(venueHallRequests, venueId);
 
         venueHallMapper.insertVenueHalls(venueHallRequests, venueId);
     }
@@ -37,12 +34,6 @@ public class VenueHallService {
             }
 
             hallNameMap.put(venueHallRequest.getName(), 1);
-        }
-    }
-
-    public void checkVenueHallsExists(List<VenueHallRequest> venueHallRequests, String venueId) {
-        if(venueHallMapper.isVenueHallsExists(venueHallRequests, venueId)) {
-            throw new VenueHallAlreadyExistsException();
         }
     }
 
@@ -65,7 +56,7 @@ public class VenueHallService {
         venueHallMapper.deleteVenueHalls(venueId, hallIds);
     }
 
-    public List<VenueHallResponse> getVenueHalls(String venueId) {
+    public List<VenueHallResponse> getVenueHalls(int venueId) {
         return venueHallMapper.getVenueHalls(venueId);
     }
 

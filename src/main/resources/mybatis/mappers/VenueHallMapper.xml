@@ -16,15 +16,6 @@
                   )
               </foreach>
     </insert>
-    
-    <select id="isVenueHallsExists" parameterType="map" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
-           <foreach collection="venueHallRequests" item="venueHallRequest" open="(" close=")" separator=",">
-               #{venueHallRequest.name}
-           </foreach>
-           AND venueId = #{venueId}
-        )
-    </select>
 
     <select id="isVenueHallExists" parameterType="map" resultType="boolean">
         SELECT EXISTS (SELECT * FROM venueHall WHERE name = #{venueHallRequest.name} AND venueId = #{venueId})
@@ -48,7 +39,7 @@
         AND venueId = #{venueId}
     </delete>
 
-    <select id="getVenueHalls" parameterType="String" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
+    <select id="getVenueHalls" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
         SELECT id, venueId, name, columnSeats, rowSeats, seatingCapacity FROM venueHall WHERE venueId = #{venueId}
     </select>
 

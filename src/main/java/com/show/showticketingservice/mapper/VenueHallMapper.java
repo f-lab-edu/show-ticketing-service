@@ -9,9 +9,7 @@ import java.util.List;
 @Mapper
 public interface VenueHallMapper {
 
-    void insertVenueHalls(List<VenueHallRequest> venueHallRequests, String venueId);
-
-    boolean isVenueHallsExists(List<VenueHallRequest> venueHallRequests, String venueId);
+    void insertVenueHalls(List<VenueHallRequest> venueHallRequests, int venueId);
 
     boolean isVenueHallExists(VenueHallRequest venueHallRequest, String venueId);
 
@@ -19,6 +17,6 @@ public interface VenueHallMapper {
 
     void deleteVenueHalls(String venueId, List<String> hallIds);
 
-    List<VenueHallResponse> getVenueHalls(String venueId);
+    List<VenueHallResponse> getVenueHalls(int venueId);
 
 }
