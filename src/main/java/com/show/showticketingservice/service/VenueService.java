@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.venue.VenueIdNotExistsException;
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
 import com.show.showticketingservice.mapper.VenueMapper;
 import com.show.showticketingservice.model.venue.Venue;
@@ -46,7 +47,15 @@ public class VenueService {
     }
 
     public void deleteVenue(int venueId) {
+        checkVenueIdExists(venueId);
+
         venueMapper.deleteVenue(venueId);
+    }
+
+    public void checkVenueIdExists(int venueId) {
+        if(!venueMapper.isVenueIdExists(venueId)) {
+            throw new VenueIdNotExistsException();
+        }
     }
 
 }

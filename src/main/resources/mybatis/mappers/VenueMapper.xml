@@ -28,4 +28,9 @@
         WHERE id = #{venueId}
     </delete>
 
+    <select id="isVenueIdExists" resultType="boolean">
+        SELECT EXISTS
+        (SELECT * FROM venue WHERE id = #{venueId})
+    </select>
+
 </mapper>

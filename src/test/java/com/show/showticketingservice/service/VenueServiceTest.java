@@ -1,6 +1,7 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
+import com.show.showticketingservice.exception.venue.VenueIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueMapper;
 import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.model.venue.VenueUpdateRequest;
@@ -72,10 +73,24 @@ public class VenueServiceTest {
     @DisplayName("공연장 정보를 삭제합니다.")
     public void venueInfoDeleteSuccess() {
 
+        when(venueMapper.isVenueIdExists(venue.getId())).thenReturn(true);
+
         doNothing().when(venueMapper).deleteVenue(venue.getId());
 
         venueService.deleteVenue(venue.getId());
 
+        verify(venueMapper, times(1)).isVenueIdExists(venue.getId());
         verify(venueMapper, times(1)).deleteVenue(venue.getId());
+    }
+
+    @Test
+    @DisplayName("삭제할 공연장 id가 없을 경우 VenueIdNotExistsException이 발생합니다.")
+    public void venueIdNotExistsDeleteFail() {
+
+        when(venueMapper.isVenueIdExists(venue.getId())).thenReturn(false);
+
+        assertThrows(VenueIdNotExistsException.class, () -> {
+            venueService.deleteVenue(venue.getId());
+        });
     }
 }
