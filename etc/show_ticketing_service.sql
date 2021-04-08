@@ -60,3 +60,8 @@ CREATE TABLE performance
     FOREIGN KEY (venueId) REFERENCES venue(id),
     FOREIGN KEY (hallId) REFERENCES venueHall(id)
 );
+
+CREATE INDEX performance_Index ON performance
+(
+    title
+);
