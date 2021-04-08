@@ -17,7 +17,7 @@
               </foreach>
     </insert>
 
-    <select id="isVenueHallsExists" parameterType="map" resultType="boolean">
+    <select id="isVenueHallNamesExists" parameterType="map" resultType="boolean">
         SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
         <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="(" close=")" separator=",">
             #{venueHallUpdate.name}
@@ -35,7 +35,7 @@
                     columnSeats=#{venueHallUpdate.columnSeats},
                     seatingCapacity=#{venueHallUpdate.seatingCapacity}
                 </set>
-                WHERE venueId = #{venueId} AND id = #{updateHallIds[${index}]}
+                WHERE venueId = #{venueId} AND id = #{venueHallUpdate.id}
         </foreach>
     </update>
 
@@ -49,6 +49,14 @@
 
     <select id="getVenueHalls" resultType="com.show.showticketingservice.model.venueHall.VenueHallResponse">
         SELECT id, venueId, name, columnSeats, rowSeats, seatingCapacity FROM venueHall WHERE venueId = #{venueId}
+    </select>
+
+    <select id="getVenueHallCount" resultType="int">
+        SELECT COUNT(*) FROM venueHall WHERE id IN
+        <foreach collection="hallIds" item="hallId" open="(" close=")" separator=",">
+            #{hallId}
+        </foreach>
+        AND venueId = #{venueId}
     </select>
 
 </mapper>

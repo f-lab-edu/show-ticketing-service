@@ -1,6 +1,6 @@
 package com.show.showticketingservice.model.venue;
 
-import com.show.showticketingservice.model.venueHall.VenueHallRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import javax.validation.Valid;
@@ -16,10 +16,7 @@ public class VenueUpdateRequest {
 
     @Valid
     @NotNull
-    private final List<VenueHallRequest> venueHallRequests;
-
-    @NotNull
-    private final List<Integer> updateHallIds;
+    private final List<VenueHallUpdateRequest> venueHallUpdateRequests;
 
     @NotNull
     private final List<Integer> deleteHallIds;

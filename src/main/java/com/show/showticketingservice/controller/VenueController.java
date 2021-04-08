@@ -1,12 +1,8 @@
 package com.show.showticketingservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.showPlace.ShowPlace;
-import com.show.showticketingservice.model.venue.Venue;
 import com.show.showticketingservice.model.venue.VenueUpdateRequest;
-import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.service.VenueHallService;
 import com.show.showticketingservice.service.VenueService;

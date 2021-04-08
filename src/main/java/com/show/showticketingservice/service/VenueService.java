@@ -29,21 +29,28 @@ public class VenueService {
     }
 
     public void checkVenueExists(String venueName) {
-        if (venueMapper.isVenueExists(venueName)) {
+        if(venueMapper.isVenueExists(venueName)) {
             throw new VenueAlreadyExistsException();
         }
     }
 
     @Transactional
     public void updateVenueInfo(int venueId, VenueUpdateRequest venueUpdateRequest) {
+
+        checkVenueIdExists(venueId);
+
         if(venueUpdateRequest.getVenue() != null) {
             checkVenueExists(venueUpdateRequest.getVenue().getName());
             venueMapper.updateVenueInfo(venueId, venueUpdateRequest.getVenue());
         }
 
-        venueHallService.updateVenueHalls(venueUpdateRequest.getUpdateHallIds(), venueUpdateRequest.getVenueHallRequests(), venueId);
+        if(!venueUpdateRequest.getVenueHallUpdateRequests().isEmpty()) {
+            venueHallService.updateVenueHalls(venueId, venueUpdateRequest.getVenueHallUpdateRequests());
+        }
 
-        venueHallService.deleteVenueHalls(venueId, venueUpdateRequest.getDeleteHallIds());
+        if(!venueUpdateRequest.getDeleteHallIds().isEmpty()) {
+            venueHallService.deleteVenueHalls(venueId, venueUpdateRequest.getDeleteHallIds());
+        }
     }
 
     public void deleteVenue(int venueId) {
