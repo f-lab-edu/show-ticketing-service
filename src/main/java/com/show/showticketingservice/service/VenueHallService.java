@@ -10,10 +10,10 @@ import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,13 +43,15 @@ public class VenueHallService {
     public void checkDuplicationVenueHallUpdateRequestNames(List<VenueHallUpdateRequest> venueHallUpdateRequests) {
         Map<String, Integer> hallNameMap = new HashMap<>();
 
-        for(VenueHallUpdateRequest venueHallUpdateRequest : venueHallUpdateRequests) {
-            if(hallNameMap.containsKey(venueHallUpdateRequest.getName())) {
-                throw new SameVenueHallAdditionException();
-            }
+        venueHallUpdateRequests.stream()
+                .forEach((venueHallUpdateRequest) -> {
+                    if(hallNameMap.containsKey(venueHallUpdateRequest.getName())) {
+                         throw new SameVenueHallAdditionException();
+                    }
 
-            hallNameMap.put(venueHallUpdateRequest.getName(), 1);
-        }
+                    hallNameMap.put(venueHallUpdateRequest.getName(), 1);
+                });
+
     }
 
     public void checkVenueHallNamesExists(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
@@ -73,13 +75,10 @@ public class VenueHallService {
     }
 
     public List<Integer> getVenueHallUpdateRequestId(List<VenueHallUpdateRequest> venueHallUpdateRequests) {
-        List<Integer> hallIds = new ArrayList<>();
 
-        for(VenueHallUpdateRequest venueHallUpdateRequest : venueHallUpdateRequests) {
-            hallIds.add(venueHallUpdateRequest.getId());
-        }
-
-        return hallIds;
+        return venueHallUpdateRequests.stream()
+                .map(venueHallUpdateRequest -> venueHallUpdateRequest.getId())
+                .collect(Collectors.toList());
     }
 
     @Transactional
