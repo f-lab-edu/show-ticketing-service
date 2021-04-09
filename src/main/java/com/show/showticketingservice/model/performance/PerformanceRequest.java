@@ -18,7 +18,7 @@ public class PerformanceRequest {
     private final String title;
 
     @Nullable
-    private final int posterId;
+    private final String imageFilePath;
 
     @Nullable
     @Length(max = 500, message = "공연 설명은 500자 내로 입력하세요.")

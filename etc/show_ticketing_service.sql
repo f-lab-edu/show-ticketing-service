@@ -37,26 +37,17 @@ CREATE TABLE venueHall(
    FOREIGN KEY (venueId) REFERENCES venue(id)
 );
 
-CREATE TABLE posterImage
-(
-    `id`        INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
-    `fileName`  VARCHAR(100)    NULL,
-    `path`      VARCHAR(255)    NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE performance
 (
-    `id`        INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
-    `title`     VARCHAR(50)     NOT NULL,
-    `posterId`  INT UNSIGNED    NULL,
-    `detail`    VARCHAR(500)    NULL,
-    `ageLimit`  INT             NULL,
-    `showType`  INT(3)          NOT NULL,
-    `venueId`   INT UNSIGNED    NOT NULL,
-    `hallId`    INT UNSIGNED    NOT NULL,
+    `id`            INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `title`         VARCHAR(50)     NOT NULL,
+    `imageFilePath` VARCHAR(255)    NULL,
+    `detail`        VARCHAR(500)    NULL,
+    `ageLimit`      INT             NULL,
+    `showType`      INT(3)          NOT NULL,
+    `venueId`       INT UNSIGNED    NOT NULL,
+    `hallId`        INT UNSIGNED    NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (posterId) REFERENCES posterImage(id),
     FOREIGN KEY (venueId) REFERENCES venue(id),
     FOREIGN KEY (hallId) REFERENCES venueHall(id)
 );

@@ -6,6 +6,7 @@ import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class PerformanceService {
 
     private final PerformanceMapper performanceMapper;
 
+    @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
         checkPerformanceExists(performanceRequest.getTitle(), performanceRequest.getShowType());
 
