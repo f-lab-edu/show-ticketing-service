@@ -31,13 +31,14 @@ public class VenueHallService {
     public void checkDuplicationVenueHallRequestNames(List<VenueHallRequest> venueHallRequests) {
         Map<String, Integer> hallNameMap = new HashMap<>();
 
-        for(VenueHallRequest venueHallRequest : venueHallRequests) {
-            if(hallNameMap.containsKey(venueHallRequest.getName())) {
-                throw new SameVenueHallAdditionException();
-            }
+        venueHallRequests.stream()
+                .forEach((venueHallUpdateRequest) -> {
+                    if(hallNameMap.containsKey(venueHallUpdateRequest.getName())) {
+                        throw new SameVenueHallAdditionException();
+                    }
 
-            hallNameMap.put(venueHallRequest.getName(), 1);
-        }
+                    hallNameMap.put(venueHallUpdateRequest.getName(), 1);
+                });
     }
 
     public void checkDuplicationVenueHallUpdateRequestNames(List<VenueHallUpdateRequest> venueHallUpdateRequests) {
