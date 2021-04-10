@@ -1,22 +1,22 @@
 package com.show.showticketingservice.model.venueHall;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VenueHallResponse {
 
-    private final int id;
+    private int id;
 
-    private final int venueId;
+    private int venueId;
 
-    private final String name;
+    private String name;
 
-    private final int columnSeats;
+    private int columnSeats;
 
-    private final int rowSeats;
+    private int rowSeats;
 
-    private final int seatingCapacity;
+    private int seatingCapacity;
 
 }

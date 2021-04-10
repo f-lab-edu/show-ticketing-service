@@ -2,6 +2,7 @@ package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.showPlace.ShowPlace;
+import com.show.showticketingservice.model.venue.VenueDetailInfoResponse;
 import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
@@ -50,7 +51,8 @@ public class VenueController {
     }
 
     @GetMapping("/{venueId}")
-    public VenueResponse getVenueInfo(@PathVariable int venueId) {
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public VenueDetailInfoResponse getVenueInfo(@PathVariable int venueId) {
         return venueService.getVenueInfo(venueId);
     }
 
@@ -65,11 +67,6 @@ public class VenueController {
     @DeleteMapping("{venueId}/halls")
     public void deleteVenueHalls(@PathVariable String venueId, @RequestBody List<String> hallIds) {
         venueHallService.deleteVenueHalls(venueId, hallIds);
-    }
-
-    @GetMapping("{venueId}/halls")
-    public List<VenueHallResponse> getVenueHalls(@PathVariable int venueId) {
-        return venueHallService.getVenueHalls(venueId);
     }
 
 }
