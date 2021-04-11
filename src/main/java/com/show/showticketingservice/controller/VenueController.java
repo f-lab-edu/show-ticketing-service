@@ -3,19 +3,14 @@ package com.show.showticketingservice.controller;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.venue.VenueDetailInfoResponse;
+import com.show.showticketingservice.model.venue.VenueUpdateRequest;
 import com.show.showticketingservice.model.venue.VenueListResponse;
-import com.show.showticketingservice.model.venue.VenueRequest;
-import com.show.showticketingservice.model.venue.VenueResponse;
-import com.show.showticketingservice.model.venueHall.VenueHallRequest;
-import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.service.VenueHallService;
 import com.show.showticketingservice.service.VenueService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +29,7 @@ public class VenueController {
 
     @PutMapping("/{venueId}")
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid VenueRequest venueUpdateRequest) {
+    public void updateVenueInfo(@PathVariable int venueId, @RequestBody @Valid VenueUpdateRequest venueUpdateRequest) {
         venueService.updateVenueInfo(venueId, venueUpdateRequest);
     }
 
@@ -54,19 +49,6 @@ public class VenueController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public VenueDetailInfoResponse getVenueInfo(@PathVariable int venueId) {
         return venueService.getVenueInfo(venueId);
-    }
-
-    @PutMapping("{venueId}/halls/{hallId}")
-    public void updateVenueHall(@RequestBody @Valid VenueHallRequest venueHallRequest,
-                                @PathVariable String venueId,
-                                @PathVariable String hallId) {
-
-        venueHallService.updateVenueHall(venueHallRequest, venueId, hallId);
-    }
-
-    @DeleteMapping("{venueId}/halls")
-    public void deleteVenueHalls(@PathVariable String venueId, @RequestBody List<String> hallIds) {
-        venueHallService.deleteVenueHalls(venueId, hallIds);
     }
 
 }

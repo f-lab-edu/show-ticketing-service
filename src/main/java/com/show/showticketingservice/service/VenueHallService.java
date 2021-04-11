@@ -2,15 +2,18 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
+import com.show.showticketingservice.exception.venueHall.VenueHallIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
+import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,40 +23,77 @@ public class VenueHallService {
 
     public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, int venueId) {
 
-        checkDuplicationVenueHallName(venueHallRequests);
+        checkDuplicationVenueHallRequestNames(venueHallRequests);
 
         venueHallMapper.insertVenueHalls(venueHallRequests, venueId);
     }
 
-    public void checkDuplicationVenueHallName(List<VenueHallRequest> venueHallRequests) {
+    public void checkDuplicationVenueHallRequestNames(List<VenueHallRequest> venueHallRequests) {
         Map<String, Integer> hallNameMap = new HashMap<>();
 
-        for(VenueHallRequest venueHallRequest : venueHallRequests) {
-            if(hallNameMap.containsKey(venueHallRequest.getName())) {
-                throw new SameVenueHallAdditionException();
-            }
+        venueHallRequests.stream()
+                .forEach((venueHallUpdateRequest) -> {
+                    if(hallNameMap.containsKey(venueHallUpdateRequest.getName())) {
+                        throw new SameVenueHallAdditionException();
+                    }
 
-            hallNameMap.put(venueHallRequest.getName(), 1);
-        }
+                    hallNameMap.put(venueHallUpdateRequest.getName(), 1);
+                });
     }
 
-    public void checkVenueHallExists(VenueHallRequest venueHallRequest, String venueId) {
-        if(venueHallMapper.isVenueHallExists(venueHallRequest, venueId)) {
+    public void checkDuplicationVenueHallUpdateRequestNames(List<VenueHallUpdateRequest> venueHallUpdateRequests) {
+        Map<String, Integer> hallNameMap = new HashMap<>();
+
+        venueHallUpdateRequests.stream()
+                .forEach((venueHallUpdateRequest) -> {
+                    if(hallNameMap.containsKey(venueHallUpdateRequest.getName())) {
+                         throw new SameVenueHallAdditionException();
+                    }
+
+                    hallNameMap.put(venueHallUpdateRequest.getName(), 1);
+                });
+
+    }
+
+    public void checkVenueHallNamesExists(List<VenueHallUpdateRequest> venueHallUpdateRequests, int venueId) {
+        if(venueHallMapper.isVenueHallNamesExists(venueHallUpdateRequests, venueId)) {
             throw new VenueHallAlreadyExistsException();
         }
     }
 
     @Transactional
-    public void updateVenueHall(VenueHallRequest venueHallRequest, String venueId, String hallId) {
+    public void updateVenueHalls(int venueId, List<VenueHallUpdateRequest> venueHallUpdateRequests) {
 
-        checkVenueHallExists(venueHallRequest, venueId);
+        List<Integer> hallIds = getVenueHallUpdateRequestId(venueHallUpdateRequests);
 
-        venueHallMapper.updateVenueHall(venueHallRequest, venueId, hallId);
+        checkVenueHallIdsExists(venueId, hallIds);
+
+        checkDuplicationVenueHallUpdateRequestNames(venueHallUpdateRequests);
+
+        checkVenueHallNamesExists(venueHallUpdateRequests, venueId);
+
+        venueHallMapper.updateVenueHalls(venueHallUpdateRequests, venueId);
     }
 
-    public void deleteVenueHalls(String venueId, List<String> hallIds) {
+    public List<Integer> getVenueHallUpdateRequestId(List<VenueHallUpdateRequest> venueHallUpdateRequests) {
 
-        venueHallMapper.deleteVenueHalls(venueId, hallIds);
+        return venueHallUpdateRequests.stream()
+                .map(venueHallUpdateRequest -> venueHallUpdateRequest.getId())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteVenueHalls(int venueId, List<Integer> deleteHallIds) {
+
+        checkVenueHallIdsExists(venueId, deleteHallIds);
+
+        venueHallMapper.deleteVenueHalls(venueId, deleteHallIds);
+    }
+
+    public void checkVenueHallIdsExists(int venueId, List<Integer> hallIds) {
+        if(venueHallMapper.getVenueHallCount(venueId, hallIds) != hallIds.size()) {
+            throw new VenueHallIdNotExistsException();
+        }
     }
 
     public List<VenueHallResponse> getVenueHalls(int venueId) {

@@ -1,8 +1,10 @@
 package com.show.showticketingservice.tool.advice;
 
+import com.show.showticketingservice.exception.venue.VenueIdNotExistsException;
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
+import com.show.showticketingservice.exception.venueHall.VenueHallIdNotExistsException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,20 @@ public class VenueExceptionAdvice {
     @ExceptionHandler(VenueHallAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> venueHallAlreadyExistsException(final VenueHallAlreadyExistsException e, WebRequest request) {
         log.error("venueHall registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VenueIdNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> venueIdNotExistsException(final VenueIdNotExistsException e, WebRequest request) {
+        log.error("failed to find venueId", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VenueHallIdNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> venueHallIdNotExistsException(final VenueHallIdNotExistsException e, WebRequest request) {
+        log.error("failed to find venueHallId", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
