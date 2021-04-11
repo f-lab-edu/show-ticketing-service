@@ -5,7 +5,6 @@ import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 @Mapper
@@ -14,6 +13,8 @@ public interface VenueMapper {
     void insertVenue(VenueRequest venueRequest);
 
     boolean isVenueExists(String venueName);
+
+    boolean isVenueIdExists(int venueId);
 
     void updateVenueInfo(@Param("venueId") int venueId, @Param("updateRequest") VenueRequest venueUpdateRequest);
 
@@ -24,4 +25,5 @@ public interface VenueMapper {
     VenueResponse getVenueInfo(int venueId);
 
     int getVenueTotalCount();
+
 }
