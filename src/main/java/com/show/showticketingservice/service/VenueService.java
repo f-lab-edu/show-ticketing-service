@@ -5,10 +5,12 @@ import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException
 import com.show.showticketingservice.mapper.VenueMapper;
 import com.show.showticketingservice.model.venue.VenueUpdateRequest;
 import com.show.showticketingservice.model.criteria.VenuePagingCriteria;
+import com.show.showticketingservice.model.venue.VenueDetailInfoResponse;
 import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -99,8 +101,14 @@ public class VenueService {
     }
 
     @Cacheable(cacheNames = CacheConstant.VENUE, key = "#venueId")
-    public VenueResponse getVenueInfo (int venueId) {
-        return venueMapper.getVenueInfo(venueId);
+    public VenueDetailInfoResponse getVenueInfo(int venueId) {
+
+        VenueResponse venueResponse = venueMapper.getVenueInfo(venueId);
+
+        List<VenueHallResponse> venueHallResponses = venueHallService.getVenueHalls(venueId);
+
+        return new VenueDetailInfoResponse(venueResponse, venueHallResponses);
+
     }
 
 }
