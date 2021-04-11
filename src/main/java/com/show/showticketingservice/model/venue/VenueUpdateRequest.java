@@ -12,7 +12,7 @@ import java.util.List;
 public class VenueUpdateRequest {
 
     @Valid
-    private final Venue venue;
+    private final VenueRequest venueRequest;
 
     @Valid
     @NotNull

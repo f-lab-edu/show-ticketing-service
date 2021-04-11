@@ -5,7 +5,7 @@ import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserSession;
-import com.show.showticketingservice.model.venue.Venue;
+import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class VenueControllerTest {
 
     private UserRequest generalUser;
 
-    private Venue venue;
+    private VenueRequest venueRequest;
 
     private VenueHallRequest venueHallRequestOne;
 
@@ -62,7 +62,7 @@ class VenueControllerTest {
 
         generalUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
 
-        venue = new Venue(0,"공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
+        venueRequest = new VenueRequest(0,"공연장1", "서울시", "02-1212-3434", "www.공연장1.co.kr");
 
         venueHallRequestOne = new VenueHallRequest("공연홀A", 50, 60);
 
@@ -72,7 +72,7 @@ class VenueControllerTest {
 
         venueHallRequests.add(venueHallRequestTwo);
 
-        showPlace = new ShowPlace(venue, venueHallRequests);
+        showPlace = new ShowPlace(venueRequest, venueHallRequests);
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
@@ -155,11 +155,11 @@ class VenueControllerTest {
     @Test
     @DisplayName("주요 공연장 정보(ex. 전화번호)가 누락된 상태로 정보 추가 요청 시 실패 - Http Status 400 (Bad Request)")
     public void insertVenueWithMissingInfo() throws Exception {
-        Venue incompleteVenue = Venue.builder()
-                .name(venue.getName())
-                .address(venue.getAddress())
+        VenueRequest incompleteVenue = VenueRequest.builder()
+                .name(venueRequest.getName())
+                .address(venueRequest.getAddress())
                 .tel("")
-                .homepage(venue.getHomepage())
+                .homepage(venueRequest.getHomepage())
                 .build();
 
         showPlace = new ShowPlace(incompleteVenue, venueHallRequests);
@@ -187,7 +187,7 @@ class VenueControllerTest {
 
         venueHallRequests.add(venueHallRequestThree);
 
-        showPlace = new ShowPlace(venue, venueHallRequests);
+        showPlace = new ShowPlace(venueRequest, venueHallRequests);
 
         String content = objectMapper.writeValueAsString(showPlace);
 

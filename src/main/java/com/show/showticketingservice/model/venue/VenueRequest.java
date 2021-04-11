@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Builder
 @AllArgsConstructor
-public class Venue {
+public class VenueRequest {
 
     private final int id;
 
