@@ -4,6 +4,8 @@ import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionEx
 import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsException;
 import com.show.showticketingservice.exception.venueHall.VenueHallIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
+import com.show.showticketingservice.model.venue.VenueResponse;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -161,6 +163,21 @@ public class VenueHallServiceTest {
 
         verify(venueHallMapper, times(1)).getVenueHallCount(venueId, deleteHallIds);
         verify(venueHallMapper, times(1)).deleteVenueHalls(venueId, deleteHallIds);
+    }
+
+    @Test
+    @DisplayName("공연 홀 조회를 성공합니다.")
+    public void getVenueHallSuccess() {
+        VenueHallResponse venueHallResponse = new VenueHallResponse(3, venueId, "공연 홀C", 3, 6, 18);
+        List<VenueHallResponse> venueHallResponses = new ArrayList<>();
+        venueHallResponses.add(venueHallResponse);
+
+        when(venueHallMapper.getVenueHalls(venueId)).thenReturn(venueHallResponses);
+
+        venueHallService.getVenueHalls(venueId);
+
+        verify(venueHallMapper, times(1)).getVenueHalls(venueId);
+
     }
 
 }

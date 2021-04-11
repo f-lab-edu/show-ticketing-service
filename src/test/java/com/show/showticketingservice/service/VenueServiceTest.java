@@ -4,7 +4,9 @@ import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException
 import com.show.showticketingservice.exception.venue.VenueIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueMapper;
 import com.show.showticketingservice.model.venue.VenueRequest;
+import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.model.venue.VenueUpdateRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -129,5 +131,29 @@ public class VenueServiceTest {
         assertThrows(VenueIdNotExistsException.class, () -> {
             venueService.deleteVenue(venueRequest.getId());
         });
+    }
+
+    @Test
+    @DisplayName("공연장 조회를 성공합니다.")
+    public void getVenueInfoSuccess() {
+
+        VenueResponse venueResponse = new VenueResponse(
+                venueRequest.getId(),
+                venueRequest.getName(),
+                venueRequest.getAddress(),
+                venueRequest.getTel(),
+                venueRequest.getHomepage());
+
+        VenueHallResponse venueHallResponse = new VenueHallResponse(3, venueRequest.getId(), "공연 홀C", 3, 6, 18);
+        List<VenueHallResponse> venueHallResponses = new ArrayList<>();
+        venueHallResponses.add(venueHallResponse);
+
+        when(venueMapper.getVenueInfo(venueRequest.getId())).thenReturn(venueResponse);
+        when(venueHallService.getVenueHalls(venueRequest.getId())).thenReturn(venueHallResponses);
+
+        venueService.getVenueInfo(venueRequest.getId());
+
+        verify(venueMapper, times(1)).getVenueInfo(venueRequest.getId());
+        verify(venueHallService, times(1)).getVenueHalls(venueRequest.getId());
     }
 }
