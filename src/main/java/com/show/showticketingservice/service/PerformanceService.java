@@ -34,6 +34,9 @@ public class PerformanceService {
     }
 
     public void updatePosterImage(int performanceId, MultipartFile image) {
+
+        fileService.checkFileContentType(image);
+
         String imagePath = performanceMapper.getImagePath(performanceId);
 
         if(imagePath != null) {

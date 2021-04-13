@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.file.InvalidFileTypeException;
 import com.show.showticketingservice.tool.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,5 +50,14 @@ public class FileService {
 
     public void deleteFile(String imagePath) {
         new File(imagePath).delete();
+    }
+
+    public void checkFileContentType(MultipartFile image) {
+        String contentType = image.getContentType();
+
+        if(contentType == null || !fileUtil.isImageFile(contentType)) {
+            throw new InvalidFileTypeException();
+        }
+
     }
 }

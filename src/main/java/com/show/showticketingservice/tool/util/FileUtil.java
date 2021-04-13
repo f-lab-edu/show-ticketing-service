@@ -32,4 +32,8 @@ public class FileUtil {
             path.mkdirs();
         }
     }
+
+    public boolean isImageFile(String contentType) {
+        return contentType.contains("image/jpeg") || contentType.contains("image/png") || contentType.contains("image/gif");
+    }
 }
