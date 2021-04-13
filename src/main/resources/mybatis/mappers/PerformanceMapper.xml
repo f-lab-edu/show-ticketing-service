@@ -21,5 +21,11 @@
         SET imageFilePath = #{filePath}
         WHERE id = #{performanceId}
     </update>
+    
+    <select id="getImagePath" parameterType="int" resultType="String">
+        SELECT imageFilePath
+        FROM performance
+        WHERE id = #{performanceId}
+    </select>
 
 </mapper>

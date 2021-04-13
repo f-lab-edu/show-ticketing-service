@@ -34,7 +34,13 @@ public class PerformanceService {
     }
 
     public void updatePosterImage(int performanceId, MultipartFile image) {
-        String imagePath = fileService.registerPosterImage(image);
+        String imagePath = performanceMapper.getImagePath(performanceId);
+
+        if(imagePath != null) {
+            fileService.deleteFile(imagePath);
+        }
+
+        imagePath = fileService.registerPosterImage(image);
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 

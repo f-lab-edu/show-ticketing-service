@@ -23,7 +23,6 @@ public class FileUtil {
     }
 
     public void pathCheck(String fileUploadPath) {
-//        File path = new File(fileUploadPath);
 
         Path dir = Paths.get(fileUploadPath).toAbsolutePath().normalize();
 

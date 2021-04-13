@@ -47,4 +47,7 @@ public class FileService {
         }
     }
 
+    public void deleteFile(String imagePath) {
+        new File(imagePath).delete();
+    }
 }
