@@ -11,4 +11,5 @@ public interface PerformanceMapper {
 
     boolean isPerformanceExists(String title, ShowType showType);
 
+    void updatePerfImagePath(int performanceId, String filePath);
 }

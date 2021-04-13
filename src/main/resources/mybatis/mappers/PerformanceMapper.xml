@@ -4,8 +4,8 @@
 <mapper namespace="com.show.showticketingservice.mapper.PerformanceMapper">
 
     <insert id="insertPerformance" parameterType="com.show.showticketingservice.model.performance.PerformanceRequest">
-        INSERT INTO performance(title, imageFilePath, detail, ageLimit, showType, venueId, hallId)
-        VALUES(#{title}, #{imageFilePath}, #{detail}, #{ageLimit}, #{showType}, #{venueId}, #{hallId})
+        INSERT INTO performance(title, detail, ageLimit, showType, venueId, hallId)
+        VALUES(#{title}, #{detail}, #{ageLimit}, #{showType}, #{venueId}, #{hallId})
     </insert>
 
     <select id="isPerformanceExists" parameterType="map" resultType="boolean">
@@ -15,5 +15,11 @@
         WHERE title = #{title} AND showType = #{showType}
         )
     </select>
+
+    <update id="updatePerfImagePath" parameterType="map">
+        UPDATE performance
+        SET imageFilePath = #{filePath}
+        WHERE id = #{performanceId}
+    </update>
 
 </mapper>

@@ -5,10 +5,8 @@ import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.service.PerformanceService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -23,6 +21,12 @@ public class PerformanceController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void insertPerformance(@RequestBody @Valid PerformanceRequest performanceRequest) {
         performanceService.insertPerformance(performanceRequest);
+    }
+
+    @PutMapping("/{performanceId}/image")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void updatePosterImage(@PathVariable int performanceId,  @RequestParam("image") MultipartFile image) {
+        performanceService.updatePosterImage(performanceId, image);
     }
 
 }
