@@ -7,7 +7,6 @@ import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +16,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PerformanceService {
-
-    @Value("${spring.servlet.multipart.location}")
-    private String fileUploadPath;
 
     private final PerformanceMapper performanceMapper;
 

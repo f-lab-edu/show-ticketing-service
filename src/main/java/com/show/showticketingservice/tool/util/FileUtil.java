@@ -1,16 +1,13 @@
 package com.show.showticketingservice.tool.util;
 
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Component
 public class FileUtil {
 
-    public String renameFile(String originName) {
+    public static String renameFile(String originName) {
 
         UUID uuid = UUID.randomUUID();
 
@@ -22,7 +19,7 @@ public class FileUtil {
         return newName.toString();
     }
 
-    public void pathCheck(String fileUploadPath) {
+    public static void pathCheck(String fileUploadPath) {
 
         Path dir = Paths.get(fileUploadPath).toAbsolutePath().normalize();
 
@@ -33,7 +30,7 @@ public class FileUtil {
         }
     }
 
-    public boolean isImageFile(String contentType) {
+    public static boolean isImageFile(String contentType) {
         return contentType.contains("image/jpeg") || contentType.contains("image/png") || contentType.contains("image/gif");
     }
 }
