@@ -55,7 +55,7 @@ public class FileService {
     public void checkFileContentType(MultipartFile image) {
         String contentType = image.getContentType();
 
-        if(contentType == null || !fileUtil.isImageFile(contentType)) {
+        if (contentType == null || !fileUtil.isImageFile(contentType)) {
             throw new InvalidFileTypeException();
         }
 
