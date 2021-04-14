@@ -56,3 +56,14 @@ CREATE INDEX performance_Index ON performance
 (
     title
 );
+
+CREATE TABLE performanceTime
+(
+    `id`             INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `performanceId`  INT UNSIGNED    NOT NULL,
+    `startTime`      DATETIME        NOT NULL,
+    `endTime`        DATETIME        NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (performanceId) REFERENCES performance(id)
+    ON DELETE CASCADE
+);

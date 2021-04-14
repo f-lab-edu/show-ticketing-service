@@ -2,13 +2,17 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
+import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
+import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,8 @@ public class PerformanceService {
     private String fileUploadPath;
 
     private final PerformanceMapper performanceMapper;
+
+    private final PerformanceTimeMapper performanceTimeMapper;
 
     private final FileService fileService;
 
@@ -39,7 +45,7 @@ public class PerformanceService {
 
         String imagePath = performanceMapper.getImagePath(performanceId);
 
-        if(imagePath != null) {
+        if (imagePath != null) {
             fileService.deleteFile(imagePath);
         }
 
@@ -47,4 +53,10 @@ public class PerformanceService {
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
+    public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
+
+        // 시간이 겹치는 지 확인 필요
+
+        performanceTimeMapper.insertPerformanceTimes(performanceTimeRequests, performanceId);
+    }
 }
