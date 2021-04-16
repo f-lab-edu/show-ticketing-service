@@ -1,5 +1,6 @@
 package com.show.showticketingservice.config;
 
+import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.enumerations.UserType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -19,7 +20,7 @@ public class MyBatisConfig {
 
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setMapperLocations(resolver.getResources("mybatis/mappers/*.xml"));
-        sqlSessionFactoryBean.setTypeHandlers(new UserType.TypeHandler());
+        sqlSessionFactoryBean.setTypeHandlers(new UserType.TypeHandler(), new ShowType.TypeHandler());
 
         return sqlSessionFactoryBean.getObject();
     }

@@ -37,3 +37,34 @@ CREATE TABLE venueHall(
    FOREIGN KEY (venueId) REFERENCES venue(id)
    ON DELETE CASCADE
 );
+
+CREATE TABLE performance
+(
+    `id`            INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `title`         VARCHAR(50)     NOT NULL,
+    `imageFilePath` VARCHAR(255)    NULL,
+    `detail`        VARCHAR(500)    NULL,
+    `ageLimit`      INT             NULL,
+    `showType`      INT(3)          NOT NULL,
+    `venueId`       INT UNSIGNED    NOT NULL,
+    `hallId`        INT UNSIGNED    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (venueId) REFERENCES venue(id),
+    FOREIGN KEY (hallId) REFERENCES venueHall(id)
+);
+
+CREATE INDEX performance_Index ON performance
+(
+    title
+);
+
+CREATE TABLE performanceTime
+(
+    `id`             INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `performanceId`  INT UNSIGNED    NOT NULL,
+    `startTime`      DATETIME        NOT NULL,
+    `endTime`        DATETIME        NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (performanceId) REFERENCES performance(id)
+    ON DELETE CASCADE
+);
