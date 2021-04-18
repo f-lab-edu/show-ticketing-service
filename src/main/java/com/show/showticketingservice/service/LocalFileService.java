@@ -20,17 +20,17 @@ public class LocalFileService implements FileService {
     private String fileUploadPath;
 
     @Override
-    public String registerPosterImage(MultipartFile image) {
+    public String registerImage(MultipartFile image) {
 
         String fileName = FileUtil.renameFile(image.getOriginalFilename());
 
         FileUtil.pathCheck(fileUploadPath);
 
-        return saveImage(fileName, image);
+        return saveFile(fileName, image);
     }
 
     @Override
-    public String saveImage(String fileName, MultipartFile image) {
+    public String saveFile(String fileName, MultipartFile image) {
         StringBuilder filePath = new StringBuilder()
                 .append(fileUploadPath)
                 .append(File.separator)
