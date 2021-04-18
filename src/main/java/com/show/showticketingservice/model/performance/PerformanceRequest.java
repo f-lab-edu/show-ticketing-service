@@ -7,13 +7,18 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
 public class PerformanceRequest {
+
+    private final int id;
 
     @NotBlank(message = "공연 제목을 입력하세요.")
     @Length(max = 50, message = "제목은 50자 내로 입력하세요.")
@@ -34,5 +39,10 @@ public class PerformanceRequest {
 
     @NotNull(message = "공연홀 ID를 입력하세요.")
     private final int hallId;
+
+    @Valid
+    @Size(min = 1, message = "좌석 가격을 최소 1개 이상 입력하세요.")
+    @NotNull(message = "좌석 가격을 입력하세요.")
+    private final List<SeatPriceRequest> seatPriceRequests;
 
 }

@@ -3,7 +3,10 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.PerformanceMapper">
 
-    <insert id="insertPerformance" parameterType="com.show.showticketingservice.model.performance.PerformanceRequest">
+    <insert id="insertPerformance"
+            parameterType="com.show.showticketingservice.model.performance.PerformanceRequest"
+            useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO performance(title, detail, ageLimit, showType, venueId, hallId)
         VALUES(#{title}, #{detail}, #{ageLimit}, #{showType}, #{venueId}, #{hallId})
     </insert>

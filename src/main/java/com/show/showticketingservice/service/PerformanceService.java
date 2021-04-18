@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Service
@@ -23,10 +22,13 @@ public class PerformanceService {
 
     private final FileService fileService;
 
+    private final SeatPriceService seatPriceService;
+
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
         checkPerformanceExists(performanceRequest.getTitle(), performanceRequest.getShowType());
         performanceMapper.insertPerformance(performanceRequest);
+        seatPriceService.insertSeatsPrice(performanceRequest.getSeatPriceRequests(), performanceRequest.getVenueId(), performanceRequest.getHallId(), performanceRequest.getId());
     }
 
     public void checkPerformanceExists(String title, ShowType showType) {
@@ -55,4 +57,5 @@ public class PerformanceService {
 
         performanceTimeMapper.insertPerformanceTimes(performanceTimeRequests, performanceId);
     }
+
 }
