@@ -11,4 +11,10 @@
         </foreach>
     </insert>
 
+    <select id="getPerfTimes" parameterType="int" resultType="com.show.showticketingservice.model.performance.PerformanceTimeRequest">
+        SELECT date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
+        FROM performanceTime
+        WHERE performanceId = #{performanceId}
+    </select>
+
 </mapper>
