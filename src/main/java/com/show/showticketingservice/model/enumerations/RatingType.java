@@ -3,7 +3,7 @@ package com.show.showticketingservice.model.enumerations;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.type.EnumTypeHandler;
+import com.show.showticketingservice.tool.handler.EnumTypeHandler;
 import org.apache.ibatis.type.MappedTypes;
 
 @RequiredArgsConstructor

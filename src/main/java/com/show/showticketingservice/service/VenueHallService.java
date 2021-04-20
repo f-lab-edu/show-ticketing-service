@@ -100,8 +100,8 @@ public class VenueHallService {
         return venueHallMapper.getVenueHalls(venueId);
     }
 
-    public int getVenueHall(int venueId, int hallId) {
-        return venueHallMapper.getVenueHall(venueId, hallId);
+    public int getVenueHallcolNum(int performanceId) {
+        return venueHallMapper.getVenueHall(performanceId);
     }
 
 }

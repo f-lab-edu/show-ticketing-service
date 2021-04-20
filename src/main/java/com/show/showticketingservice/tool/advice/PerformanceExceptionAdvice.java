@@ -1,7 +1,8 @@
 package com.show.showticketingservice.tool.advice;
 
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
-import com.show.showticketingservice.exception.performance.SeatNumberWrongException;
+import com.show.showticketingservice.exception.performance.SameSeatRatingListAdditionException;
+import com.show.showticketingservice.exception.performance.SeatColNumWrongException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,16 @@ public class PerformanceExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(SeatNumberWrongException.class)
-    public ResponseEntity<ExceptionResponse> seatNumberWrongException(final SeatNumberWrongException e,WebRequest request) {
+    @ExceptionHandler(SeatColNumWrongException.class)
+    public ResponseEntity<ExceptionResponse> seatNumberWrongException(final SeatColNumWrongException e, WebRequest request) {
         log.error("ticket price registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SameSeatRatingListAdditionException.class)
+    public ResponseEntity<ExceptionResponse> sameSeatRating(final SameSeatRatingListAdditionException e, WebRequest request) {
+        log.error("", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }

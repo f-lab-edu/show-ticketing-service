@@ -4,15 +4,15 @@
 <mapper namespace="com.show.showticketingservice.mapper.SeatPriceMapper">
 
     <insert id="insertSeatsPrice" parameterType="map">
-        INSERT INTO seatPrice(performanceId, price, rating, startSeat, endSeat)
+        INSERT INTO seatPrice(performanceId, price, ratingType, startColNum, endColNum)
         VALUES
-        <foreach collection="seatPriceRequests" item="ticketPriceRequest" separator=",">
+        <foreach collection="seatPriceRequests" item="seatPriceRequest" separator=",">
             (
             #{performanceId},
-            #{ticketPriceRequest.price},
-            #{ticketPriceRequest.rating},
-            #{ticketPriceRequest.startSeat},
-            #{ticketPriceRequest.endSeat}
+            #{seatPriceRequest.price},
+            #{seatPriceRequest.ratingType},
+            #{seatPriceRequest.startColNum},
+            #{seatPriceRequest.endColNum}
             )
         </foreach>
     </insert>

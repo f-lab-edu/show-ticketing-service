@@ -22,13 +22,10 @@ public class PerformanceService {
 
     private final FileService fileService;
 
-    private final SeatPriceService seatPriceService;
-
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
         checkPerformanceExists(performanceRequest.getTitle(), performanceRequest.getShowType());
         performanceMapper.insertPerformance(performanceRequest);
-        seatPriceService.insertSeatsPrice(performanceRequest.getSeatPriceRequests(), performanceRequest.getVenueId(), performanceRequest.getHallId(), performanceRequest.getId());
     }
 
     public void checkPerformanceExists(String title, ShowType showType) {

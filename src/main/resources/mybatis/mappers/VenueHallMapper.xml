@@ -59,10 +59,11 @@
         AND venueId = #{venueId}
     </select>
 
-    <select id="getVenueHall" parameterType="map" resultType="int">
-        SELECT seatingCapacity
-        FROM venueHall
-        WHERE venueId = #{venueId} AND id = #{hallId}
+    <select id="getVenueHall" resultType="int">
+        SELECT columnSeats
+        FROM venueHall v JOIN performance p
+        ON v.id = p.hallId
+        WHERE p.id = #{performanceId}
     </select>
 
 </mapper>
