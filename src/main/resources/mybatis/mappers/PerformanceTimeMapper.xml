@@ -16,10 +16,20 @@
         </foreach>
     </insert>
 
-    <select id="getPerfTimes" parameterType="int" resultType="com.show.showticketingservice.model.performance.PerformanceTimeRequest">
+    <select id="getPerfTimes" parameterType="map"
+            resultType="com.show.showticketingservice.model.performance.PerformanceTimeRequest">
         SELECT date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
         FROM performanceTime
-        WHERE performanceId = #{performanceId}
+        WHERE hallId = (SELECT hallId FROM performance WHERE id = #{performanceId}) AND
+        <foreach collection="performanceTimeRequests" item="performanceTimeRequest" open="(" close=")" separator="OR">
+            (
+            DATE(startTime)
+            BETWEEN
+            DATE(#{performanceTimeRequest.startTime}) - 1
+            AND
+            DATE(#{performanceTimeRequest.startTime}) + 1
+            )
+        </foreach>
     </select>
 
 </mapper>

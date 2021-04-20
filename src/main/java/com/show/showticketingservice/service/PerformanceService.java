@@ -71,7 +71,7 @@ public class PerformanceService {
         3. 검색된 스케줄이 입력하려는 스케줄의 시간과 중첩된다면 예외처리
          */
 
-        List<PerformanceTimeRequest> perfTimesFromDB = performanceTimeMapper.getPerfTimes(performanceId);
+        List<PerformanceTimeRequest> perfTimesFromDB = performanceTimeMapper.getPerfTimes(performanceId, performanceTimeRequests);
 
         if (perfTimesFromDB.size() == 0)
             return;

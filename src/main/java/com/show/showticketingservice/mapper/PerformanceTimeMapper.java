@@ -10,6 +10,6 @@ public interface PerformanceTimeMapper {
 
     void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId);
 
-    List<PerformanceTimeRequest> getPerfTimes(int performanceId);
+    List<PerformanceTimeRequest> getPerfTimes(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests);
 
 }
