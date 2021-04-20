@@ -4,10 +4,15 @@
 <mapper namespace="com.show.showticketingservice.mapper.PerformanceTimeMapper">
 
     <insert id="insertPerformanceTimes" parameterType="map">
-        INSERT INTO performanceTime(performanceId, startTime, endTime)
+        INSERT INTO performanceTime(performanceId, hallId, startTime, endTime)
         VALUES
         <foreach collection="performanceTimeRequests" item="performanceTimeRequest" separator=",">
-            (#{performanceId}, #{performanceTimeRequest.startTime}, #{performanceTimeRequest.endTime})
+            (
+            #{performanceId},
+            (SELECT hallId FROM performance WHERE id = #{performanceId}),
+            #{performanceTimeRequest.startTime},
+            #{performanceTimeRequest.endTime}
+            )
         </foreach>
     </insert>
 

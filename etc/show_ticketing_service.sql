@@ -21,10 +21,7 @@ CREATE TABLE venue
     PRIMARY KEY (id)
 );
 
-CREATE INDEX venue_Index ON venue
-(
-    name
-);
+CREATE INDEX venue_Index ON venue(name);
 
 CREATE TABLE venueHall(
    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -52,18 +49,18 @@ CREATE TABLE performance
     FOREIGN KEY (hallId) REFERENCES venueHall(id)
 );
 
-CREATE INDEX performance_Index ON performance
-(
-    title
-);
+CREATE INDEX performance_Index ON performance(title);
 
 CREATE TABLE performanceTime
 (
     `id`             INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
     `performanceId`  INT UNSIGNED    NOT NULL,
+    `hallId`         INT UNSIGNED    NOT NULL,
     `startTime`      DATETIME        NOT NULL,
     `endTime`        DATETIME        NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (performanceId) REFERENCES performance(id)
-    ON DELETE CASCADE
+    FOREIGN KEY (performanceId) REFERENCES performance(id) ON DELETE CASCADE,
+    FOREIGN KEY (hallId)        REFERENCES venueHall(id)
 );
+
+CREATE INDEX performanceTime_Index ON performanceTime(startTime);
