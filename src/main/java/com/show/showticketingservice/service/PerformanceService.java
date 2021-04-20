@@ -113,7 +113,7 @@ public class PerformanceService {
 
     private void checkPerfTimeRequestConflict(List<PerformanceTimeRequest> performanceTimeRequests) {
         /*
-        공연 스케줄 입력 요청의 시간이 서로 중첩되거나 시작 시간이 끝나는 시간 보다 늦을 때 예외 처리
+        공연 스케줄 입력 요청의 시간이 서로 중첩되거나 정상적인 공연 시간이 아닐 때 예외 처리
         (스케줄 입력 요청을 시작 시간을 기준으로 정렬 후 확인)
          */
 
@@ -142,7 +142,8 @@ public class PerformanceService {
     private void checkCorrectPerfTime(PerformanceTimeRequest timeRequest) {
         /*
         정상적인 공연 시간 체크
-        (시작 시간이 끝나는 시간 보다 늦을 경우 예외처리)
+        - 시작 시간이 끝나는 시간 보다 늦을 경우 예외처리
+        - 공연 시간이 24시간 이상일 경우 예외처리
          */
 
         long startTime = Long.parseLong(timeRequest.getStartTime());
@@ -151,5 +152,10 @@ public class PerformanceService {
         if (startTime >= endTime) {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
+
+        if(endTime - startTime > 24_00_00) {
+            throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
+        }
+
     }
 }
