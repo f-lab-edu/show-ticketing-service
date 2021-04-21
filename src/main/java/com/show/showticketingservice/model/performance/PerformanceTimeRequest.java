@@ -1,10 +1,12 @@
 package com.show.showticketingservice.model.performance;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@Getter
 @AllArgsConstructor
 public class PerformanceTimeRequest {
 
