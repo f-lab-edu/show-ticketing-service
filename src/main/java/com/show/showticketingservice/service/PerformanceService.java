@@ -48,7 +48,7 @@ public class PerformanceService {
             fileService.deleteFile(imagePath);
         }
 
-        imagePath = fileService.registerImage(image);
+        imagePath = fileService.saveFile(image);
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
