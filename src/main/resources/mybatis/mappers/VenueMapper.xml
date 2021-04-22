@@ -28,6 +28,11 @@
         WHERE id = #{venueId}
     </delete>
 
+    <select id="isVenueIdExists" resultType="boolean">
+        SELECT EXISTS
+        (SELECT * FROM venue WHERE id = #{venueId})
+    </select>
+
     <select id="getVenueList" parameterType="com.show.showticketingservice.model.criteria.VenuePagingCriteria"
             resultType="com.show.showticketingservice.model.venue.VenueResponse">
         SELECT id, name, address, tel, homepage

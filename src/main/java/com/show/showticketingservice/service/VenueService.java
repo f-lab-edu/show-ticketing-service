@@ -1,19 +1,22 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.venue.VenueIdNotExistsException;
 import com.show.showticketingservice.exception.venue.VenueAlreadyExistsException;
 import com.show.showticketingservice.mapper.VenueMapper;
+import com.show.showticketingservice.model.venue.VenueUpdateRequest;
 import com.show.showticketingservice.model.criteria.VenuePagingCriteria;
+import com.show.showticketingservice.model.venue.VenueDetailInfoResponse;
 import com.show.showticketingservice.model.venue.VenueListResponse;
 import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -40,14 +43,37 @@ public class VenueService {
         }
     }
 
+    @Transactional
     @CacheEvict(cacheNames = CacheConstant.VENUE, key = "#venueId")
-    public void updateVenueInfo(int venueId, VenueRequest venueUpdateRequest) {
-        venueMapper.updateVenueInfo(venueId, venueUpdateRequest);
+    public void updateVenueInfo(int venueId, VenueUpdateRequest venueUpdateRequest) {
+
+        checkVenueIdExists(venueId);
+
+        if(venueUpdateRequest.getVenueRequest() != null) {
+            checkVenueExists(venueUpdateRequest.getVenueRequest().getName());
+            venueMapper.updateVenueInfo(venueId, venueUpdateRequest.getVenueRequest());
+        }
+
+        if(!venueUpdateRequest.getVenueHallUpdateRequests().isEmpty()) {
+            venueHallService.updateVenueHalls(venueId, venueUpdateRequest.getVenueHallUpdateRequests());
+        }
+
+        if(!venueUpdateRequest.getDeleteHallIds().isEmpty()) {
+            venueHallService.deleteVenueHalls(venueId, venueUpdateRequest.getDeleteHallIds());
+        }
     }
 
     @CacheEvict(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public void deleteVenue(int venueId) {
+        checkVenueIdExists(venueId);
+
         venueMapper.deleteVenue(venueId);
+    }
+
+    public void checkVenueIdExists(int venueId) {
+        if (!venueMapper.isVenueIdExists(venueId)) {
+            throw new VenueIdNotExistsException();
+        }
     }
 
     public VenueListResponse getVenueList(int page) {
@@ -75,8 +101,14 @@ public class VenueService {
     }
 
     @Cacheable(cacheNames = CacheConstant.VENUE, key = "#venueId")
-    public VenueResponse getVenueInfo(int venueId) {
-        return venueMapper.getVenueInfo(venueId);
+    public VenueDetailInfoResponse getVenueInfo(int venueId) {
+
+        VenueResponse venueResponse = venueMapper.getVenueInfo(venueId);
+
+        List<VenueHallResponse> venueHallResponses = venueHallService.getVenueHalls(venueId);
+
+        return new VenueDetailInfoResponse(venueResponse, venueHallResponses);
+
     }
 
 }
