@@ -3,13 +3,13 @@ package com.show.showticketingservice.controller;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.showPlace.ShowPlace;
 import com.show.showticketingservice.model.venue.VenueDetailInfoResponse;
-import com.show.showticketingservice.model.venue.VenueUpdateRequest;
 import com.show.showticketingservice.model.venue.VenueListResponse;
-import com.show.showticketingservice.service.VenueHallService;
+import com.show.showticketingservice.model.venue.VenueUpdateRequest;
 import com.show.showticketingservice.service.VenueService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 @RestController
@@ -18,8 +18,6 @@ import javax.validation.Valid;
 public class VenueController {
 
     private final VenueService venueService;
-
-    private final VenueHallService venueHallService;
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
