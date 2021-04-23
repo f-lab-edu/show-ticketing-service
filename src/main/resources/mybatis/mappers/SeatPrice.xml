@@ -17,4 +17,11 @@
         </foreach>
     </insert>
 
+    <select id="getSeatPriceColNum" resultType="com.show.showticketingservice.model.performance.SeatPriceColNumData">
+        SELECT s.id, startColNum, endColNum
+        FROM seatPrice s JOIN performance p
+        ON p.id = p.performanceId
+        WHERE p.id = #{performanceId}
+    </select>
+
 </mapper>

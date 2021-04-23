@@ -66,4 +66,11 @@
         WHERE p.id = #{performanceId}
     </select>
 
+    <select id="getVenueHallRowSeat" resultType="com.show.showticketingservice.model.venueHall.VenueHallRowSeat">
+        SELECT v.id, rowSeats
+        FROM venueHall v JOIN performance p
+        ON v.id = p.hallId
+        WHERE p.id = #{performanceId}
+    </select>
+
 </mapper>

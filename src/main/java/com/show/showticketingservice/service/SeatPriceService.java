@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.performance.SameSeatRatingListAdd
 import com.show.showticketingservice.exception.performance.SeatColNumWrongException;
 import com.show.showticketingservice.mapper.SeatPriceMapper;
 import com.show.showticketingservice.model.enumerations.RatingType;
+import com.show.showticketingservice.model.performance.SeatPriceColNumData;
 import com.show.showticketingservice.model.performance.SeatPriceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,10 @@ public class SeatPriceService {
         checkDuplicationSeatsRatingList(seatPriceRequests);
 
         seatPriceMapper.insertSeatsPrice(seatPriceRequests, performanceId);
+    }
+
+    public List<SeatPriceColNumData> getSeatPriceColNum(int performanceId) {
+        return seatPriceMapper.getSeatPriceColNum(performanceId);
     }
 
 }

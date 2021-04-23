@@ -4,16 +4,23 @@ import com.show.showticketingservice.exception.performance.PerformanceAlreadyExi
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
+import com.show.showticketingservice.mapper.SeatInfoMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
+import com.show.showticketingservice.model.performance.SeatPriceColNumData;
+import com.show.showticketingservice.model.performance.SeatRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallRowSeat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +30,13 @@ public class PerformanceService {
 
     private final PerformanceTimeMapper performanceTimeMapper;
 
+    private final VenueHallService venueHallService;
+
     private final FileService fileService;
+
+    private final SeatPriceService seatPriceService;
+
+    private final SeatInfoMapper seatInfoMapper;
 
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
@@ -58,6 +71,8 @@ public class PerformanceService {
         checkPerfTimeWithDB(performanceTimeRequests, performanceId);
 
         performanceTimeMapper.insertPerformanceTimes(performanceTimeRequests, performanceId);
+
+        insertSeatInfo(performanceId, performanceTimeRequests);
     }
 
     private void checkPerfTimeWithDB(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
@@ -156,5 +171,49 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
+    }
+
+    private List<SeatRequest> setSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+
+        VenueHallRowSeat venueHallRowSeat = venueHallService.getVenueHallRowNum(performanceId);
+        List<SeatPriceColNumData> seatPriceColNumDataList = seatPriceService.getSeatPriceColNum(performanceId);
+        List<SeatRequest> seatRequests = new ArrayList<>();
+
+        performanceTimeRequests.stream().forEach(performanceTimeRequest -> {
+
+            seatPriceColNumDataList.stream().forEach(seatPriceColNumData -> {
+
+                IntStream.range(1, ((seatPriceColNumData.getEndColNum() - seatPriceColNumData.getStartColNum()) * venueHallRowSeat.getRowSeats()) + 1).
+                        forEach(v -> {
+
+                            int colNum = 1;
+                            int rowNum = 1;
+
+                            if(rowNum == venueHallRowSeat.getRowSeats() + 1) {
+                                colNum += 1;
+                                rowNum = 1;
+                            }
+
+                            SeatRequest seatRequest = SeatRequest.builder().
+                                    perfTimeId(performanceTimeRequest.getId()).
+                                    hallId(venueHallRowSeat.getId()).
+                                    colNum(colNum).
+                                    rowNum(rowNum).
+                                    reserved(0).
+                                    build();
+                            seatRequests.add(seatRequest);
+
+                            rowNum++;
+                        });
+
+            });
+        });
+
+        return seatRequests;
+    }
+
+    public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        //List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
+        //seatInfoMapper.insertSeatInfo(seatRequests);
     }
 }
