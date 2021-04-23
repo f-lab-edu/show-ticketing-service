@@ -4,9 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
 
-    String registerPosterImage(MultipartFile image);
-
-    String saveImage(String fileName, MultipartFile image);
+    String saveFile(MultipartFile image);
 
     void deleteFile(String imagePath);
 
