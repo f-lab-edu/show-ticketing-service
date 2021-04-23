@@ -4,17 +4,21 @@
 <mapper namespace="com.show.showticketingservice.mapper.SeatPriceMapper">
 
     <insert id="insertSeatsPrice" parameterType="map">
-        INSERT INTO seatPrice(performanceId, price, ratingType, startColNum, endColNum)
+        INSERT INTO seatPrice(performanceId, price, ratingType, startRowNum, endRowNum)
         VALUES
         <foreach collection="seatPriceRequests" item="seatPriceRequest" separator=",">
             (
             #{performanceId},
             #{seatPriceRequest.price},
             #{seatPriceRequest.ratingType},
-            #{seatPriceRequest.startColNum},
-            #{seatPriceRequest.endColNum}
+            #{seatPriceRequest.startRowNum},
+            #{seatPriceRequest.endRowNum}
             )
         </foreach>
     </insert>
+
+    <select id="isSeatPriceExists" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM seatPrice WHERE performanceId = #{performanceId})
+    </select>
 
 </mapper>

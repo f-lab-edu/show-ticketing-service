@@ -7,4 +7,6 @@ import java.util.List;
 @Mapper
 public interface SeatPriceMapper {
     void insertSeatsPrice(List<SeatPriceRequest> seatPriceRequests, int performanceId);
+
+    boolean isSeatPriceExists(int performanceId);
 }
