@@ -20,9 +20,9 @@ public class SeatPriceRequest {
 
     @Min(value = 1, message = "좌석 행을 1이상 입력하세요.")
     @NotNull(message = "좌석 행을 입력하세요.")
-    private final int startColNum;
+    private final int startRowNum;
 
     @Min(value = 1, message = "좌석 행을 1이상 입력하세요.")
     @NotNull(message = "좌석 행을 입력하세요.")
-    private final int endColNum;
+    private final int endRowNum;
 }

@@ -31,7 +31,7 @@ public class PerformanceExceptionAdvice {
 
     @ExceptionHandler(SameSeatRatingListAdditionException.class)
     public ResponseEntity<ExceptionResponse> sameSeatRating(final SameSeatRatingListAdditionException e, WebRequest request) {
-        log.error("", e);
+        log.error("ticket price registration failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
