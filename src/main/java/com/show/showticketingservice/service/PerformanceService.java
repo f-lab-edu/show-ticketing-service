@@ -1,12 +1,14 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
+import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
+import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -157,5 +159,27 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
+    }
+
+    @Transactional
+    public void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest) {
+
+        checkValidPerformanceId(performanceId);
+
+        checkPerfTitleDuplicated(performanceId, perfUpdateRequest.getTitle(), perfUpdateRequest.getShowType());
+
+        performanceMapper.updatePerformanceInfo(performanceId, perfUpdateRequest);
+    }
+
+    private void checkValidPerformanceId(int performanceId) {
+        if(!performanceMapper.isPerformanceIdExists(performanceId)) {
+            throw new PerformanceNotExistsException();
+        }
+    }
+
+    private void checkPerfTitleDuplicated(int performanceId, String title, ShowType showType) {
+        if (performanceMapper.isPerfTitleDuplicated(performanceId, title, showType)) {
+            throw new PerformanceAlreadyExistsException();
+        }
     }
 }
