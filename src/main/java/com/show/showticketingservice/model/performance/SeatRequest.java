@@ -19,5 +19,5 @@ public class SeatRequest {
 
     private final int rowNum;
 
-    private final int reserved;
+    private final boolean reserved;
 }

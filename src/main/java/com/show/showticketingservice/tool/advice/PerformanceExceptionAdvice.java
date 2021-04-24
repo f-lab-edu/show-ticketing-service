@@ -51,4 +51,11 @@ public class PerformanceExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SeatPriceNonExistsException.class)
+    public ResponseEntity<ExceptionResponse> seatPriceNonExistsException(final SeatPriceNonExistsException e, WebRequest request) {
+        log.error("seat registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

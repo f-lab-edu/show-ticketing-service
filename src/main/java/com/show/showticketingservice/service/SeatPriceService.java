@@ -1,6 +1,7 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.SameSeatRatingListAdditionException;
+import com.show.showticketingservice.exception.performance.SeatPriceNonExistsException;
 import com.show.showticketingservice.exception.performance.SeatRowNumWrongException;
 import com.show.showticketingservice.exception.performance.SeatPriceAlreadyExistsException;
 import com.show.showticketingservice.mapper.SeatPriceMapper;
@@ -103,4 +104,10 @@ public class SeatPriceService {
 
     }
 
+    public void checkSeatPriceNonExistsException(int performanceId) {
+        if(!seatPriceMapper.isSeatPriceExists(performanceId)) {
+            throw new SeatPriceNonExistsException("공연 좌석 가격 정보가 존재하지 않습니다.");
+        }
+
+    }
 }

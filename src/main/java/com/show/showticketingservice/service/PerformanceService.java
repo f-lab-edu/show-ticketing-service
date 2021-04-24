@@ -62,6 +62,7 @@ public class PerformanceService {
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
+    @Transactional
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -172,6 +173,10 @@ public class PerformanceService {
     }
 
     private List<SeatRequest> setSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        /*
+        좌석 정보 세팅
+        - DB로부터 좌석 정보에 필요한 정보를 불러옴 (VenueHallColumnSeat, SeatPriceRowNumData)
+         */
 
         VenueHallColumnSeat venueHallColumnSeat = venueHallService.getVenueHallColumnAndId(performanceId);
 
@@ -200,7 +205,7 @@ public class PerformanceService {
                             priceId(seatPriceRowNumData.getId()).
                             colNum(colNum).
                             rowNum(rowNum).
-                            reserved(0).
+                            reserved(false).
                             build();
                     seatRequests.add(seatRequest);
 
@@ -213,6 +218,7 @@ public class PerformanceService {
     }
 
     public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        seatPriceService.checkSeatPriceNonExistsException(performanceId);
         List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
         seatInfoMapper.insertSeatInfo(seatRequests);
     }
