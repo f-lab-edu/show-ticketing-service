@@ -45,7 +45,7 @@ public class PerformanceController {
 
     @PostMapping("/{performanceId}/prices")
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
-    public void insertPerfPrice(@RequestBody List<@Valid SeatPriceRequest> seatPriceRequests, @PathVariable int performanceId) {
+    public void insertPerfPrice(@RequestBody @Valid List<SeatPriceRequest> seatPriceRequests, @PathVariable int performanceId) {
         seatPriceService.insertSeatsPrice(seatPriceRequests, performanceId);
     }
 

@@ -79,7 +79,7 @@ public class SeatPriceService {
 
     public void insertSeatsPrice(List<SeatPriceRequest> seatPriceRequests, int performanceId) {
 
-        isSeatPriceExists(performanceId);
+        checkSeatPriceAlreadyExistsException(performanceId);
 
         int totalRowNum = venueHallService.getVenueHallRowNum(performanceId);
 
@@ -92,14 +92,13 @@ public class SeatPriceService {
         seatPriceMapper.insertSeatsPrice(seatPriceRequests, performanceId);
     }
 
-
     public List<SeatPriceRowNumData> getSeatPriceRowNum(int performanceId) {
         return seatPriceMapper.getSeatPriceRowNum(performanceId);
     }
 
-    public void isSeatPriceExists(int performanceId) {
+    public void checkSeatPriceAlreadyExistsException(int performanceId) {
         if(seatPriceMapper.isSeatPriceExists(performanceId)) {
-            throw new SeatPriceAlreadyExistsException();
+            throw new SeatPriceAlreadyExistsException("이 공연은 좌석 가격이 이미 등록되어 있습니다.");
         }
 
     }
