@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class VenueHallRowSeat {
+public class VenueHallColumnSeat {
 
     private int id;
 
-    private int rowSeats;
+    private int columnSeats;
 }

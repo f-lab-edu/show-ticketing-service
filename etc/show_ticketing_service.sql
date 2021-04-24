@@ -70,8 +70,8 @@ CREATE TABLE seatPrice
     `performanceId`  INT UNSIGNED     NOT NULL,
     `price`          INT             NOT NULL,
     `ratingType`     INT             NOT NULL,
-    `startColNum`    INT             NOT NULL,
-    `endColNum`      INT             NOT NULL,
+    `startRowNum`    INT             NOT NULL,
+    `endRowNum`      INT             NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (performanceId) REFERENCES performance(id)
     ON DELETE CASCADE

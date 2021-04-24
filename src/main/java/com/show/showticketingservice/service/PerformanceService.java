@@ -8,19 +8,17 @@ import com.show.showticketingservice.mapper.SeatInfoMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceColNumData;
+import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
 import com.show.showticketingservice.model.performance.SeatRequest;
-import com.show.showticketingservice.model.venueHall.VenueHallRowSeat;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +58,7 @@ public class PerformanceService {
             fileService.deleteFile(imagePath);
         }
 
-        imagePath = fileService.registerImage(image);
+        imagePath = fileService.saveFile(image);
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
@@ -175,45 +173,48 @@ public class PerformanceService {
 
     private List<SeatRequest> setSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
 
-        VenueHallRowSeat venueHallRowSeat = venueHallService.getVenueHallRowNum(performanceId);
-        List<SeatPriceColNumData> seatPriceColNumDataList = seatPriceService.getSeatPriceColNum(performanceId);
+        VenueHallColumnSeat venueHallColumnSeat = venueHallService.getVenueHallColumnAndId(performanceId);
+
+        List<SeatPriceRowNumData> seatPriceRowNumDataList = seatPriceService.getSeatPriceRowNum(performanceId);
         List<SeatRequest> seatRequests = new ArrayList<>();
 
-        performanceTimeRequests.stream().forEach(performanceTimeRequest -> {
+        for(PerformanceTimeRequest performanceTimeRequest : performanceTimeRequests) {
 
-            seatPriceColNumDataList.stream().forEach(seatPriceColNumData -> {
+            int colNum = 1;
+            int rowNum = 1;
 
-                IntStream.range(1, ((seatPriceColNumData.getEndColNum() - seatPriceColNumData.getStartColNum()) * venueHallRowSeat.getRowSeats()) + 1).
-                        forEach(v -> {
+            for(SeatPriceRowNumData seatPriceRowNumData : seatPriceRowNumDataList) {
 
-                            int colNum = 1;
-                            int rowNum = 1;
+                int seatNum = ((seatPriceRowNumData.getEndRowNum() - seatPriceRowNumData.getStartRowNum() + 1) * venueHallColumnSeat.getColumnSeats());
 
-                            if(rowNum == venueHallRowSeat.getRowSeats() + 1) {
-                                colNum += 1;
-                                rowNum = 1;
-                            }
+                for(int i = 0; seatNum > i; i++) {
 
-                            SeatRequest seatRequest = SeatRequest.builder().
-                                    perfTimeId(performanceTimeRequest.getId()).
-                                    hallId(venueHallRowSeat.getId()).
-                                    colNum(colNum).
-                                    rowNum(rowNum).
-                                    reserved(0).
-                                    build();
-                            seatRequests.add(seatRequest);
+                    if(colNum == venueHallColumnSeat.getColumnSeats() + 1) {
+                        colNum = 1;
+                        rowNum += 1;
+                    }
 
-                            rowNum++;
-                        });
+                    SeatRequest seatRequest = SeatRequest.builder().
+                            perfTimeId(performanceTimeRequest.getId()).
+                            hallId(venueHallColumnSeat.getId()).
+                            priceId(seatPriceRowNumData.getId()).
+                            colNum(colNum).
+                            rowNum(rowNum).
+                            reserved(0).
+                            build();
+                    seatRequests.add(seatRequest);
 
-            });
-        });
+                    colNum++;
+                }
+            }
+        }
 
         return seatRequests;
     }
 
     public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
-        //List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
-        //seatInfoMapper.insertSeatInfo(seatRequests);
+        List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
+        seatInfoMapper.insertSeatInfo(seatRequests);
     }
+
 }

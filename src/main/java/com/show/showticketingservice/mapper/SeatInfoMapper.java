@@ -7,5 +7,5 @@ import java.util.*;
 @Mapper
 public interface SeatInfoMapper {
 
-    void insertSeatInfo(List<SeatRequest> seatRequest);
+    void insertSeatInfo(List<SeatRequest> seatRequests);
 }

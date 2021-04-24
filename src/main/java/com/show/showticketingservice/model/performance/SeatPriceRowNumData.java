@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SeatPriceColNumData {
+public class SeatPriceRowNumData {
 
     private final int id;
 
-    private final int startColNum;
+    private final int startRowNum;
 
-    private final int endColNum;
+    private final int endRowNum;
 }

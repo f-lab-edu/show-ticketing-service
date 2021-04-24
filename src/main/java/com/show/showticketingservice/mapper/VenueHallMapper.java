@@ -2,7 +2,7 @@ package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
-import com.show.showticketingservice.model.venueHall.VenueHallRowSeat;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,8 +24,8 @@ public interface VenueHallMapper {
 
     int getVenueHallCount(int venueId, List<Integer> hallIds);
 
-    int getVenueHall(int performanceId);
+    int getVenueHallRowNum(int performanceId);
 
-    VenueHallRowSeat getVenueHallRowSeat(int performanceId);
+    VenueHallColumnSeat getVenueHallColumnAndId(int performanceId);
 
 }

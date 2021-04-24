@@ -13,6 +13,8 @@ public class SeatRequest {
 
     private final int hallId;
 
+    private final int priceId;
+
     private final int colNum;
 
     private final int rowNum;

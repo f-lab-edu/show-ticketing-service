@@ -4,9 +4,9 @@ import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsE
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.exception.venueHall.VenueHallIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
-import com.show.showticketingservice.model.venueHall.VenueHallRowSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -101,12 +101,11 @@ public class VenueHallService {
         return venueHallMapper.getVenueHalls(venueId);
     }
 
-    public int getVenueHallcolNum(int performanceId) {
-        return venueHallMapper.getVenueHall(performanceId);
+    public int getVenueHallRowNum(int performanceId) {
+        return venueHallMapper.getVenueHallRowNum(performanceId);
     }
 
-    public VenueHallRowSeat getVenueHallRowNum(int performanceId) {
-        return venueHallMapper.getVenueHallRowSeat(performanceId);
+    public VenueHallColumnSeat getVenueHallColumnAndId(int performanceId) {
+        return  venueHallMapper.getVenueHallColumnAndId(performanceId);
     }
-
 }

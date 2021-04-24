@@ -59,15 +59,15 @@
         AND venueId = #{venueId}
     </select>
 
-    <select id="getVenueHall" resultType="int">
-        SELECT columnSeats
+    <select id="getVenueHallRowNum" resultType="int">
+        SELECT rowSeats
         FROM venueHall v JOIN performance p
         ON v.id = p.hallId
         WHERE p.id = #{performanceId}
     </select>
 
-    <select id="getVenueHallRowSeat" resultType="com.show.showticketingservice.model.venueHall.VenueHallRowSeat">
-        SELECT v.id, rowSeats
+    <select id="getVenueHallColumnAndId" resultType="com.show.showticketingservice.model.venueHall.VenueHallColumnSeat">
+        SELECT v.id, columnSeats
         FROM venueHall v JOIN performance p
         ON v.id = p.hallId
         WHERE p.id = #{performanceId}

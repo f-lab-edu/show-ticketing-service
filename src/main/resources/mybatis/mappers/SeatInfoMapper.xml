@@ -3,12 +3,13 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.SeatInfoMapper">
 
-    <insert id="insertSeatInfo" parameterType="com.show.showticketingservice.model.performance.SeatRequest">
-        INSERT INTO seat(perfTimeId, hallId, colNum, rowNum, reserved)
-        VALUE
+    <insert id="insertSeatInfo" parameterType="java.util.List">
+        INSERT INTO seat(perfTimeId, priceId, hallId, colNum, rowNum, reserved)
+        VALUES
         <foreach collection="seatRequests" item="seatRequest" separator=",">
             (
             #{seatRequest.perfTimeId},
+            #{seatRequest.priceId},
             #{seatRequest.hallId},
             #{seatRequest.colNum},
             #{seatRequest.rowNum},

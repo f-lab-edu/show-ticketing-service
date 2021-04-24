@@ -4,24 +4,29 @@
 <mapper namespace="com.show.showticketingservice.mapper.SeatPriceMapper">
 
     <insert id="insertSeatsPrice" parameterType="map">
-        INSERT INTO seatPrice(performanceId, price, ratingType, startColNum, endColNum)
+        INSERT INTO seatPrice(performanceId, price, ratingType, startRowNum, endRowNum)
         VALUES
         <foreach collection="seatPriceRequests" item="seatPriceRequest" separator=",">
             (
             #{performanceId},
             #{seatPriceRequest.price},
             #{seatPriceRequest.ratingType},
-            #{seatPriceRequest.startColNum},
-            #{seatPriceRequest.endColNum}
+            #{seatPriceRequest.startRowNum},
+            #{seatPriceRequest.endRowNum}
             )
         </foreach>
     </insert>
 
-    <select id="getSeatPriceColNum" resultType="com.show.showticketingservice.model.performance.SeatPriceColNumData">
-        SELECT s.id, startColNum, endColNum
+    <select id="getSeatPriceRowNum" resultType="com.show.showticketingservice.model.performance.SeatPriceRowNumData">
+        SELECT s.id, startRowNum, endRowNum
         FROM seatPrice s JOIN performance p
-        ON p.id = p.performanceId
+        ON p.id = s.performanceId
         WHERE p.id = #{performanceId}
     </select>
 
+    <select id="isSeatPriceExists" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM seatPrice WHERE performanceId = #{performanceId})
+    </select>
+
 </mapper>
+
