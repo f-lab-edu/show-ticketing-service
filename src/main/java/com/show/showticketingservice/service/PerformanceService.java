@@ -182,4 +182,9 @@ public class PerformanceService {
             throw new PerformanceAlreadyExistsException();
         }
     }
+
+    public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
+        checkValidPerformanceId(performanceId);
+        performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
+    }
 }
