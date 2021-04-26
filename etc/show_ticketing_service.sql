@@ -64,4 +64,17 @@ CREATE TABLE performanceTime
     FOREIGN KEY (hallId)        REFERENCES venueHall(id)
 );
 
+CREATE TABLE seatPrice
+(
+    `id`             INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `performanceId`  INT UNSIGNED     NOT NULL,
+    `price`          INT             NOT NULL,
+    `ratingType`     INT             NOT NULL,
+    `startRowNum`    INT             NOT NULL,
+    `endRowNum`      INT             NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (performanceId) REFERENCES performance(id)
+    ON DELETE CASCADE
+);
+
 CREATE INDEX performanceTime_Index ON performanceTime(startTime);

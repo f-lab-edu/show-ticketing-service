@@ -7,8 +7,11 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Builder
@@ -34,5 +37,5 @@ public class PerformanceRequest {
 
     @NotNull(message = "공연홀 ID를 입력하세요.")
     private final int hallId;
-
+    
 }

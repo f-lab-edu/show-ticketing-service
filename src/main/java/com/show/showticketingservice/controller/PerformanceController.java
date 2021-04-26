@@ -3,22 +3,27 @@ package com.show.showticketingservice.controller;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
+import com.show.showticketingservice.model.performance.SeatPriceRequest;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.service.PerformanceService;
+import com.show.showticketingservice.service.SeatPriceService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/performances")
 public class PerformanceController {
 
     private final PerformanceService performanceService;
+
+    private final SeatPriceService seatPriceService;
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
@@ -36,6 +41,12 @@ public class PerformanceController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void insertPerfTime(@RequestBody @Valid List<PerformanceTimeRequest> performanceTimeRequests, @PathVariable int performanceId) {
         performanceService.insertPerformanceTimes(performanceTimeRequests, performanceId);
+    }
+
+    @PostMapping("/{performanceId}/prices")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void insertPerfPrice(@RequestBody @Valid List<SeatPriceRequest> seatPriceRequests, @PathVariable int performanceId) {
+        seatPriceService.insertSeatsPrice(seatPriceRequests, performanceId);
     }
 
     @PutMapping("/{performanceId}")
