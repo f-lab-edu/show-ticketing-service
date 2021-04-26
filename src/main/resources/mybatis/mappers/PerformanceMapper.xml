@@ -51,4 +51,41 @@
         WHERE id = #{performanceId}
     </update>
 
+    <resultMap id="performanceTimeResponse" type="com.show.showticketingservice.model.performance.PerformanceTimeResponse">
+        <result column="startTime" property="startTime"/>
+        <result column="endTime" property="endTime"/>
+    </resultMap>
+
+    <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
+        <result column="title" property="title"/>
+        <result column="detail" property="detail"/>
+        <result column="ageLimit" property="ageLimit"/>
+        <result column="showType" property="showType"/>
+        <association property="venueResponse" javaType="com.show.showticketingservice.model.venue.VenueResponse">
+            <result column="name" property="name"/>
+            <result column="address" property="address"/>
+            <result column="tel" property="tel"/>
+            <result column="homepage" property="homepage"/>
+        </association>
+        <collection property="performanceTimeResponses" resultMap="performanceTimeResponse"/>
+    </resultMap>
+
+    <select id="getPerformance" resultMap="performanceResponse">
+        SELECT
+            p.title,
+            p.detail,
+            p.ageLimit,
+            p.showType,
+            pt.startTime,
+            pt.endTime,
+            v.name,
+            v.address,
+            v.tel,
+            v.homepage
+        FROM performance p
+        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        INNER JOIN venue v ON p.venueId = v.id
+        WHERE p.id = #{performanceId}
+    </select>
+
 </mapper>

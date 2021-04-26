@@ -2,6 +2,7 @@ package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
+import com.show.showticketingservice.model.performance.PerformanceResponse;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.service.PerformanceService;
@@ -42,6 +43,11 @@ public class PerformanceController {
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void updatePerformanceInfo(@PathVariable int performanceId, @RequestBody @Valid PerformanceUpdateRequest perfUpdateRequest) {
         performanceService.updatePerformanceInfo(performanceId, perfUpdateRequest);
+    }
+
+    @GetMapping("/{performanceId}")
+    public PerformanceResponse getPerformance(@PathVariable int performanceId) {
+        return performanceService.getPerformance(performanceId);
     }
 
 }
