@@ -21,11 +21,34 @@
         SET imageFilePath = #{filePath}
         WHERE id = #{performanceId}
     </update>
-    
+
     <select id="getImagePath" parameterType="int" resultType="String">
         SELECT imageFilePath
         FROM performance
         WHERE id = #{performanceId}
     </select>
+
+    <select id="isPerformanceIdExists" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT * FROM performance
+        WHERE id = #{performanceId}
+        )
+    </select>
+
+    <select id="isPerfTitleDuplicated" parameterType="map" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT * FROM performance
+        WHERE id != #{performanceId} AND title = #{title} AND showType = #{showType}
+        )
+    </select>
+
+    <update id="updatePerformanceInfo" parameterType="map">
+        UPDATE performance
+        SET title = #{perfUpdateRequest.title}, detail = #{perfUpdateRequest.detail},
+        ageLimit = #{perfUpdateRequest.ageLimit}, showType = #{perfUpdateRequest.showType}
+        WHERE id = #{performanceId}
+    </update>
 
 </mapper>
