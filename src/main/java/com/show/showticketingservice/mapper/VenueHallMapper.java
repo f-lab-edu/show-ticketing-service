@@ -23,4 +23,6 @@ public interface VenueHallMapper {
 
     int getVenueHallCount(int venueId, List<Integer> hallIds);
 
+    int getVenueHallRowNum(int performanceId);
+
 }

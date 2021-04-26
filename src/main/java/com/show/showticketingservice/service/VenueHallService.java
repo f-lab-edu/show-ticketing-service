@@ -100,4 +100,8 @@ public class VenueHallService {
         return venueHallMapper.getVenueHalls(venueId);
     }
 
+    public int getVenueHallRowNum(int performanceId) {
+        return venueHallMapper.getVenueHallRowNum(performanceId);
+    }
+
 }
