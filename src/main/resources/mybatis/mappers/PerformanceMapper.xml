@@ -56,6 +56,11 @@
         <result column="endTime" property="endTime"/>
     </resultMap>
 
+    <resultMap id="seatPriceResponse" type="com.show.showticketingservice.model.performance.SeatPriceResponse">
+        <result column="price" property="price"/>
+        <result column="ratingType" property="ratingType"/>
+    </resultMap>
+
     <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
         <result column="title" property="title"/>
         <result column="detail" property="detail"/>
@@ -68,6 +73,7 @@
             <result column="homepage" property="homepage"/>
         </association>
         <collection property="performanceTimeResponses" resultMap="performanceTimeResponse"/>
+        <collection property="seatPriceResponses" resultMap="seatPriceResponse"/>
     </resultMap>
 
     <select id="getPerformance" resultMap="performanceResponse">
@@ -81,10 +87,13 @@
             v.name,
             v.address,
             v.tel,
-            v.homepage
+            v.homepage,
+            s.ratingType,
+            s.price
         FROM performance p
         INNER JOIN performanceTime pt ON p.id = pt.performanceId
         INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN seatPrice s ON p.id = s.performanceId
         WHERE p.id = #{performanceId}
     </select>
 

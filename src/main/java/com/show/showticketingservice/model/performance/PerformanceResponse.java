@@ -23,4 +23,6 @@ public class PerformanceResponse {
     private List<PerformanceTimeResponse> performanceTimeResponses;
 
     private VenueResponse venueResponse;
+
+    private List<SeatPriceResponse> seatPriceResponses;
 }
