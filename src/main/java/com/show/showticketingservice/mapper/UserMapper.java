@@ -19,4 +19,7 @@ public interface UserMapper {
     void deleteUserByUserId(String userId);
 
     String getUserPasswordByUserId(String UserId);
+
+    int getUserNum(String userId);
+
 }

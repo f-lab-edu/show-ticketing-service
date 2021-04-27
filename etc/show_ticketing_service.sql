@@ -93,3 +93,13 @@ CREATE TABLE seat
     FOREIGN KEY (priceId)    REFERENCES seatPrice(id) ON DELETE CASCADE,
     FOREIGN KEY (hallId)     REFERENCES venueHall(id) ON DELETE CASCADE
 );
+
+CREATE TABLE pick
+(
+    `id`             INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `userId`         INT UNSIGNED    NOT NULL,
+    `performanceId`  INT UNSIGNED    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId)        REFERENCES user(id)         ON DELETE CASCADE,
+    FOREIGN KEY (performanceId) REFERENCES performance(id)  ON DELETE CASCADE
+);

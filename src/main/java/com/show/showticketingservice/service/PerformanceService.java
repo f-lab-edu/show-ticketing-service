@@ -228,7 +228,7 @@ public class PerformanceService {
         performanceMapper.updatePerformanceInfo(performanceId, perfUpdateRequest);
     }
 
-    private void checkValidPerformanceId(int performanceId) {
+    public void checkValidPerformanceId(int performanceId) {
         if(!performanceMapper.isPerformanceIdExists(performanceId)) {
             throw new PerformanceNotExistsException();
         }
