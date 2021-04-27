@@ -5,17 +5,23 @@ import com.show.showticketingservice.exception.performance.PerformanceNotExistsE
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
+import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
+import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
+import com.show.showticketingservice.model.performance.SeatRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +31,13 @@ public class PerformanceService {
 
     private final PerformanceTimeMapper performanceTimeMapper;
 
+    private final VenueHallService venueHallService;
+
     private final FileService fileService;
+
+    private final SeatPriceService seatPriceService;
+
+    private final SeatMapper seatMapper;
 
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
@@ -53,6 +65,7 @@ public class PerformanceService {
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
+    @Transactional
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -60,6 +73,8 @@ public class PerformanceService {
         checkPerfTimeWithDB(performanceTimeRequests, performanceId);
 
         performanceTimeMapper.insertPerformanceTimes(performanceTimeRequests, performanceId);
+
+        insertSeatInfo(performanceId, performanceTimeRequests);
     }
 
     private void checkPerfTimeWithDB(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
@@ -158,6 +173,49 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
+    }
+
+    private List<SeatRequest> setSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        /*
+        좌석 정보 세팅
+        - DB로부터 좌석 정보에 필요한 정보를 불러옴 (VenueHallColumnSeat, SeatPriceRowNumData)
+         */
+
+        VenueHallColumnSeat venueHallColumnSeat = venueHallService.getVenueHallColumnAndId(performanceId);
+
+        List<SeatPriceRowNumData> seatPriceRowNumDataList = seatPriceService.getSeatPriceRowNum(performanceId);
+        List<SeatRequest> seatRequests = new ArrayList<>();
+
+        performanceTimeRequests.stream().forEach(performanceTimeRequest -> {
+
+            seatPriceRowNumDataList.stream().forEach(seatPriceRowNumData -> {
+
+                IntStream.range(seatPriceRowNumData.getStartRowNum(), seatPriceRowNumData.getEndRowNum() + 1).forEach(rowNum -> {
+
+                    IntStream.range(1, venueHallColumnSeat.getColumnSeats() + 1).forEach(colNum -> {
+
+                        SeatRequest seatRequest = SeatRequest.builder().
+                                perfTimeId(performanceTimeRequest.getId()).
+                                hallId(venueHallColumnSeat.getId()).
+                                priceId(seatPriceRowNumData.getId()).
+                                colNum(colNum).
+                                rowNum(rowNum).
+                                reserved(false).
+                                build();
+
+                        seatRequests.add(seatRequest);
+                    });
+                });
+            });
+        });
+
+        return seatRequests;
+    }
+
+    public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        seatPriceService.checkSeatPriceNotExistsException(performanceId);
+        List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
+        seatMapper.insertSeatInfo(seatRequests);
     }
 
     @Transactional

@@ -1,10 +1,12 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.SameSeatRatingListAdditionException;
+import com.show.showticketingservice.exception.performance.SeatPriceNotExistsException;
 import com.show.showticketingservice.exception.performance.SeatRowNumWrongException;
 import com.show.showticketingservice.exception.performance.SeatPriceAlreadyExistsException;
 import com.show.showticketingservice.mapper.SeatPriceMapper;
 import com.show.showticketingservice.model.enumerations.RatingType;
+import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
 import com.show.showticketingservice.model.performance.SeatPriceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -91,10 +93,21 @@ public class SeatPriceService {
         seatPriceMapper.insertSeatsPrice(seatPriceRequests, performanceId);
     }
 
+    public List<SeatPriceRowNumData> getSeatPriceRowNum(int performanceId) {
+        return seatPriceMapper.getSeatPriceRowNum(performanceId);
+    }
+
     public void checkSeatPriceAlreadyExistsException(int performanceId) {
         if(seatPriceMapper.isSeatPriceExists(performanceId)) {
             throw new SeatPriceAlreadyExistsException("이 공연은 좌석 가격이 이미 등록되어 있습니다.");
         }
+
     }
 
+    public void checkSeatPriceNotExistsException(int performanceId) {
+        if(!seatPriceMapper.isSeatPriceExists(performanceId)) {
+            throw new SeatPriceNotExistsException("공연 좌석 가격 정보가 존재하지 않습니다.");
+        }
+
+    }
 }

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.PerformanceTimeMapper">
 
-    <insert id="insertPerformanceTimes" parameterType="map">
+    <insert id="insertPerformanceTimes" parameterType="map" useGeneratedKeys="true" keyProperty="performanceTimeRequests.id">
         INSERT INTO performanceTime(performanceId, hallId, startTime, endTime)
         VALUES
         <foreach collection="performanceTimeRequests" item="performanceTimeRequest" separator=",">

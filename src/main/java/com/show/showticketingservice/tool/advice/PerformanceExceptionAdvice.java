@@ -1,9 +1,10 @@
 package com.show.showticketingservice.tool.advice;
 
-import com.show.showticketingservice.exception.performance.*;
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
+import com.show.showticketingservice.exception.performance.SameSeatRatingListAdditionException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
+import com.show.showticketingservice.exception.performance.*;
+import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class PerformanceExceptionAdvice {
     }
 
     @ExceptionHandler(SameSeatRatingListAdditionException.class)
-    public ResponseEntity<ExceptionResponse> sameSeatRating(final SameSeatRatingListAdditionException e, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> sameSeatRatingListAdditionException(final SameSeatRatingListAdditionException e, WebRequest request) {
         log.error("ticket price registration failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -45,8 +46,15 @@ public class PerformanceExceptionAdvice {
     }
 
     @ExceptionHandler(SeatPriceAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> SeatPriceAlreadyExistsException(final SeatPriceAlreadyExistsException e, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> seatPriceAlreadyExistsException(final SeatPriceAlreadyExistsException e, WebRequest request) {
         log.error("ticket price registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SeatPriceNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> seatPriceNonExistsException(final SeatPriceNotExistsException e, WebRequest request) {
+        log.error("seat registration failed", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
