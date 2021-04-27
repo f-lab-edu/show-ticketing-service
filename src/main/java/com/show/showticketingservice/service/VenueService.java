@@ -50,7 +50,7 @@ public class VenueService {
         checkVenueIdExists(venueId);
 
         if(venueUpdateRequest.getVenueRequest() != null) {
-            checkVenueExists(venueUpdateRequest.getVenueRequest().getName());
+            checkDuplicateVenueName(venueUpdateRequest.getVenueRequest().getName(), venueId);
             venueMapper.updateVenueInfo(venueId, venueUpdateRequest.getVenueRequest());
         }
 
@@ -109,6 +109,12 @@ public class VenueService {
 
         return new VenueDetailInfoResponse(venueResponse, venueHallResponses);
 
+    }
+
+    public void checkDuplicateVenueName(String venueName, int venueId) {
+        if (venueMapper.isDuplicateVenueName(venueName, venueId)) {
+            throw new VenueAlreadyExistsException();
+        }
     }
 
 }
