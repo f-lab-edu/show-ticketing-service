@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.*;
 
 @Mapper
-public interface SeatInfoMapper {
+public interface SeatMapper {
 
     void insertSeatInfo(List<SeatRequest> seatRequests);
 }

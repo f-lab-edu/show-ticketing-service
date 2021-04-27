@@ -4,7 +4,7 @@ import com.show.showticketingservice.exception.performance.PerformanceAlreadyExi
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
-import com.show.showticketingservice.mapper.SeatInfoMapper;
+import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class PerformanceService {
 
     private final SeatPriceService seatPriceService;
 
-    private final SeatInfoMapper seatInfoMapper;
+    private final SeatMapper seatMapper;
 
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
@@ -183,44 +184,36 @@ public class PerformanceService {
         List<SeatPriceRowNumData> seatPriceRowNumDataList = seatPriceService.getSeatPriceRowNum(performanceId);
         List<SeatRequest> seatRequests = new ArrayList<>();
 
-        for(PerformanceTimeRequest performanceTimeRequest : performanceTimeRequests) {
+        performanceTimeRequests.stream().forEach(performanceTimeRequest -> {
 
-            int colNum = 1;
-            int rowNum = 1;
+            seatPriceRowNumDataList.stream().forEach(seatPriceRowNumData -> {
 
-            for(SeatPriceRowNumData seatPriceRowNumData : seatPriceRowNumDataList) {
+                IntStream.range(seatPriceRowNumData.getStartRowNum(), seatPriceRowNumData.getEndRowNum() + 1).forEach(rowNum -> {
 
-                int seatNum = ((seatPriceRowNumData.getEndRowNum() - seatPriceRowNumData.getStartRowNum() + 1) * venueHallColumnSeat.getColumnSeats());
+                    IntStream.range(1, venueHallColumnSeat.getColumnSeats() + 1).forEach(colNum -> {
 
-                for(int i = 0; seatNum > i; i++) {
+                        SeatRequest seatRequest = SeatRequest.builder().
+                                perfTimeId(performanceTimeRequest.getId()).
+                                hallId(venueHallColumnSeat.getId()).
+                                priceId(seatPriceRowNumData.getId()).
+                                colNum(colNum).
+                                rowNum(rowNum).
+                                reserved(false).
+                                build();
 
-                    if(colNum == venueHallColumnSeat.getColumnSeats() + 1) {
-                        colNum = 1;
-                        rowNum += 1;
-                    }
-
-                    SeatRequest seatRequest = SeatRequest.builder().
-                            perfTimeId(performanceTimeRequest.getId()).
-                            hallId(venueHallColumnSeat.getId()).
-                            priceId(seatPriceRowNumData.getId()).
-                            colNum(colNum).
-                            rowNum(rowNum).
-                            reserved(false).
-                            build();
-                    seatRequests.add(seatRequest);
-
-                    colNum++;
-                }
-            }
-        }
+                        seatRequests.add(seatRequest);
+                    });
+                });
+            });
+        });
 
         return seatRequests;
     }
 
     public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
-        seatPriceService.checkSeatPriceNonExistsException(performanceId);
+        seatPriceService.checkSeatPriceNotExistsException(performanceId);
         List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
-        seatInfoMapper.insertSeatInfo(seatRequests);
+        seatMapper.insertSeatInfo(seatRequests);
     }
 
 }
