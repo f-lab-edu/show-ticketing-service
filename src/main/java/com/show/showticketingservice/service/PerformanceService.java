@@ -244,4 +244,9 @@ public class PerformanceService {
         checkValidPerformanceId(performanceId);
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
+
+    public void deletePerformance(int performanceId) {
+        checkValidPerformanceId(performanceId);
+        performanceMapper.deletePerformance(performanceId);
+    }
 }

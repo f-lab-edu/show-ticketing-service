@@ -51,4 +51,9 @@
         WHERE id = #{performanceId}
     </update>
 
+    <delete id="deletePerformance">
+        DELETE FROM performance
+        WHERE id = #{performanceId}
+    </delete>
+
 </mapper>

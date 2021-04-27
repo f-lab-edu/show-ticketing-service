@@ -21,4 +21,6 @@ public interface PerformanceMapper {
     boolean isPerfTitleDuplicated(int performanceId, String title, ShowType showType);
 
     void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest);
+
+    void deletePerformance(int performanceId);
 }
