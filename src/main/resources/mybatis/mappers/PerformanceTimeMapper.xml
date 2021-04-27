@@ -32,4 +32,13 @@
         </foreach>
     </select>
 
+    <delete id="deletePerformanceTimes" parameterType="map">
+        DELETE FROM performanceTime
+        WHERE performanceId = #{performanceId}
+        AND id IN
+        <foreach collection="timeIds" item="timeId" open="(" close=")" separator=",">
+            #{timeId}
+        </foreach>
+    </delete>
+
 </mapper>

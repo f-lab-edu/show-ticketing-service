@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.performance.PerformanceAlreadyExi
 import com.show.showticketingservice.exception.performance.SameSeatRatingListAdditionException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.exception.performance.*;
+import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,13 @@ public class PerformanceExceptionAdvice {
     @ExceptionHandler(SeatPriceNotExistsException.class)
     public ResponseEntity<ExceptionResponse> seatPriceNonExistsException(final SeatPriceNotExistsException e, WebRequest request) {
         log.error("seat registration failed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PerformanceNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> performanceNotExistsException(final PerformanceNotExistsException e, WebRequest request) {
+        log.error("The performance information does not exist", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
