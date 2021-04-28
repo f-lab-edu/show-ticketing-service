@@ -76,7 +76,7 @@
         <collection property="seatPriceResponses" resultMap="seatPriceResponse"/>
     </resultMap>
 
-    <select id="getPerformance" resultMap="performanceDetailInfoResponse">
+    <select id="getPerformanceDetailInfo" resultMap="performanceDetailInfoResponse">
         SELECT
             p.title,
             p.detail,

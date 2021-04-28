@@ -186,7 +186,7 @@ public class PerformanceService {
     }
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
-    public PerformanceDetailInfoResponse getPerformance(int performanceId) {
-        return performanceMapper.getPerformance(performanceId);
+    public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
+        return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 }

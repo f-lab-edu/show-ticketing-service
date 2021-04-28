@@ -23,5 +23,5 @@ public interface PerformanceMapper {
 
     void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest);
 
-    PerformanceDetailInfoResponse getPerformance(int performanceId);
+    PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId);
 }

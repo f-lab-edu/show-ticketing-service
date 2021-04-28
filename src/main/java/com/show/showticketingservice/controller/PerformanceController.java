@@ -57,8 +57,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/{performanceId}")
-    public PerformanceDetailInfoResponse getPerformance(@PathVariable int performanceId) {
-        return performanceService.getPerformance(performanceId);
+    public PerformanceDetailInfoResponse getPerformanceDetailInfo(@PathVariable int performanceId) {
+        return performanceService.getPerformanceDetailInfo(performanceId);
     }
 
 }
