@@ -16,4 +16,9 @@
         )
     </select>
 
+    <delete id="deletePick" parameterType="map">
+        DELETE FROM pick
+        WHERE userId = #{userNum} AND performanceId = #{performanceId}
+    </delete>
+
 </mapper>

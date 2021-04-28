@@ -9,4 +9,5 @@ public interface PickMapper {
 
     boolean isPickExists(int userNum, int performanceId);
 
+    void deletePick(int userNum, int performanceId);
 }

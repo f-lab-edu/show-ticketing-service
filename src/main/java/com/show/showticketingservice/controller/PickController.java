@@ -7,10 +7,7 @@ import com.show.showticketingservice.service.PickService;
 import com.show.showticketingservice.tool.annotation.CurrentUser;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +18,13 @@ public class PickController {
 
     @PostMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-        public void insertPick(@CurrentUser UserSession userSession, @RequestBody PickRequest pickRequest) {
-            pickService.insertPick(userSession.getUserId(), pickRequest.getPerformanceId());
+    public void insertPick(@CurrentUser UserSession userSession, @RequestBody PickRequest pickRequest) {
+        pickService.insertPick(userSession.getUserId(), pickRequest.getPerformanceId());
     }
 
+    @DeleteMapping("/{performanceId}")
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    public void deletePick(@CurrentUser UserSession userSession, @PathVariable int performanceId) {
+        pickService.deletePick(userSession.getUserId(), performanceId);
+    }
 }

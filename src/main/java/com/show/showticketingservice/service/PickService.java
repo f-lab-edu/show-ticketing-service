@@ -32,4 +32,10 @@ public class PickService {
         }
     }
 
+    public void deletePick(String userId, int performanceId) {
+
+        int userNum = userService.getUserNum(userId);
+
+        pickMapper.deletePick(userNum, performanceId);
+    }
 }
