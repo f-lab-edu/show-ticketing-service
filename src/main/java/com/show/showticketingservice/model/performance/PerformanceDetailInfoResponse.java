@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PerformanceResponse {
+public class PerformanceDetailInfoResponse {
 
     private String title;
 

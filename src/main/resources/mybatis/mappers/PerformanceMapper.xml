@@ -61,7 +61,7 @@
         <result column="ratingType" property="ratingType"/>
     </resultMap>
 
-    <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
+    <resultMap id="performanceDetailInfoResponse" type="com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse">
         <result column="title" property="title"/>
         <result column="detail" property="detail"/>
         <result column="ageLimit" property="ageLimit"/>
@@ -76,7 +76,7 @@
         <collection property="seatPriceResponses" resultMap="seatPriceResponse"/>
     </resultMap>
 
-    <select id="getPerformance" resultMap="performanceResponse">
+    <select id="getPerformance" resultMap="performanceDetailInfoResponse">
         SELECT
             p.title,
             p.detail,

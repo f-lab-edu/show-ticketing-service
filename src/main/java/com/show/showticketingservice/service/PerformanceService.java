@@ -7,7 +7,7 @@ import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceResponse;
+import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
@@ -186,7 +186,7 @@ public class PerformanceService {
     }
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
-    public PerformanceResponse getPerformance(int performanceId) {
+    public PerformanceDetailInfoResponse getPerformance(int performanceId) {
         return performanceMapper.getPerformance(performanceId);
     }
 }
