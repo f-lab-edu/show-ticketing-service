@@ -66,6 +66,7 @@
         <result column="detail" property="detail"/>
         <result column="ageLimit" property="ageLimit"/>
         <result column="showType" property="showType"/>
+        <result column="imageFilePath" property="imageFilePath"/>
         <association property="venueResponse" javaType="com.show.showticketingservice.model.venue.VenueResponse">
             <result column="name" property="name"/>
             <result column="address" property="address"/>
@@ -82,6 +83,7 @@
             p.detail,
             p.ageLimit,
             p.showType,
+            p.imageFilePath,
             pt.startTime,
             pt.endTime,
             v.name,
