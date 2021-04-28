@@ -25,4 +25,6 @@ public class PerformanceDetailInfoResponse {
     private VenueResponse venueResponse;
 
     private List<SeatPriceResponse> seatPriceResponses;
+
+    private String hallName;
 }
