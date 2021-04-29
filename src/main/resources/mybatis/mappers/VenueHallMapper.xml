@@ -18,9 +18,9 @@
     </insert>
 
     <select id="isVenueHallNamesExists" parameterType="map" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
-        <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="(" close=")" separator=",">
-            #{venueHallUpdate.name}
+        SELECT EXISTS (SELECT * FROM venueHall WHERE
+        <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="" close="" separator="OR">
+            (name = #{venueHallUpdate.name} AND id != #{venueHallUpdate.id})
         </foreach>
         AND venueId = #{venueId}
         )
