@@ -61,14 +61,16 @@
         <result column="ratingType" property="ratingType"/>
     </resultMap>
 
-    <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
+    <resultMap id="performanceDetailInfoResponse" type="com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse">
         <result column="title" property="title"/>
         <result column="detail" property="detail"/>
         <result column="ageLimit" property="ageLimit"/>
         <result column="showType" property="showType"/>
         <result column="imageFilePath" property="imageFilePath"/>
+        <result column="hallName" property="hallName"/>
         <association property="venueResponse" javaType="com.show.showticketingservice.model.venue.VenueResponse">
-            <result column="name" property="name"/>
+            <id column="venueId" property="id"/>
+            <result column="venueName" property="name"/>
             <result column="address" property="address"/>
             <result column="tel" property="tel"/>
             <result column="homepage" property="homepage"/>
@@ -77,25 +79,28 @@
         <collection property="seatPriceResponses" resultMap="seatPriceResponse"/>
     </resultMap>
 
-    <select id="getPerformance" resultMap="performanceResponse">
+    <select id="getPerformanceDetailInfo" resultMap="performanceDetailInfoResponse">
         SELECT
-            p.title,
-            p.detail,
-            p.ageLimit,
-            p.showType,
-            p.imageFilePath,
-            pt.startTime,
-            pt.endTime,
-            v.name,
-            v.address,
-            v.tel,
-            v.homepage,
-            s.ratingType,
-            s.price
+            p.title AS title,
+            p.detail AS detail,
+            p.ageLimit AS ageLimit,
+            p.showType AS showType,
+            p.imageFilePath AS imageFilePath,
+            pt.startTime AS startTime,
+            pt.endTime AS endTime,
+            v.id AS venueId,
+            v.name AS venueName,
+            v.address AS address,
+            v.tel AS tel,
+            v.homepage AS homepage,
+            s.ratingType AS ratingType,
+            s.price AS price,
+            vh.name AS hallName
         FROM performance p
         INNER JOIN performanceTime pt ON p.id = pt.performanceId
         INNER JOIN venue v ON p.venueId = v.id
         INNER JOIN seatPrice s ON p.id = s.performanceId
+        INNER JOIN venueHall vh ON p.hallId = vh.id
         WHERE p.id = #{performanceId}
     </select>
 

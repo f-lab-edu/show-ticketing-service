@@ -2,7 +2,7 @@ package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceResponse;
+import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,5 +23,5 @@ public interface PerformanceMapper {
 
     void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest);
 
-    PerformanceResponse getPerformance(int performanceId);
+    PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId);
 }

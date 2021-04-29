@@ -18,9 +18,9 @@
     </insert>
 
     <select id="isVenueHallNamesExists" parameterType="map" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM venueHall WHERE name IN
-        <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="(" close=")" separator=",">
-            #{venueHallUpdate.name}
+        SELECT EXISTS (SELECT * FROM venueHall WHERE
+        <foreach collection="venueHallsUpdate" item="venueHallUpdate" open="" close="" separator="OR">
+            (name = #{venueHallUpdate.name} AND id != #{venueHallUpdate.id})
         </foreach>
         AND venueId = #{venueId}
         )
@@ -61,6 +61,13 @@
 
     <select id="getVenueHallRowNum" resultType="int">
         SELECT rowSeats
+        FROM venueHall v JOIN performance p
+        ON v.id = p.hallId
+        WHERE p.id = #{performanceId}
+    </select>
+
+    <select id="getVenueHallColumnAndId" resultType="com.show.showticketingservice.model.venueHall.VenueHallColumnSeat">
+        SELECT v.id, columnSeats
         FROM venueHall v JOIN performance p
         ON v.id = p.hallId
         WHERE p.id = #{performanceId}
