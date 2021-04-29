@@ -2,6 +2,7 @@ package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
+import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,6 @@ public interface PerformanceMapper {
     boolean isPerfTitleDuplicated(int performanceId, String title, ShowType showType);
 
     void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest);
+
+    PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId);
 }

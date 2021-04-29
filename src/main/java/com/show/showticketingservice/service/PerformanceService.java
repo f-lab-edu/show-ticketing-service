@@ -8,12 +8,15 @@ import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceRequest;
+import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
 import com.show.showticketingservice.model.performance.SeatRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
+import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -238,6 +241,11 @@ public class PerformanceService {
         if (performanceMapper.isPerfTitleDuplicated(performanceId, title, showType)) {
             throw new PerformanceAlreadyExistsException();
         }
+    }
+
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
+        return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
