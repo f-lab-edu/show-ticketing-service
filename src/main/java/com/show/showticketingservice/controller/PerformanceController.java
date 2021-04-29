@@ -61,4 +61,10 @@ public class PerformanceController {
         return performanceService.getPerformanceDetailInfo(performanceId);
     }
 
+    @DeleteMapping("/{performanceId}/times")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void deletePerformanceTimes(@PathVariable int performanceId, @RequestBody List<Integer> timeIds) {
+        performanceService.deletePerformanceTimes(performanceId, timeIds);
+    }
+
 }

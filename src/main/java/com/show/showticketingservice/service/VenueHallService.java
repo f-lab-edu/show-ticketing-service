@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.venueHall.VenueHallAlreadyExistsE
 import com.show.showticketingservice.exception.venueHall.SameVenueHallAdditionException;
 import com.show.showticketingservice.exception.venueHall.VenueHallIdNotExistsException;
 import com.show.showticketingservice.mapper.VenueHallMapper;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
@@ -104,4 +105,7 @@ public class VenueHallService {
         return venueHallMapper.getVenueHallRowNum(performanceId);
     }
 
+    public VenueHallColumnSeat getVenueHallColumnAndId(int performanceId) {
+        return  venueHallMapper.getVenueHallColumnAndId(performanceId);
+    }
 }
