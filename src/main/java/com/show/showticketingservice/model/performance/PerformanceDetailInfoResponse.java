@@ -20,6 +20,8 @@ public class PerformanceDetailInfoResponse {
 
     private ShowType showType;
 
+    private String imageFilePath;
+
     private List<PerformanceTimeResponse> performanceTimeResponses;
 
     private VenueResponse venueResponse;
