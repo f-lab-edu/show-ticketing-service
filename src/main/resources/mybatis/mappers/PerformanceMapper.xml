@@ -51,6 +51,11 @@
         WHERE id = #{performanceId}
     </update>
 
+    <delete id="deletePerformance">
+        DELETE FROM performance
+        WHERE id = #{performanceId}
+    </delete>
+
     <resultMap id="performanceTimeResponse" type="com.show.showticketingservice.model.performance.PerformanceTimeResponse">
         <result column="startTime" property="startTime"/>
         <result column="endTime" property="endTime"/>
