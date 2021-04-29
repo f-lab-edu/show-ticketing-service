@@ -53,6 +53,7 @@ public class RedisCacheConfig {
 
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new HashMap<>();
         redisCacheConfigMap.put(CacheConstant.VENUE, redisCacheConfig.entryTtl(Duration.ofHours(2L)));
+        redisCacheConfigMap.put(CacheConstant.PERFORMANCE, redisCacheConfig.entryTtl(Duration.ofDays(1L)));
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(redisCacheConfigMap)

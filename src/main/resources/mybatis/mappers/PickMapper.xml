@@ -12,13 +12,13 @@
         SELECT EXISTS
         (
         SELECT * FROM pick
-        WHERE userId = #{userNum} AND performanceId = #{performanceId}
+        WHERE userId = #{userId} AND performanceId = #{performanceId}
         )
     </select>
 
     <delete id="deletePick" parameterType="map">
         DELETE FROM pick
-        WHERE userId = #{userNum} AND performanceId = #{performanceId}
+        WHERE userId = #{userId} AND performanceId = #{performanceId}
     </delete>
 
 </mapper>

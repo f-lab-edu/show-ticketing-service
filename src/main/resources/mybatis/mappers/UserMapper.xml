@@ -3,7 +3,7 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.UserMapper">
 
-    <insert id="insertUser" parameterType="com.show.showticketingservice.model.user.UserRequest">
+    <insert id="insertUser" parameterType="com.show.showticketingservice.model.user.UserRequest" keyProperty="id">
         INSERT INTO user(userId, password, name, phoneNum, email, address, userType)
         VALUES(#{userId}, #{password}, #{name}, #{phoneNum}, #{email}, #{address}, #{userType})
     </insert>
@@ -22,17 +22,17 @@
     <update id="updateUserInfo" parameterType="map" >
         UPDATE user
         SET password = #{updateRequest.newPassword}, phoneNum = #{updateRequest.newPhoneNum}, address = #{updateRequest.newAddress}
-        WHERE userId = #{userId}
+        WHERE id = #{id}
     </update>
 
-    <select id="getUserPasswordByUserId" parameterType="String" resultType="String" >
+    <select id="getUserPasswordById" parameterType="int" resultType="String" >
         SELECT password
         FROM user
-        WHERE userId = #{userId}
+        WHERE id = #{id}
     </select>
 
-    <delete id="deleteUserByUserId" parameterType="String">
-        DELETE FROM user WHERE userId = #{userId}
+    <delete id="deleteUserById" parameterType="int">
+        DELETE FROM user WHERE id = #{id}
     </delete>
 
     <select id="getUserNum" resultType="int">

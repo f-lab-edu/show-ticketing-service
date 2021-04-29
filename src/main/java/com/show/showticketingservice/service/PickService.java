@@ -9,21 +9,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PickService {
 
-    private final UserService userService;
-
     private final PerformanceService performanceService;
 
     private final PickMapper pickMapper;
 
-    public void insertPick(String userId, int performanceId) {
+    public void insertPick(int userId, int performanceId) {
 
         performanceService.checkValidPerformanceId(performanceId);
 
-        int userNum = userService.getUserNum(userId);
+        checkPickDuplicated(userId, performanceId);
 
-        checkPickDuplicated(userNum, performanceId);
-
-        pickMapper.insertPick(userNum, performanceId);
+        pickMapper.insertPick(userId, performanceId);
     }
 
     private void checkPickDuplicated(int userNum, int performanceId) {
@@ -32,10 +28,7 @@ public class PickService {
         }
     }
 
-    public void deletePick(String userId, int performanceId) {
-
-        int userNum = userService.getUserNum(userId);
-
-        pickMapper.deletePick(userNum, performanceId);
+    public void deletePick(int userId, int performanceId) {
+        pickMapper.deletePick(userId, performanceId);
     }
 }

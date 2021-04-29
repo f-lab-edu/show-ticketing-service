@@ -14,12 +14,10 @@ public interface UserMapper {
 
     UserResponse getUserByUserId(String userId);
 
-    void updateUserInfo(@Param("userId") String userId, @Param("updateRequest") UserUpdateRequest userUpdateRequest);
+    void updateUserInfo(@Param("id") int id, @Param("updateRequest") UserUpdateRequest userUpdateRequest);
 
-    void deleteUserByUserId(String userId);
+    void deleteUserById(int id);
 
-    String getUserPasswordByUserId(String UserId);
-
-    int getUserNum(String userId);
+    String getUserPasswordById(int id);
 
 }

@@ -78,7 +78,10 @@ class VenueControllerTest {
     }
 
     private void loginUser(UserRequest userRequest) throws Exception {
-        UserSession userSession = new UserSession(userRequest.getUserId(), userRequest.getUserType());
+
+        int tmpUserNum = 1;
+
+        UserSession userSession = new UserSession(tmpUserNum, userRequest.getUserType());
 
         httpSession.setAttribute(USER, userSession);
     }

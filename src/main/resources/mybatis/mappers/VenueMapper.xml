@@ -51,4 +51,9 @@
         FROM venue
     </select>
 
+    <select id="isDuplicateVenueName" parameterType="map" resultType="boolean">
+        SELECT EXISTS
+        (SELECT * FROM venue WHERE id != #{venueId} AND name = #{venueName})
+    </select>
+
 </mapper>
