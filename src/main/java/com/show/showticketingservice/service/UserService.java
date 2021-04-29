@@ -56,13 +56,13 @@ public class UserService {
 
     public void deleteUser(UserSession userSession, String passwordRequest) {
 
-        String hashPassword = userMapper.getUserPasswordByUserId(userSession.getUserId());
+        String hashPassword = userMapper.getUserPasswordById(userSession.getUserId());
 
         if(!isPasswordMatches(passwordRequest, hashPassword)) {
             throw new UserPasswordWrongException();
         }
 
-        userMapper.deleteUserByUserId(userSession.getUserId());
+        userMapper.deleteUserById(userSession.getUserId());
     }
 
     public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {

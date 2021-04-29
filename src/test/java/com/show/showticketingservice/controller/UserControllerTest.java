@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,7 @@ class UserControllerTest {
     public void init() {
         testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
         managerAccount = new UserRequest("managerTest1", "testPW1234#", "Test Manager", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.MANAGER);
-        userSession = new UserSession(testUser.getUserId(), testUser.getUserType());
+        userSession = new UserSession(1, testUser.getUserType());
 
         this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
