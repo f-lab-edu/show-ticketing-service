@@ -249,6 +249,7 @@ public class PerformanceService {
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
+        checkValidPerformanceId(performanceId);
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
@@ -263,4 +264,5 @@ public class PerformanceService {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);
     }
+
 }
