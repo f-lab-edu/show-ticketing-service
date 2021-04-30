@@ -35,4 +35,10 @@
         DELETE FROM user WHERE id = #{id}
     </delete>
 
+    <select id="getUserNum" resultType="int">
+        SELECT id
+        FROM user
+        WHERE userId = #{userId}
+    </select>
+
 </mapper>

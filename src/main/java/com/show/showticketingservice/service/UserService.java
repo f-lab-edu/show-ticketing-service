@@ -69,4 +69,5 @@ public class UserService {
         String newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.getNewPassword());
         userMapper.updateUserInfo(userSession.getUserId(), userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword));
     }
+
 }
