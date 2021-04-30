@@ -18,7 +18,7 @@
 
     <select id="getPerfTimes" parameterType="map"
             resultType="com.show.showticketingservice.model.performance.PerformanceTimeRequest">
-        SELECT date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
+        SELECT id, date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
         FROM performanceTime
         WHERE hallId = (SELECT hallId FROM performance WHERE id = #{performanceId}) AND
         <foreach collection="performanceTimeRequests" item="performanceTimeRequest" open="(" close=")" separator="OR">
