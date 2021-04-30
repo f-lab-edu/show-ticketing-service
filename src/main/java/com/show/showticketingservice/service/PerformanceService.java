@@ -16,6 +16,7 @@ import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,7 @@ public class PerformanceService {
         }
     }
 
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
         fileService.checkFileContentType(image);
@@ -69,6 +71,7 @@ public class PerformanceService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -222,6 +225,7 @@ public class PerformanceService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest) {
 
         checkValidPerformanceId(performanceId);
@@ -248,11 +252,13 @@ public class PerformanceService {
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
         checkValidPerformanceId(performanceId);
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
 
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);

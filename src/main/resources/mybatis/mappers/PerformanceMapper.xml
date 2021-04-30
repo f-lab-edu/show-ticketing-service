@@ -102,9 +102,9 @@
             s.price AS price,
             vh.name AS hallName
         FROM performance p
-        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        LEFT OUTER JOIN performanceTime pt ON p.id = pt.performanceId
+        LEFT OUTER JOIN seatPrice s ON p.id = s.performanceId
         INNER JOIN venue v ON p.venueId = v.id
-        INNER JOIN seatPrice s ON p.id = s.performanceId
         INNER JOIN venueHall vh ON p.hallId = vh.id
         WHERE p.id = #{performanceId}
     </select>
