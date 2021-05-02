@@ -1,15 +1,13 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
-import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
-import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceRequest;
-import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
+import com.show.showticketingservice.model.enumerations.ShowType;
+import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.service.PerformanceService;
 import com.show.showticketingservice.service.SeatPriceService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,4 +59,9 @@ public class PerformanceController {
         return performanceService.getPerformanceDetailInfo(performanceId);
     }
 
+    @GetMapping
+    public List<PerformanceResponse> getPerformances(@RequestParam(value = "showType", required = false) ShowType showType,
+                                                     @RequestParam(value = "lastPerfId", required = false) Integer lastPerfId) {
+        return performanceService.getPerformances(showType, lastPerfId);
+    }
 }

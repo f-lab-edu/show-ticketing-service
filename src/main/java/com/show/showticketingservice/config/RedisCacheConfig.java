@@ -54,7 +54,10 @@ public class RedisCacheConfig {
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new HashMap<>();
         redisCacheConfigMap.put(CacheConstant.VENUE, redisCacheConfig.entryTtl(Duration.ofHours(2L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE, redisCacheConfig.entryTtl(Duration.ofDays(1L)));
-
+        redisCacheConfigMap.put(CacheConstant.PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
+        redisCacheConfigMap.put(CacheConstant.MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
+        redisCacheConfigMap.put(CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
+        redisCacheConfigMap.put(CacheConstant.ALL_TYPE_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(redisCacheConfigMap)
                 .build();
