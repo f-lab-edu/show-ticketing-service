@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class PerformancePagingCriteria {
 
-    private final int amount = 10;
+    private final static int amount = 10;
 
     private final Integer lastPerfId;
 

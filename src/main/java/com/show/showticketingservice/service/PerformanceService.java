@@ -193,10 +193,10 @@ public class PerformanceService {
     /*
     공연 정보 리스트 조회 캐시 기능
     cacheNames
-    MAIN_PERFORMANCE_LIST : 첫 번째 페이지고 공연 타입을 선택했을 경우
-    PERFORMANCE_LIST : 첫 번째 페이지를 제외하고 공연 타입을 선택했을 경우
-    ALL_TYPE_MAIN_PERFORMANCE_LIST : 첫 번째 페이지고 공연 타입을 선택하지 않아 모든 타입의 공연을 보여줄 경우
-    ALL_TYPE_PERFORMANCE_LIST : 첫 번째 페이지를 제외하고 공연 타입을 선택하지 않아 모든 타입의 공연을 보여줄 경우
+      - MAIN_PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지인 경우
+      - PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지를 제외한 경우
+      - ALL_TYPE_MAIN_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지인 경우
+      - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
      */
     @Caching(cacheable = {
             @Cacheable(
