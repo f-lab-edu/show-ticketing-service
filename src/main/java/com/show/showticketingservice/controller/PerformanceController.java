@@ -1,5 +1,6 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
@@ -62,6 +63,6 @@ public class PerformanceController {
     @GetMapping
     public List<PerformanceResponse> getPerformances(@RequestParam(value = "showType", required = false) ShowType showType,
                                                      @RequestParam(value = "lastPerfId", required = false) Integer lastPerfId) {
-        return performanceService.getPerformances(showType, lastPerfId);
+        return performanceService.getPerformances(showType, new PerformancePagingCriteria(lastPerfId));
     }
 }

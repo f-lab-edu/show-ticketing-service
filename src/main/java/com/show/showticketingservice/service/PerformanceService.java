@@ -220,9 +220,9 @@ public class PerformanceService {
                     key = "#lastPerfId"
             )
     })
-    public List<PerformanceResponse> getPerformances(ShowType showType, Integer lastPerfId) {
-        checkValidPerfIdAndShowType(showType, lastPerfId);
-        return performanceMapper.getPerformances(showType, new PerformancePagingCriteria(lastPerfId));
+    public List<PerformanceResponse> getPerformances(ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        checkValidPerfIdAndShowType(showType, performancePagingCriteria.getLastPerfId());
+        return performanceMapper.getPerformances(showType, performancePagingCriteria);
     }
 
     private void checkValidPerfIdAndShowType(ShowType showType, Integer lastPerfId) {

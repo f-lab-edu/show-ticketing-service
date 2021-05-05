@@ -120,7 +120,7 @@
         <result column="venueName" property="venueName"/>
         <result column="hallName" property="hallName"/>
         <association property="performancePeriod"
-                     column="performanceId"
+                     column="id"
                      javaType="com.show.showticketingservice.model.performance.PerformancePeriod"
                      select="getPerfTime">
         </association>
@@ -148,10 +148,10 @@
         ORDER BY p.id DESC
         LIMIT #{pagination.amount}
     </select>
-    
+
     <select id="getPerfTime" resultType="com.show.showticketingservice.model.performance.PerformancePeriod">
         SELECT
-            MIN(startTime) AS firstDay, MAX(startTime) AS lastDay
+            DATE(MIN(startTime)) AS firstDay, DATE(MAX(startTime)) AS lastDay
         FROM performanceTime
         WHERE performanceId = #{id}
     </select>
