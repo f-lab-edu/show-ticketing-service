@@ -1,11 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
-import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
-import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceRequest;
-import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
+import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.service.PerformanceService;
 import com.show.showticketingservice.service.SeatPriceService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
@@ -73,4 +69,9 @@ public class PerformanceController {
         performanceService.deletePerformance(performanceId);
     }
 
+    @GetMapping("/{performanceId}/times")
+    @UserAuthenticationNecessary
+    public List<PerformanceTitleAndTimesResponse> getPerformanceTitleAndTimes(@PathVariable int performanceId) {
+        return performanceService.getPerformanceTitleAndTimes(performanceId);
+    }
 }

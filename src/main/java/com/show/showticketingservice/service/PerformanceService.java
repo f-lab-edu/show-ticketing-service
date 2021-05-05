@@ -2,18 +2,14 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
+import com.show.showticketingservice.exception.performance.PerformanceTicketNotExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
-import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
-import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
-import com.show.showticketingservice.model.performance.SeatRequest;
+import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
-import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -265,4 +261,14 @@ public class PerformanceService {
         performanceMapper.deletePerformance(performanceId);
     }
 
+    public List<PerformanceTitleAndTimesResponse> getPerformanceTitleAndTimes(int performanceId) {
+        checkPerfTicketExists(performanceId);
+        return performanceMapper.getPerformanceTitleAndTimes(performanceId);
+    }
+
+    public void checkPerfTicketExists(int performanceId) {
+        if(!performanceMapper.isPerfTicket(performanceId)) {
+            throw new PerformanceTicketNotExistsException();
+        }
+    }
 }

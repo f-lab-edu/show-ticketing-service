@@ -109,4 +109,29 @@
         WHERE p.id = #{performanceId}
     </select>
 
+    <resultMap id="PerformanceTitleAndTimesResponse" type="com.show.showticketingservice.model.performance.PerformanceTitleAndTimesResponse">
+        <result column="title" property="title"/>
+        <collection property="performanceTimeResponses" resultMap="performanceTimeResponse"/>
+    </resultMap>
+
+    <select id="getPerformanceTitleAndTimes" resultMap="PerformanceTitleAndTimesResponse">
+        SELECT
+            p.title AS title,
+            pt.startTime AS startTime,
+            pt.endTime AS endTime
+        FROM performance p
+        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        WHERE p.id = #{performanceId}
+    </select>
+
+    <select id="isPerfTicket" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT *
+        FROM performance p
+        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        INNER JOIN seat s ON pt.id = s.perfTimeId
+        WHERE p.id = #{performanceId} AND s.reserved = false
+        )
+    </select>
 </mapper>
