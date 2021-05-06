@@ -66,4 +66,10 @@ public class PerformanceExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(PerformanceTicketNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> performanceTicketNotExistsException(final PerformanceTicketNotExistsException e, WebRequest request) {
+        log.error("The performance ticket does not exist", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }

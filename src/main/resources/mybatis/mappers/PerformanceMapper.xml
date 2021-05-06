@@ -119,6 +119,7 @@
     <select id="getPerformanceTitleAndTimes" resultMap="PerformanceTitleAndTimesResponse">
         SELECT
             p.title AS title,
+            pt.id AS perfTimeId,
             pt.startTime AS startTime,
             pt.endTime AS endTime
         FROM performance p
