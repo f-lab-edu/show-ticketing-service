@@ -12,4 +12,5 @@ public interface PerformanceTimeMapper {
 
     List<PerformanceTimeRequest> getPerfTimes(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests);
 
+    void deletePerformanceTimes(int performanceId, List<Integer> timeIds);
 }

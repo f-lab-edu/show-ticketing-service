@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PerformanceTimeResponse {
 
+    private int id;
+
     private String startTime;
 
     private String endTime;

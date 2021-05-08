@@ -28,9 +28,12 @@ public interface PerformanceMapper {
 
     void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest);
 
+    void deletePerformance(int performanceId);
+
     PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId);
 
     List<PerformanceResponse> getPerformances(ShowType showType, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
 
     boolean isPerfIdAndShowTypeExists(ShowType showType, Integer lastPerfId);
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.show.showticketingservice.mapper.SeatMapper">
+
+    <insert id="insertSeatInfo" parameterType="java.util.List">
+        INSERT INTO seat(perfTimeId, priceId, hallId, colNum, rowNum, reserved)
+        VALUES
+        <foreach collection="seatRequests" item="seatRequest" separator=",">
+            (
+            #{seatRequest.perfTimeId},
+            #{seatRequest.priceId},
+            #{seatRequest.hallId},
+            #{seatRequest.colNum},
+            #{seatRequest.rowNum},
+            #{seatRequest.reserved}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

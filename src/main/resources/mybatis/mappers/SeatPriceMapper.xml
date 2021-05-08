@@ -17,8 +17,16 @@
         </foreach>
     </insert>
 
+    <select id="getSeatPriceRowNum" resultType="com.show.showticketingservice.model.performance.SeatPriceRowNumData">
+        SELECT s.id, startRowNum, endRowNum
+        FROM seatPrice s JOIN performance p
+        ON p.id = s.performanceId
+        WHERE p.id = #{performanceId}
+    </select>
+
     <select id="isSeatPriceExists" resultType="boolean">
         SELECT EXISTS (SELECT * FROM seatPrice WHERE performanceId = #{performanceId})
     </select>
 
 </mapper>
+

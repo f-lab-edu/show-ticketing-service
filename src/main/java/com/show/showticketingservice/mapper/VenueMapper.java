@@ -26,4 +26,6 @@ public interface VenueMapper {
 
     int getVenueTotalCount();
 
+    boolean isDuplicateVenueName(String venueName, int venueId);
+
 }

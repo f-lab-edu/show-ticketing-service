@@ -64,6 +64,8 @@ CREATE TABLE performanceTime
     FOREIGN KEY (hallId)        REFERENCES venueHall(id)
 );
 
+CREATE INDEX performanceTime_Index ON performanceTime(startTime);
+
 CREATE TABLE seatPrice
 (
     `id`             INT UNSIGNED    NOT NULL AUTO_INCREMENT,
@@ -77,4 +79,27 @@ CREATE TABLE seatPrice
     ON DELETE CASCADE
 );
 
-CREATE INDEX performanceTime_Index ON performanceTime(startTime);
+CREATE TABLE seat
+(
+    `id`              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `perfTimeId`      INT UNSIGNED    NOT NULL,
+    `priceId`         INT UNSIGNED    NOT NULL,
+    `hallId`          INT UNSIGNED    NOT NULL,
+    `colNum`          INT             NOT NULL,
+    `rowNum`          INT             NOT NULL,
+    `reserved`        TINYINT(1)      NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (perfTimeId) REFERENCES performanceTime(id) ON DELETE CASCADE,
+    FOREIGN KEY (priceId)    REFERENCES seatPrice(id) ON DELETE CASCADE,
+    FOREIGN KEY (hallId)     REFERENCES venueHall(id) ON DELETE CASCADE
+);
+
+CREATE TABLE pick
+(
+    `id`             INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+    `userId`         INT UNSIGNED    NOT NULL,
+    `performanceId`  INT UNSIGNED    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId)        REFERENCES user(id)         ON DELETE CASCADE,
+    FOREIGN KEY (performanceId) REFERENCES performance(id)  ON DELETE CASCADE
+);

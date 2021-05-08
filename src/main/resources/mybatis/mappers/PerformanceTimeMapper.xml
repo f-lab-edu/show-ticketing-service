@@ -3,7 +3,7 @@
 
 <mapper namespace="com.show.showticketingservice.mapper.PerformanceTimeMapper">
 
-    <insert id="insertPerformanceTimes" parameterType="map">
+    <insert id="insertPerformanceTimes" parameterType="map" useGeneratedKeys="true" keyProperty="performanceTimeRequests.id">
         INSERT INTO performanceTime(performanceId, hallId, startTime, endTime)
         VALUES
         <foreach collection="performanceTimeRequests" item="performanceTimeRequest" separator=",">
@@ -18,7 +18,7 @@
 
     <select id="getPerfTimes" parameterType="map"
             resultType="com.show.showticketingservice.model.performance.PerformanceTimeRequest">
-        SELECT date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
+        SELECT id, date_format(startTime, '%Y%m%d%H%i%S'), date_format(endTime, '%Y%m%d%H%i%S')
         FROM performanceTime
         WHERE hallId = (SELECT hallId FROM performance WHERE id = #{performanceId}) AND
         <foreach collection="performanceTimeRequests" item="performanceTimeRequest" open="(" close=")" separator="OR">
@@ -31,5 +31,14 @@
             )
         </foreach>
     </select>
+
+    <delete id="deletePerformanceTimes" parameterType="map">
+        DELETE FROM performanceTime
+        WHERE performanceId = #{performanceId}
+        AND id IN
+        <foreach collection="timeIds" item="timeId" open="(" close=")" separator=",">
+            #{timeId}
+        </foreach>
+    </delete>
 
 </mapper>

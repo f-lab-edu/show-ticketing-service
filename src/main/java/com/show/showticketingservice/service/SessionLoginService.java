@@ -28,7 +28,7 @@ public class SessionLoginService implements LoginService {
 
         UserResponse userResponse = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
 
-        UserSession userSession = new UserSession(userResponse.getUserId(), userResponse.getUserType());
+        UserSession userSession = new UserSession(userResponse.getId(), userResponse.getUserType());
 
         httpSession.setAttribute(USER, userSession);
 

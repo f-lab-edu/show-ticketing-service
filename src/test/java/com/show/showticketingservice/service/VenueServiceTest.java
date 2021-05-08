@@ -54,7 +54,7 @@ public class VenueServiceTest {
         venueUpdateRequest = new VenueUpdateRequest(updateVenue, venueHallUpdateRequests, deleteHallIds);
 
         when(venueMapper.isVenueIdExists(venueRequest.getId())).thenReturn(true);
-        when(venueMapper.isVenueExists(updateVenue.getName())).thenReturn(false);
+        when(venueMapper.isDuplicateVenueName(updateVenue.getName(), venueRequest.getId())).thenReturn(false);
         doNothing().when(venueMapper).updateVenueInfo(venueRequest.getId(), updateVenue);
         doNothing().when(venueHallService).updateVenueHalls(venueRequest.getId(),  venueHallUpdateRequests);
         doNothing().when(venueHallService).deleteVenueHalls(venueRequest.getId(), deleteHallIds);
@@ -62,7 +62,7 @@ public class VenueServiceTest {
         venueService.updateVenueInfo(venueRequest.getId(), venueUpdateRequest);
 
         verify(venueMapper, times(1)).isVenueIdExists(venueRequest.getId());
-        verify(venueMapper, times(1)).isVenueExists(updateVenue.getName());
+        verify(venueMapper, times(1)).isDuplicateVenueName(updateVenue.getName(), venueRequest.getId());
         verify(venueMapper, times(1)).updateVenueInfo(venueRequest.getId(), updateVenue);
         verify(venueHallService, times(1)).updateVenueHalls(venueRequest.getId(), venueHallUpdateRequests);
         verify(venueHallService, times(1)).deleteVenueHalls(venueRequest.getId(), deleteHallIds);
@@ -98,14 +98,14 @@ public class VenueServiceTest {
         venueUpdateRequest = new VenueUpdateRequest(updateVenue, venueHallUpdateRequests, deleteHallIds);
 
         when(venueMapper.isVenueIdExists(venueRequest.getId())).thenReturn(true);
-        when(venueMapper.isVenueExists(updateVenue.getName())).thenReturn(true);
+        when(venueMapper.isDuplicateVenueName(updateVenue.getName(), venueRequest.getId())).thenReturn(true);
 
         assertThrows(VenueAlreadyExistsException.class, () -> {
             venueService.updateVenueInfo(venueRequest.getId(), venueUpdateRequest);
         });
 
         verify(venueMapper, times(1)).isVenueIdExists(venueRequest.getId());
-        verify(venueMapper, times(1)).isVenueExists(updateVenue.getName());
+        verify(venueMapper, times(1)).isDuplicateVenueName(venueRequest.getName(), venueRequest.getId());
     }
 
     @Test

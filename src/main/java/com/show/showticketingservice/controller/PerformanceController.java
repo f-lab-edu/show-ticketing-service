@@ -8,7 +8,6 @@ import com.show.showticketingservice.service.PerformanceService;
 import com.show.showticketingservice.service.SeatPriceService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,4 +64,17 @@ public class PerformanceController {
                                                      @RequestParam(value = "lastPerfId", required = false) Integer lastPerfId) {
         return performanceService.getPerformances(showType, new PerformancePagingCriteria(lastPerfId));
     }
+
+    @DeleteMapping("/{performanceId}/times")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void deletePerformanceTimes(@PathVariable int performanceId, @RequestBody List<Integer> timeIds) {
+        performanceService.deletePerformanceTimes(performanceId, timeIds);
+    }
+
+    @DeleteMapping("/{performanceId}")
+    @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
+    public void deletePerformance(@PathVariable int performanceId) {
+        performanceService.deletePerformance(performanceId);
+    }
+
 }

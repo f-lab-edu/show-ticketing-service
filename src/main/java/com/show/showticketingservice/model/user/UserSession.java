@@ -10,7 +10,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UserSession implements Serializable {
 
-    private final String userId;
+    private final int userId;
 
     private final UserType userType;
 

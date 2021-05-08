@@ -8,17 +8,29 @@ import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
+import com.show.showticketingservice.mapper.SeatMapper;
+import com.show.showticketingservice.model.enumerations.ShowType;
+import com.show.showticketingservice.model.performance.PerformanceRequest;
+import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
+import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
+import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
+import com.show.showticketingservice.model.performance.SeatRequest;
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
+import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +40,13 @@ public class PerformanceService {
 
     private final PerformanceTimeMapper performanceTimeMapper;
 
+    private final VenueHallService venueHallService;
+
     private final FileService fileService;
+
+    private final SeatPriceService seatPriceService;
+
+    private final SeatMapper seatMapper;
 
     @Transactional
     public void insertPerformance(PerformanceRequest performanceRequest) {
@@ -42,6 +60,7 @@ public class PerformanceService {
         }
     }
 
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
         fileService.checkFileContentType(image);
@@ -56,6 +75,8 @@ public class PerformanceService {
         performanceMapper.updatePerfImagePath(performanceId, imagePath);
     }
 
+    @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -63,6 +84,8 @@ public class PerformanceService {
         checkPerfTimeWithDB(performanceTimeRequests, performanceId);
 
         performanceTimeMapper.insertPerformanceTimes(performanceTimeRequests, performanceId);
+
+        insertSeatInfo(performanceId, performanceTimeRequests);
     }
 
     private void checkPerfTimeWithDB(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
@@ -163,7 +186,51 @@ public class PerformanceService {
 
     }
 
+    private List<SeatRequest> setSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        /*
+        좌석 정보 세팅
+        - DB로부터 좌석 정보에 필요한 정보를 불러옴 (VenueHallColumnSeat, SeatPriceRowNumData)
+         */
+
+        VenueHallColumnSeat venueHallColumnSeat = venueHallService.getVenueHallColumnAndId(performanceId);
+
+        List<SeatPriceRowNumData> seatPriceRowNumDataList = seatPriceService.getSeatPriceRowNum(performanceId);
+        List<SeatRequest> seatRequests = new ArrayList<>();
+
+        performanceTimeRequests.stream().forEach(performanceTimeRequest -> {
+
+            seatPriceRowNumDataList.stream().forEach(seatPriceRowNumData -> {
+
+                IntStream.range(seatPriceRowNumData.getStartRowNum(), seatPriceRowNumData.getEndRowNum() + 1).forEach(rowNum -> {
+
+                    IntStream.range(1, venueHallColumnSeat.getColumnSeats() + 1).forEach(colNum -> {
+
+                        SeatRequest seatRequest = SeatRequest.builder().
+                                perfTimeId(performanceTimeRequest.getId()).
+                                hallId(venueHallColumnSeat.getId()).
+                                priceId(seatPriceRowNumData.getId()).
+                                colNum(colNum).
+                                rowNum(rowNum).
+                                reserved(false).
+                                build();
+
+                        seatRequests.add(seatRequest);
+                    });
+                });
+            });
+        });
+
+        return seatRequests;
+    }
+
+    public void insertSeatInfo(int performanceId, List<PerformanceTimeRequest> performanceTimeRequests) {
+        seatPriceService.checkSeatPriceNotExistsException(performanceId);
+        List<SeatRequest> seatRequests = setSeatInfo(performanceId, performanceTimeRequests);
+        seatMapper.insertSeatInfo(seatRequests);
+    }
+
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest) {
 
         checkValidPerformanceId(performanceId);
@@ -173,7 +240,7 @@ public class PerformanceService {
         performanceMapper.updatePerformanceInfo(performanceId, perfUpdateRequest);
     }
 
-    private void checkValidPerformanceId(int performanceId) {
+    public void checkValidPerformanceId(int performanceId) {
         if(!performanceMapper.isPerformanceIdExists(performanceId)) {
             throw new PerformanceNotExistsException();
         }
@@ -187,6 +254,7 @@ public class PerformanceService {
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
+        checkValidPerformanceId(performanceId);
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
@@ -226,9 +294,21 @@ public class PerformanceService {
     }
 
     private void checkValidPerfIdAndShowType(ShowType showType, Integer lastPerfId) {
-        if(!performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)) {
+        if (!performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)) {
             throw new PerformanceNotExistsException();
         }
+    }
+
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
+        checkValidPerformanceId(performanceId);
+        performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
+    }
+
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    public void deletePerformance(int performanceId) {
+        checkValidPerformanceId(performanceId);
+        performanceMapper.deletePerformance(performanceId);
     }
 
 }

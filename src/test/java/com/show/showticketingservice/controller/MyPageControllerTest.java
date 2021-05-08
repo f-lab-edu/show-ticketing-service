@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.show.showticketingservice.tool.constants.UserConstant.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -51,14 +50,9 @@ class MyPageControllerTest {
     public void init() {
         testUser = new UserRequest("testId1", "testPW1234#", "Test User", "010-1111-1111", "user1@example.com", "Seoul, South Korea", UserType.GENERAL);
 
-        userSession = new UserSession(testUser.getUserId(), testUser.getUserType());
-
         updateRequest = new UserUpdateRequest("!validPW123", "010-1234-5678", "Busan, South Korea");
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
-
-        httpSession.setAttribute(USER, userSession);
-
     }
 
     private void insertUser(UserRequest userRequest) throws Exception {
@@ -79,6 +73,7 @@ class MyPageControllerTest {
 
         mvc.perform(post("/login")
                 .content(content)
+                .session(httpSession)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
