@@ -57,6 +57,7 @@
     </delete>
 
     <resultMap id="performanceTimeResponse" type="com.show.showticketingservice.model.performance.PerformanceTimeResponse">
+        <result column="perfTimeId" property="id"/>
         <result column="startTime" property="startTime"/>
         <result column="endTime" property="endTime"/>
     </resultMap>
@@ -91,6 +92,7 @@
             p.ageLimit AS ageLimit,
             p.showType AS showType,
             p.imageFilePath AS imageFilePath,
+            pt.id AS perfTimeId,
             pt.startTime AS startTime,
             pt.endTime AS endTime,
             v.id AS venueId,
