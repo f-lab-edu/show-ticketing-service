@@ -36,4 +36,6 @@ public interface PerformanceMapper {
 
     boolean isPerfIdAndShowTypeExists(ShowType showType, Integer lastPerfId);
 
+    List<PerformanceResponse> getPickedPerformances(int userId);
+
 }
