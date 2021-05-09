@@ -41,4 +41,41 @@
         </foreach>
     </delete>
 
+    <resultMap id="perfTimeAndSeatCapacityResponse" type="com.show.showticketingservice.model.performance.PerfTimeAndSeatCapacityResponse">
+        <result column="startTime" property="startTime"/>
+        <result column="perfTimeId" property="perfTimeId"/>
+        <collection property="seatCapacityResponses" resultMap="seatCapacityResponse"/>
+    </resultMap>
+
+    <resultMap id="seatCapacityResponse" type="com.show.showticketingservice.model.performance.SeatCapacityResponse">
+        <result column="ratingType" property="ratingType"/>
+        <association property="seatCapacity" column="{ratingType=ratingType, perfTimeId=perfTimeId}" select="getSeatCapacity"/>
+    </resultMap>
+
+    <select id="getSeatCapacity" resultType="int">
+        SELECT COUNT(s.priceId) AS seatCapacity
+        FROM seat s
+        INNER JOIN seatPrice sp ON s.priceId = sp.id
+        INNER JOIN performanceTime pt ON s.perfTimeId = pt.id
+        WHERE sp.ratingType = #{ratingType} AND pt.id = #{perfTimeId} AND s.reserved = false
+    </select>
+
+    <select id="getPerfTimeAndSeatCapacity" resultMap="perfTimeAndSeatCapacityResponse" parameterType="map">
+        SELECT
+            TIME(pt.startTime) AS startTime,
+            pt.id AS perfTimeId,
+            sp.ratingType AS ratingType
+        FROM performanceTime pt
+        INNER JOIN seatPrice sp ON pt.performanceId = sp.performanceId
+        WHERE pt.performanceId = #{performanceId} AND DATE(pt.startTime) = #{perfDate}
+    </select>
+
+    <select id="isPerfDate" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT * FROM performanceTime
+        WHERE performanceId = #{performanceId} AND DATE(startTime) = #{perfDate}
+        )
+    </select>
+
 </mapper>

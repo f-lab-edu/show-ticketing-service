@@ -33,4 +33,5 @@ public interface PerformanceMapper {
     List<PerformanceTitleAndTimesResponse> getPerformanceTitleAndTimes(int performanceId);
 
     boolean isPerfTicket(int performanceId);
+
 }
