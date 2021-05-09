@@ -183,6 +183,9 @@
         WHERE p.id IN ( SELECT performanceId
                         FROM pick
                         WHERE userId = #{userId})
+        <if test="showType != null">
+            AND p.showType = #{showType}
+        </if>
         <if test="pagination.lastPerfId != null">
             AND p.id <![CDATA[<]]> #{pagination.lastPerfId}
         </if>

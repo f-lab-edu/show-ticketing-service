@@ -306,7 +306,8 @@ public class PerformanceService {
         performanceMapper.deletePerformance(performanceId);
     }
 
-    public List<PerformanceResponse> getPickedPerformances(int userId, PerformancePagingCriteria performancePagingCriteria) {
-        return performanceMapper.getPickedPerformances(userId, performancePagingCriteria);
+    public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
+
 }

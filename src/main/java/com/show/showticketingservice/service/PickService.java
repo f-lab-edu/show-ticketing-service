@@ -3,6 +3,7 @@ package com.show.showticketingservice.service;
 import com.show.showticketingservice.exception.pick.PickAlreadyExistsException;
 import com.show.showticketingservice.mapper.PickMapper;
 import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
+import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,8 @@ public class PickService {
         pickMapper.deletePick(userId, performanceId);
     }
 
-    public List<PerformanceResponse> getPicks(int userId, PerformancePagingCriteria performancePagingCriteria) {
-        return performanceService.getPickedPerformances(userId, performancePagingCriteria);
+    public List<PerformanceResponse> getPicks(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        return performanceService.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
 }

@@ -36,6 +36,6 @@ public interface PerformanceMapper {
 
     boolean isPerfIdAndShowTypeExists(ShowType showType, Integer lastPerfId);
 
-    List<PerformanceResponse> getPickedPerformances(int userId, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
+    List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
 
 }

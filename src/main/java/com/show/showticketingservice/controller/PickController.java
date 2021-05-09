@@ -2,6 +2,7 @@ package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceResponse;
 import com.show.showticketingservice.model.pick.PickRequest;
 import com.show.showticketingservice.model.user.UserSession;
@@ -35,8 +36,9 @@ public class PickController {
     @GetMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
     public List<PerformanceResponse> getPicks(@CurrentUser UserSession userSession,
+                                              @RequestParam(value = "showType", required = false) ShowType showType,
                                               @RequestParam(value = "lastPerfId", required = false) Integer lastPerfId) {
-        return pickService.getPicks(userSession.getUserId(), new PerformancePagingCriteria(lastPerfId));
+        return pickService.getPicks(userSession.getUserId(), showType, new PerformancePagingCriteria(lastPerfId));
     }
 
 }
