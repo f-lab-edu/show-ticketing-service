@@ -183,7 +183,11 @@
         WHERE p.id IN ( SELECT performanceId
                         FROM pick
                         WHERE userId = #{userId})
+        <if test="pagination.lastPerfId != null">
+            AND p.id <![CDATA[<]]> #{pagination.lastPerfId}
+        </if>
         ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
     </select>
 
 </mapper>
