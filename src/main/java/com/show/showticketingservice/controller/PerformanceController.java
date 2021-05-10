@@ -78,13 +78,13 @@ public class PerformanceController {
     }
 
     @GetMapping("/{performanceId}/times")
-    //@UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
     public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(@PathVariable int performanceId) {
         return performanceService.getPerformanceTitleAndTimes(performanceId);
     }
 
     @GetMapping("/{performanceId}/times/{perfDate}")
-    //@UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
     public List<PerfTimeAndSeatCapacityResponse> getPerfTimeAndSeatCapacity(@PathVariable int performanceId, @PathVariable String perfDate) {
         return performanceService.getPerfTimeAndSeatCapacity(performanceId, perfDate);
     }
