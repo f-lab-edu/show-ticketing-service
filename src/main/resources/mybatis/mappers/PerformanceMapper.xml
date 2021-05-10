@@ -137,4 +137,64 @@
         WHERE p.id = #{performanceId} AND s.reserved = false
         )
     </select>
+
+    <select id="isPerfIdAndShowTypeExists" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT * FROM performance
+        <if test="lastPerfId != null and showType != null">
+            WHERE id = #{lastPerfId} AND showType = #{showType}
+        </if>
+        <if test="lastPerfId != null and showType == null">
+            WHERE id = #{lastPerfId}
+        </if>
+        <if test="lastPerfId == null and showType != null">
+            WHERE showType = #{showType}
+        </if>
+        )
+    </select>
+
+    <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="imageFilePath" property="imageFilePath"/>
+        <result column="venueName" property="venueName"/>
+        <result column="hallName" property="hallName"/>
+        <association property="performancePeriod"
+                     column="id"
+                     javaType="com.show.showticketingservice.model.performance.PerformancePeriod"
+                     select="getPerfTime">
+        </association>
+    </resultMap>
+
+    <select id="getPerformances" resultMap="performanceResponse" parameterType="map">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.imageFilePath AS imageFilePath,
+            v.name AS venueName,
+            vh.name AS hallName
+        FROM performance p
+        INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN venueHall vh ON p.hallId = vh.id
+        <if test="pagination.lastPerfId != null and showType != null">
+            WHERE p.id <![CDATA[<]]> #{pagination.lastPerfId} AND showType = #{showType}
+        </if>
+        <if test="pagination.lastPerfId != null and showType == null">
+            WHERE p.id <![CDATA[<]]> #{pagination.lastPerfId}
+        </if>
+        <if test="pagination.lastPerfId == null and showType != null">
+            WHERE showType = #{showType}
+        </if>
+        ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
+    </select>
+
+    <select id="getPerfTime" resultType="com.show.showticketingservice.model.performance.PerformancePeriod">
+        SELECT
+            DATE(MIN(startTime)) AS firstDay, DATE(MAX(startTime)) AS lastDay
+        FROM performanceTime
+        WHERE performanceId = #{id}
+    </select>
+
 </mapper>

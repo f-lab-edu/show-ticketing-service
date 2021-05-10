@@ -1,6 +1,8 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.AccessRoles;
+import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.service.PerformanceService;
 import com.show.showticketingservice.service.SeatPriceService;
@@ -57,6 +59,12 @@ public class PerformanceController {
         return performanceService.getPerformanceDetailInfo(performanceId);
     }
 
+    @GetMapping
+    public List<PerformanceResponse> getPerformances(@RequestParam(value = "showType", required = false) ShowType showType,
+                                                     @RequestParam(value = "lastPerfId", required = false) Integer lastPerfId) {
+        return performanceService.getPerformances(showType, new PerformancePagingCriteria(lastPerfId));
+    }
+
     @DeleteMapping("/{performanceId}/times")
     @UserAuthenticationNecessary(role = AccessRoles.MANAGER)
     public void deletePerformanceTimes(@PathVariable int performanceId, @RequestBody List<Integer> timeIds) {
@@ -71,7 +79,7 @@ public class PerformanceController {
 
     @GetMapping("/{performanceId}/times")
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-    public List<PerformanceTitleAndTimesResponse> getPerformanceTitleAndTimes(@PathVariable int performanceId) {
+    public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(@PathVariable int performanceId) {
         return performanceService.getPerformanceTitleAndTimes(performanceId);
     }
 

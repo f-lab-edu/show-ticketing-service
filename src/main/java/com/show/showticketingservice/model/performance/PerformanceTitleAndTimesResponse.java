@@ -9,8 +9,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PerformanceTitleAndTimesResponse {
 
-    private int id;
-
     private String title;
 
     private List<PerformanceTimeResponse> performanceTimeResponses;

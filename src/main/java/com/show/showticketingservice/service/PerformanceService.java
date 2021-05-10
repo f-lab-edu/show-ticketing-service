@@ -3,6 +3,9 @@ package com.show.showticketingservice.service;
 import com.show.showticketingservice.exception.performance.*;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
+import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
+import com.show.showticketingservice.model.enumerations.ShowType;
+import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 import java.util.stream.IntStream;
 
 @Service
@@ -250,6 +254,47 @@ public class PerformanceService {
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
+    /*
+    공연 정보 리스트 조회 캐시 기능
+    cacheNames
+      - MAIN_PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지인 경우
+      - PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지를 제외한 경우
+      - ALL_TYPE_MAIN_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지인 경우
+      - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
+     */
+    @Caching(cacheable = {
+            @Cacheable(
+                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
+                    condition = "#showType != null && #lastPerfId == null",
+                    key = "#showType.toString()"
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.PERFORMANCE_LIST,
+                    condition = "#showType != null && #lastPerfId != null",
+                    key = "#showType.toString() + #lastPerfId"
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST,
+                    condition = "#showType == null && #lastPerfId == null",
+                    key = ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.ALL_TYPE_PERFORMANCE_LIST,
+                    condition = "#showType == null && #lastPerfId != null",
+                    key = "#lastPerfId"
+            )
+    })
+    public List<PerformanceResponse> getPerformances(ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        checkValidPerfIdAndShowType(showType, performancePagingCriteria.getLastPerfId());
+        return performanceMapper.getPerformances(showType, performancePagingCriteria);
+    }
+
+    private void checkValidPerfIdAndShowType(ShowType showType, Integer lastPerfId) {
+        if (!performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)) {
+            throw new PerformanceNotExistsException();
+        }
+    }
+
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
@@ -269,7 +314,7 @@ public class PerformanceService {
     }
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
-    public List<PerformanceTitleAndTimesResponse> getPerformanceTitleAndTimes(int performanceId) {
+    public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(int performanceId) {
         checkPerfTicketExists(performanceId);
         return performanceMapper.getPerformanceTitleAndTimes(performanceId);
     }
