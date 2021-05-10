@@ -120,8 +120,8 @@
         SELECT
             p.title AS title,
             pt.id AS perfTimeId,
-            pt.startTime AS startTime,
-            pt.endTime AS endTime
+            DATE(pt.startTime) AS startTime,
+            DATE(pt.endTime) AS endTime
         FROM performance p
         INNER JOIN performanceTime pt ON p.id = pt.performanceId
         WHERE p.id = #{performanceId}
