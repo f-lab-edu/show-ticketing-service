@@ -20,6 +20,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,6 +55,7 @@ public class PerformanceService {
         }
     }
 
+    @Transactional
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
         fileService.checkFileContentType(image);
@@ -172,7 +174,7 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
 
-        if(endTime - startTime > 24_00_00) {
+        if (endTime - startTime > 24_00_00) {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
@@ -232,7 +234,7 @@ public class PerformanceService {
     }
 
     public void checkValidPerformanceId(int performanceId) {
-        if(!performanceMapper.isPerformanceIdExists(performanceId)) {
+        if (!performanceMapper.isPerformanceIdExists(performanceId)) {
             throw new PerformanceNotExistsException();
         }
     }
@@ -243,16 +245,19 @@ public class PerformanceService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
+    @Transactional
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
         checkValidPerformanceId(performanceId);
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
 
+    @Transactional
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);

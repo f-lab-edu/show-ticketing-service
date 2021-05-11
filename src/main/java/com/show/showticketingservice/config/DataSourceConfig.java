@@ -8,6 +8,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
@@ -45,6 +46,17 @@ public class DataSourceConfig {
         routingDataSource.setDefaultTargetDataSource(masterDataSource);
 
         return routingDataSource;
+    }
+
+    /*
+        LazyConnectionDataSourceProxy
+        - Spring의 Transaction은 트랜잭션 실행과 동시에 Connection 객체를 확보 & 해당 트랜잭션은 기본 DataSource를 이용
+        - LazyConnectionDataSourceProxy는 트랜잭션 실행 후 첫번째 Statement가 생성될 때까지 JDBC Connection fetch를 늦춤
+        - 상황에 맞게 DataSource를 분기하기 위해 사용
+    */
+    @Bean
+    public DataSource lazyRoutingDataSource(@Qualifier("routingDataSource") DataSource dataSource) {
+        return new LazyConnectionDataSourceProxy(dataSource);
     }
 
 }

@@ -11,6 +11,7 @@ import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class UserService {
 
     private final PasswordEncryptor passwordEncryptor;
 
+    @Transactional
     public void signUp(UserRequest userRequest) {
         checkIdExists(userRequest.getUserId());
 
@@ -30,6 +32,7 @@ public class UserService {
         userMapper.insertUser(userRequest.pwEncryptedUser(passwordEncryptor.encrypt(userRequest.getPassword())));
     }
 
+    @Transactional(readOnly = true)
     public void checkIdExists(String userId) {
         if(userMapper.isIdExists(userId)) {
             throw new UserIdAlreadyExistsException();
@@ -54,6 +57,7 @@ public class UserService {
         return passwordEncryptor.isMatched(passwordRequest, userPassword);
     }
 
+    @Transactional
     public void deleteUser(UserSession userSession, String passwordRequest) {
 
         String hashPassword = userMapper.getUserPasswordById(userSession.getUserId());
@@ -65,6 +69,7 @@ public class UserService {
         userMapper.deleteUserById(userSession.getUserId());
     }
 
+    @Transactional
     public void updateUserInfo(UserSession userSession, UserUpdateRequest userUpdateRequest) {
         String newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.getNewPassword());
         userMapper.updateUserInfo(userSession.getUserId(), userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword));

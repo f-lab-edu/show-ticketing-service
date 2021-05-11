@@ -4,6 +4,7 @@ import com.show.showticketingservice.exception.pick.PickAlreadyExistsException;
 import com.show.showticketingservice.mapper.PickMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class PickService {
 
     private final PickMapper pickMapper;
 
+    @Transactional
     public void insertPick(int userId, int performanceId) {
 
         performanceService.checkValidPerformanceId(performanceId);
@@ -28,6 +30,7 @@ public class PickService {
         }
     }
 
+    @Transactional
     public void deletePick(int userId, int performanceId) {
         pickMapper.deletePick(userId, performanceId);
     }

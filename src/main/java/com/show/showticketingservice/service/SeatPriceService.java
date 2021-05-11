@@ -10,6 +10,8 @@ import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
 import com.show.showticketingservice.model.performance.SeatPriceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -78,6 +80,7 @@ public class SeatPriceService {
         });
     }
 
+    @Transactional
     public void insertSeatsPrice(List<SeatPriceRequest> seatPriceRequests, int performanceId) {
 
         checkSeatPriceAlreadyExistsException(performanceId);
