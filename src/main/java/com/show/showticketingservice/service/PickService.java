@@ -7,6 +7,7 @@ import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformanceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PickService {
 
     private final PickMapper pickMapper;
 
+    @Transactional
     public void insertPick(int userId, int performanceId) {
 
         performanceService.checkValidPerformanceId(performanceId);
@@ -37,6 +39,7 @@ public class PickService {
         pickMapper.deletePick(userId, performanceId);
     }
 
+    @Transactional(readOnly = true)
     public List<PerformanceResponse> getPicks(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         return performanceService.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
