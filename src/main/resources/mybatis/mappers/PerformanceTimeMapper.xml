@@ -44,7 +44,7 @@
     <resultMap id="perfTimeAndRemainingSeatsResponse" type="com.show.showticketingservice.model.performance.PerfTimeAndRemainingSeatsResponse">
         <result column="startTime" property="startTime"/>
         <result column="perfTimeId" property="perfTimeId"/>
-        <collection property="remainingSeatsRespons" resultMap="remainingSeatsResponse"/>
+        <collection property="remainingSeatsResponses" resultMap="remainingSeatsResponse"/>
     </resultMap>
 
     <resultMap id="remainingSeatsResponse" type="com.show.showticketingservice.model.performance.RemainingSeatsResponse">

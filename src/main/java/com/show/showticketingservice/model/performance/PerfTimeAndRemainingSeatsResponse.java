@@ -14,5 +14,5 @@ public class PerfTimeAndRemainingSeatsResponse {
 
     private String startTime;
 
-    List<RemainingSeatsResponse> remainingSeatsRespons;
+    List<RemainingSeatsResponse> remainingSeatsResponses;
 }

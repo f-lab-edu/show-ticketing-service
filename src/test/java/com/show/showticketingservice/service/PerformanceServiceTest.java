@@ -162,7 +162,7 @@ public class PerformanceServiceTest {
         PerfTimeAndRemainingSeatsResponse perfTimeAndRemainingSeatsResponse = PerfTimeAndRemainingSeatsResponse.builder()
                 .perfTimeId(1)
                 .startTime("12:00:00")
-                .remainingSeatsRespons(remainingSeatsRespons)
+                .remainingSeatsResponses(remainingSeatsRespons)
                 .build();
         perfTimeAndRemainingSeatsRespons.add(perfTimeAndRemainingSeatsResponse);
 
