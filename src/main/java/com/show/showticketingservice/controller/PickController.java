@@ -33,6 +33,12 @@ public class PickController {
         pickService.deletePick(userSession.getUserId(), performanceId);
     }
 
+    @DeleteMapping
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    public void deletePicks(@CurrentUser UserSession userSession, @RequestBody List<Integer> perfIds) {
+        pickService.deletePicks(userSession.getUserId(), perfIds);
+    }
+
     @GetMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
     public List<PerformanceResponse> getPicks(@CurrentUser UserSession userSession,

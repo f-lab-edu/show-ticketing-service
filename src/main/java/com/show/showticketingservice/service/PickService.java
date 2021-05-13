@@ -45,10 +45,16 @@ public class PickService {
 
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.MAIN_PICK_LIST),
-            @CacheEvict(cacheNames = CacheConstant.TYPED_PICK_LIST, allEntries = true)
-    })
+            @CacheEvict(cacheNames = CacheConstant.TYPED_PICK_LIST, allEntries = true)})
     public void deletePick(int userId, int performanceId) {
         pickMapper.deletePick(userId, performanceId);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PICK_LIST),
+            @CacheEvict(cacheNames = CacheConstant.TYPED_PICK_LIST, allEntries = true)})
+    public void deletePicks(int userId, List<Integer> perfIds) {
+        pickMapper.deletePicks(userId, perfIds);
     }
 
     @Transactional(readOnly = true)
@@ -64,5 +70,4 @@ public class PickService {
     public List<PerformanceResponse> getPicks(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         return performanceService.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
-
 }
