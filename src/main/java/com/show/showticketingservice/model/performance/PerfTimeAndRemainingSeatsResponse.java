@@ -8,11 +8,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PerfTimeAndSeatCapacityResponse {
+public class PerfTimeAndRemainingSeatsResponse {
 
     private int perfTimeId;
 
     private String startTime;
 
-    List<SeatCapacityResponse> seatCapacityResponses;
+    List<RemainingSeatsResponse> remainingSeatsRespons;
 }

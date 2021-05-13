@@ -7,8 +7,6 @@ import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.mapper.SeatMapper;
-import com.show.showticketingservice.model.enumerations.ShowType;
-import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
@@ -315,25 +313,19 @@ public class PerformanceService {
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
     public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(int performanceId) {
-        checkPerfTicketExists(performanceId);
+        checkValidPerformanceId(performanceId);
         return performanceMapper.getPerformanceTitleAndTimes(performanceId);
     }
 
-    public void checkPerfTicketExists(int performanceId) {
-        if(!performanceMapper.isPerfTicket(performanceId)) {
-            throw new PerformanceTicketNotExistsException();
-        }
-    }
-
-    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT, key = "#performanceId + #perfDate")
-    public List<PerfTimeAndSeatCapacityResponse> getPerfTimeAndSeatCapacity(int performanceId, String perfDate) {
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT, key = "#performanceId + #perfTimeId")
+    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
         checkValidPerformanceId(performanceId);
-        checkPerfDate(performanceId, perfDate);
-        return performanceTimeMapper.getPerfTimeAndSeatCapacity(performanceId, perfDate);
+        checkPerfDateExists(performanceId, perfTimeId);
+        return performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
     }
 
-    public void checkPerfDate(int performanceId, String perfDate) {
-        if(!performanceTimeMapper.isPerfDate(performanceId, perfDate)) {
+    public void checkPerfDateExists(int performanceId, int perfTimeId) {
+        if(!performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)) {
             throw new PerformanceTimeNotExistsException("공연 날짜가 존재하지 않습니다.");
         }
     }

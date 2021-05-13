@@ -1,7 +1,6 @@
 package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceTicketNotExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeNotExistsException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
@@ -102,13 +101,16 @@ public class PerformanceServiceTest {
     }
 
     @Test
-    @DisplayName("공연 예매 시 먼저 스케줄과 공연 이름을 조회합니다.")
+    @DisplayName("공연 id를 통해 스케줄과 공연 이름을 조회합니다.")
     public void getPerformanceTimeAndTitleSuccess() {
+
+        int performanceId = 1;
+
         List<PerformanceTimeResponse> performanceTimeResponses = new ArrayList<>();
         PerformanceTimeResponse performanceTimeResponse = PerformanceTimeResponse.builder()
                 .id(2)
-                .startTime("2021-05-04 13:00:00")
-                .endTime("2021-05-04 15:00:00")
+                .startTime("2021-05-04")
+                .endTime("2021-05-04")
                 .build();
 
         performanceTimeResponses.add(performanceTimeResponse);
@@ -118,99 +120,96 @@ public class PerformanceServiceTest {
                 .performanceTimeResponses(performanceTimeResponses)
                 .build();
 
-        int performanceId = 1;
-
-        when(performanceMapper.isPerfTicket(performanceId)).thenReturn(true);
         when(performanceMapper.getPerformanceTitleAndTimes(performanceId)).thenReturn(performanceTitleAndTimesResponse);
+        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
         PerformanceTitleAndTimesResponse resultPerformanceTitleAndTimesResponse = performanceService.getPerformanceTitleAndTimes(performanceId);
 
-        verify(performanceMapper, times(1)).isPerfTicket(performanceId);
         verify(performanceMapper, times(1)).getPerformanceTitleAndTimes(performanceId);
+        verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
 
         assertEquals(performanceTitleAndTimesResponse, resultPerformanceTitleAndTimesResponse);
     }
 
     @Test
-    @DisplayName("공연 예매 시 스케줄 또는 예약할 좌석이 없을 경우 조회가 실패합니다.")
-    public void performanceTimeNotExistsOrSeatNotExists() {
+    @DisplayName("공연 스케줄과 이름을 조회 시 요청한 공연 id가 존재하지 않으면 조회를 실패합니다.")
+    public void failIfPerfIdDoseNotExistWhenGetPerformanceTimeAndTitle() {
 
         int performanceId = 1;
-
-        when(performanceMapper.isPerfTicket(performanceId)).thenReturn(false);
-
-        assertThrows(PerformanceTicketNotExistsException.class, () -> {
-            performanceService.getPerformanceTitleAndTimes(performanceId);
-        });
-
-        verify(performanceMapper, times(1)).isPerfTicket(performanceId);
-
-    }
-
-    @Test
-    @DisplayName("공연 예매 시 스케줄을 선택하면 남은 좌석 수를 조회합니다.")
-    public void getPerformanceTimeAndSeatCapacitySuccess() {
-        int performanceId = 1;
-        String perfDate = "2021-12-11";
-
-        List<SeatCapacityResponse> seatCapacityResponses = new ArrayList<>();
-        SeatCapacityResponse seatCapacityResponse = SeatCapacityResponse.builder()
-                .ratingType(VIP)
-                .seatCapacity(20)
-                .build();
-        seatCapacityResponses.add(seatCapacityResponse);
-
-        List<PerfTimeAndSeatCapacityResponse> perfTimeAndSeatCapacityResponses = new ArrayList<>();
-        PerfTimeAndSeatCapacityResponse perfTimeAndSeatCapacityResponse = PerfTimeAndSeatCapacityResponse.builder()
-                .perfTimeId(1)
-                .startTime("12:00:00")
-                .seatCapacityResponses(seatCapacityResponses)
-                .build();
-        perfTimeAndSeatCapacityResponses.add(perfTimeAndSeatCapacityResponse);
-
-        when(performanceTimeMapper.getPerfTimeAndSeatCapacity(performanceId, perfDate)).thenReturn(perfTimeAndSeatCapacityResponses);
-        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
-        when(performanceTimeMapper.isPerfDate(performanceId, perfDate)).thenReturn(true);
-
-        List<PerfTimeAndSeatCapacityResponse> resultPerfTimeAndSeatCapacityResponses = performanceService.getPerfTimeAndSeatCapacity(performanceId, perfDate);
-
-        verify(performanceTimeMapper, times(1)).getPerfTimeAndSeatCapacity(performanceId, perfDate);
-        verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
-        verify(performanceTimeMapper, times(1)).isPerfDate(performanceId, perfDate);
-
-        assertEquals(perfTimeAndSeatCapacityResponses, resultPerfTimeAndSeatCapacityResponses);
-    }
-
-    @Test
-    @DisplayName("공연 예매 시 스케줄을 선택할 때 공연 id가 존재하지 않을 시 조회를 실패합니다.")
-    public void performanceIdNotExists() {
-
-        int performanceId = 1;
-        String perfDate = "2021-12-11";
 
         when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(false);
 
         assertThrows(PerformanceNotExistsException.class, () -> {
-            performanceService.getPerfTimeAndSeatCapacity(performanceId, perfDate);
+            performanceService.getPerformanceTitleAndTimes(performanceId);
         });
 
         verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
     }
 
     @Test
-    @DisplayName("공연 예매 시 스케줄을 선택할 때 공연 시간이 존재하지 않을 시 조회를 실패합니다.")
-    public void performanceTimeNotNotExists() {
+    @DisplayName("공연 id와 공연 시간 id를 통해 시작 시간과 남은 좌석 정보를 조회합니다.")
+    public void getPerformanceTimeAndRemainingSeatsSuccess() {
+        int performanceId = 1;
+        int perfTimeId = 2;
+
+        List<RemainingSeatsResponse> remainingSeatsRespons = new ArrayList<>();
+        RemainingSeatsResponse remainingSeatsResponse = RemainingSeatsResponse.builder()
+                .ratingType(VIP)
+                .remainingSeats(20)
+                .build();
+        remainingSeatsRespons.add(remainingSeatsResponse);
+
+        List<PerfTimeAndRemainingSeatsResponse> perfTimeAndRemainingSeatsRespons = new ArrayList<>();
+        PerfTimeAndRemainingSeatsResponse perfTimeAndRemainingSeatsResponse = PerfTimeAndRemainingSeatsResponse.builder()
+                .perfTimeId(1)
+                .startTime("12:00:00")
+                .remainingSeatsRespons(remainingSeatsRespons)
+                .build();
+        perfTimeAndRemainingSeatsRespons.add(perfTimeAndRemainingSeatsResponse);
+
+        when(performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId)).thenReturn(perfTimeAndRemainingSeatsRespons);
+        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
+        when(performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)).thenReturn(true);
+
+        List<PerfTimeAndRemainingSeatsResponse> resultPerfTimeAndRemainingSeatsRespons = performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+
+        verify(performanceTimeMapper, times(1)).getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+        verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
+        verify(performanceTimeMapper, times(1)).isPerfDateExists(performanceId, perfTimeId);
+
+        assertEquals(perfTimeAndRemainingSeatsRespons, resultPerfTimeAndRemainingSeatsRespons);
+    }
+
+    @Test
+    @DisplayName("공연 시간과 남은 좌석 정보를 조회 시 요청한 공연 id가 존재하지 않으면 조회를 실패합니다.")
+    public void failIfPerfIdDoseNotExistWhenGetPerformanceTimeAndRemainingSeats() {
 
         int performanceId = 1;
-        String perfDate = "2021-12-11";
+        int perfTimeId = 2;
 
-        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
-        when(performanceTimeMapper.isPerfDate(performanceId, perfDate)).thenReturn(false);
+        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(false);
 
-        assertThrows(PerformanceTimeNotExistsException.class, () -> {
-            performanceService.getPerfTimeAndSeatCapacity(performanceId, perfDate);
+        assertThrows(PerformanceNotExistsException.class, () -> {
+            performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
         });
 
         verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
-        verify(performanceTimeMapper, times(1)).isPerfDate(performanceId, perfDate);
+    }
+
+    @Test
+    @DisplayName("공연 시간과 남은 좌석 정보를 조회 시 요청한 공연 시간 id가 존재하지 않으면 조회를 실패합니다.")
+    public void failIfPerfTimeIdDoseNotExistWhenGetPerformanceTimeAndRemainingSeats() {
+
+        int performanceId = 1;
+        int perfTimeId = 2;
+
+        when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
+        when(performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)).thenReturn(false);
+
+        assertThrows(PerformanceTimeNotExistsException.class, () -> {
+            performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+        });
+
+        verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
+        verify(performanceTimeMapper, times(1)).isPerfDateExists(performanceId, perfTimeId);
     }
 }

@@ -1,6 +1,6 @@
 package com.show.showticketingservice.mapper;
 
-import com.show.showticketingservice.model.performance.PerfTimeAndSeatCapacityResponse;
+import com.show.showticketingservice.model.performance.PerfTimeAndRemainingSeatsResponse;
 import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,7 +15,7 @@ public interface PerformanceTimeMapper {
 
     void deletePerformanceTimes(int performanceId, List<Integer> timeIds);
 
-    List<PerfTimeAndSeatCapacityResponse> getPerfTimeAndSeatCapacity(int performanceId, String perfDate);
+    List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId);
 
-    boolean isPerfDate(int performanceId, String perfDate);
+    boolean isPerfDateExists(int performanceId, int perfTimeId);
 }

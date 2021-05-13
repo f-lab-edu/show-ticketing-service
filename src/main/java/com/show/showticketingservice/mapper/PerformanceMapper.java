@@ -34,8 +34,6 @@ public interface PerformanceMapper {
 
     PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(int performanceId);
 
-    boolean isPerfTicket(int performanceId);
-
     List<PerformanceResponse> getPerformances(ShowType showType, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
 
     boolean isPerfIdAndShowTypeExists(ShowType showType, Integer lastPerfId);

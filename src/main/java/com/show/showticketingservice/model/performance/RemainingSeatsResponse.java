@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SeatCapacityResponse {
+public class RemainingSeatsResponse {
 
     private RatingType ratingType;
 
-    private int seatCapacity;
+    private int remainingSeats;
 }

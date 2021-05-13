@@ -123,19 +123,8 @@
             DATE(pt.startTime) AS startTime,
             DATE(pt.endTime) AS endTime
         FROM performance p
-        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        LEFT OUTER JOIN performanceTime pt ON p.id = pt.performanceId
         WHERE p.id = #{performanceId}
-    </select>
-
-    <select id="isPerfTicket" resultType="boolean">
-        SELECT EXISTS
-        (
-        SELECT *
-        FROM performance p
-        INNER JOIN performanceTime pt ON p.id = pt.performanceId
-        INNER JOIN seat s ON pt.id = s.perfTimeId
-        WHERE p.id = #{performanceId} AND s.reserved = false
-        )
     </select>
 
     <select id="isPerfIdAndShowTypeExists" resultType="boolean">
