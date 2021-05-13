@@ -16,4 +16,8 @@ public class CacheConstant {
 
     public static final String ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY = "'allTypeMainPerformanceListKey'";
 
+    public static final String MAIN_PICK_LIST = "mainPickList";
+
+    public static final String TYPED_PICK_LIST = "typedPickList";
+
 }
