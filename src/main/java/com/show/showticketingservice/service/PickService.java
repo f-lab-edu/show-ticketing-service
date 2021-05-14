@@ -39,9 +39,12 @@ public class PickService {
         pickMapper.deletePick(userId, performanceId);
     }
 
+    public void deletePicks(int userId, List<Integer> perfIds) {
+        pickMapper.deletePicks(userId, perfIds);
+    }
+
     @Transactional(readOnly = true)
     public List<PerformanceResponse> getPicks(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         return performanceService.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
-
 }

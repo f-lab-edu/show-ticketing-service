@@ -15,7 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -82,6 +84,30 @@ class PickServiceTest {
         pickService.deletePick(USER_NUM, PERF_NUM);
 
         verify(pickMapper).deletePick(USER_NUM, PERF_NUM);
+    }
+
+    @Test
+    @DisplayName("다중 찜 목록 삭제 성공")
+    public void deletePicks() {
+        Map<Integer, Integer> picks = new HashMap<>();
+        picks.put(1, 1);
+        picks.put(2, 2);
+        picks.put(3, 3);
+        picks.put(4, 4);
+
+        List<Integer> perfIds = new ArrayList<>();
+        perfIds.add(1);
+        perfIds.add(2);
+
+        willAnswer(invocationOnMock -> {
+            perfIds.forEach(picks::remove);
+            return null;
+        }).given(pickMapper).deletePicks(USER_NUM, perfIds);
+
+        pickService.deletePicks(USER_NUM, perfIds);
+
+        verify(pickMapper).deletePicks(USER_NUM, perfIds);
+        assertEquals(2, picks.size());
     }
 
     @Test
