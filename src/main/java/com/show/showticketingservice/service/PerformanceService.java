@@ -5,18 +5,11 @@ import com.show.showticketingservice.exception.performance.PerformanceNotExistsE
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
+import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.*;
-import com.show.showticketingservice.mapper.SeatMapper;
-import com.show.showticketingservice.model.enumerations.ShowType;
-import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
-import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
-import com.show.showticketingservice.model.performance.SeatRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
-import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,12 +18,14 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 import java.util.stream.IntStream;
+
+import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -309,6 +304,10 @@ public class PerformanceService {
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);
+    }
+
+    public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
 }
