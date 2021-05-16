@@ -38,6 +38,6 @@ public interface PerformanceMapper {
 
     List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
 
-    List<PerformanceResponse> getPerformancesByKeyword(String keyword);
+    List<PerformanceResponse> getPerformancesByKeyword(String keyword, @Param("pagination") PerformancePagingCriteria performancePagingCriteria);
 
 }

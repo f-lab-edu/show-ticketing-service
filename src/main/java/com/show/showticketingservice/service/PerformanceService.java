@@ -311,10 +311,10 @@ public class PerformanceService {
         return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
-    public List<PerformanceResponse> getPerformancesByKeyword(String keyword) {
+    public List<PerformanceResponse> getPerformancesByKeyword(String keyword, PerformancePagingCriteria performancePagingCriteria) {
         if (keyword == null || keyword.isBlank())
             throw new NoKeywordException();
 
-        return performanceMapper.getPerformancesByKeyword(keyword);
+        return performanceMapper.getPerformancesByKeyword(keyword, performancePagingCriteria);
     }
 }

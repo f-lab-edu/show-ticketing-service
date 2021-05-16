@@ -1,5 +1,6 @@
 package com.show.showticketingservice.controller;
 
+import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.performance.PerformanceResponse;
 import com.show.showticketingservice.service.PerformanceService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,9 @@ public class SearchController {
     private final PerformanceService performanceService;
 
     @GetMapping
-    public List<PerformanceResponse> getPerformancesByKeyword(@RequestParam String keyword) {
-        return performanceService.getPerformancesByKeyword(keyword);
+    public List<PerformanceResponse> getPerformancesByKeyword(@RequestParam String keyword,
+                                                              @RequestParam(required = false) Integer lastPerfId) {
+        return performanceService.getPerformancesByKeyword(keyword, new PerformancePagingCriteria(lastPerfId));
     }
 
 }
