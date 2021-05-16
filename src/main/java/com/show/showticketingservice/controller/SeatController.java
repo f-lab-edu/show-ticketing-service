@@ -1,7 +1,7 @@
 package com.show.showticketingservice.controller;
 
 import com.show.showticketingservice.model.enumerations.AccessRoles;
-import com.show.showticketingservice.model.performance.SeatResponse;
+import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import com.show.showticketingservice.service.SeatService;
 import com.show.showticketingservice.tool.annotation.UserAuthenticationNecessary;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,8 @@ public class SeatController {
 
     @GetMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-    public List<SeatResponse> getPerfSeats(@RequestParam int perfTimeId) {
-        return seatService.getPerfSeats(perfTimeId);
+    public List<SeatAndPriceResponse> getPerfSeatsAndPrices(@RequestParam int perfTimeId) {
+        return seatService.getPerfSeatsAndPrices(perfTimeId);
     }
+
 }

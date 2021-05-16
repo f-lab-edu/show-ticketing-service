@@ -1,9 +1,8 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.exception.performance.SeatNotExistsException;
 import com.show.showticketingservice.mapper.SeatMapper;
-import com.show.showticketingservice.model.performance.SeatResponse;
+import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,58 +28,60 @@ public class SeatServiceTest {
     @InjectMocks
     private SeatService seatService;
 
-    private List<SeatResponse> seatResponses;
+    private List<SeatAndPriceResponse> seatAndPriceResponses;
 
-    private SeatResponse seatResponse1;
+    private SeatAndPriceResponse seatAndPriceResponses1;
 
-    private SeatResponse seatResponse2;
+    private SeatAndPriceResponse seatAndPriceResponses2;
 
     @BeforeEach
     public void createSeatResponsesInfo() {
-        seatResponses = new ArrayList<>();
+        seatAndPriceResponses = new ArrayList<>();
 
-        seatResponse1 = SeatResponse.builder()
+        seatAndPriceResponses1 = SeatAndPriceResponse.builder()
                 .id(1)
                 .rowNum(1)
                 .colNum(1)
+                .price(40000)
                 .ratingType(VIP)
                 .reserved(false)
                 .build();
 
-        seatResponse2 = SeatResponse.builder()
+        seatAndPriceResponses2 = SeatAndPriceResponse.builder()
                 .id(2)
                 .rowNum(1)
                 .colNum(2)
+                .price(40000)
                 .ratingType(VIP)
                 .reserved(true)
                 .build();
 
-        seatResponses.add(seatResponse1);
-        seatResponses.add(seatResponse2);
+        seatAndPriceResponses.add(seatAndPriceResponses1);
+        seatAndPriceResponses.add(seatAndPriceResponses2);
     }
 
     @Test
     @DisplayName("공연 시간 id를 통해 공연 좌석 조회를 성공합니다.")
     public void getPerfSeatSuccess() {
-        when(seatMapper.getPerfSeats(perfTimeId)).thenReturn(seatResponses);
-        when(seatMapper.isSeatExists(perfTimeId)).thenReturn(true);
+        when(seatMapper.getPerfSeatsAndPrices(perfTimeId)).thenReturn(seatAndPriceResponses);
+        when(seatMapper.isSeatsExists(perfTimeId)).thenReturn(true);
 
-        List<SeatResponse> resultSeatResponses = seatService.getPerfSeats(perfTimeId);
+        List<SeatAndPriceResponse> resultSeatResponses = seatService.getPerfSeatsAndPrices(perfTimeId);
 
-        verify(seatMapper, times(1)).getPerfSeats(perfTimeId);
-        verify(seatMapper, times(1)).isSeatExists(perfTimeId);
-        assertEquals(seatResponses, resultSeatResponses);
+        verify(seatMapper, times(1)).getPerfSeatsAndPrices(perfTimeId);
+        verify(seatMapper, times(1)).isSeatsExists(perfTimeId);
+        assertEquals(seatAndPriceResponses, resultSeatResponses);
     }
 
     @Test
     @DisplayName("공연 시간 id에 좌석이 등록되어 있지 않거나 전부 예약되었을 시 조회를 실패합니다.")
     public void failIfPerfIdDoseNotExistOrAllReservedWhenGetPerfSeats() {
-        when(seatMapper.isSeatExists(perfTimeId)).thenReturn(false);
+        when(seatMapper.isSeatsExists(perfTimeId)).thenReturn(false);
 
         assertThrows(SeatNotExistsException.class, () -> {
-            seatService.getPerfSeats(perfTimeId);
+            seatService.getPerfSeatsAndPrices(perfTimeId);
         });
 
-        verify(seatMapper, times(1)).isSeatExists(perfTimeId);
+        verify(seatMapper, times(1)).isSeatsExists(perfTimeId);
     }
 }

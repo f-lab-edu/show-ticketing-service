@@ -18,15 +18,15 @@
         </foreach>
     </insert>
 
-    <select id="getPerfSeats" resultType="com.show.showticketingservice.model.performance.SeatResponse">
+    <select id="getPerfSeatsAndPrices" resultType="com.show.showticketingservice.model.seat.SeatAndPriceResponse">
         SELECT
-            sp.ratingType, s.rowNum, s.colNum, s.reserved
+            sp.ratingType, sp.price, s.id, s.rowNum, s.colNum, s.reserved
         FROM seat s
         INNER JOIN seatPrice sp ON s.priceId = sp.id
         WHERE s.perfTimeId = #{perfTimeId}
     </select>
 
-    <select id="isSeatExists" resultType="boolean">
+    <select id="isSeatsExists" resultType="boolean">
         SELECT EXISTS
         (
             SELECT * FROM seat

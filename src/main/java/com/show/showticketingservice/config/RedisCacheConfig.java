@@ -60,6 +60,7 @@ public class RedisCacheConfig {
         redisCacheConfigMap.put(CacheConstant.MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(15L)));
         redisCacheConfigMap.put(CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(20L)));
         redisCacheConfigMap.put(CacheConstant.ALL_TYPE_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
+        redisCacheConfigMap.put(CacheConstant.PERFORMANCE_SEAT_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(3L)));
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(redisCacheConfigMap)
                 .build();

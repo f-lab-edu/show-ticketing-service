@@ -1,7 +1,7 @@
 package com.show.showticketingservice.mapper;
 
 import com.show.showticketingservice.model.performance.SeatRequest;
-import com.show.showticketingservice.model.performance.SeatResponse;
+import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.*;
 
@@ -10,7 +10,8 @@ public interface SeatMapper {
 
     void insertSeatInfo(List<SeatRequest> seatRequests);
 
-    List<SeatResponse> getPerfSeats(int perfTimeId);
+    List<SeatAndPriceResponse> getPerfSeatsAndPrices(int perfTimeId);
 
-    boolean isSeatExists(int perfTimeId);
+    boolean isSeatsExists(int perfTimeId);
+
 }
