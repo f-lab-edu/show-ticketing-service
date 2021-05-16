@@ -66,4 +66,11 @@ public class PerformanceExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoKeywordException.class)
+    public ResponseEntity<ExceptionResponse> noKeywordException(final NoKeywordException e, WebRequest request) {
+        log.error("keyword does not exist - blankless keyword is needed", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

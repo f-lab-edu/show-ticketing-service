@@ -3,6 +3,7 @@ package com.show.showticketingservice.service;
 import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
+import com.show.showticketingservice.exception.performance.NoKeywordException;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.mapper.SeatMapper;
@@ -175,7 +176,7 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
 
-        if(endTime - startTime > 24_00_00) {
+        if (endTime - startTime > 24_00_00) {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
@@ -236,7 +237,7 @@ public class PerformanceService {
     }
 
     public void checkValidPerformanceId(int performanceId) {
-        if(!performanceMapper.isPerformanceIdExists(performanceId)) {
+        if (!performanceMapper.isPerformanceIdExists(performanceId)) {
             throw new PerformanceNotExistsException();
         }
     }
@@ -311,6 +312,9 @@ public class PerformanceService {
     }
 
     public List<PerformanceResponse> getPerformancesByKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank())
+            throw new NoKeywordException();
+
         return performanceMapper.getPerformancesByKeyword(keyword);
     }
 }
