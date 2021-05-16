@@ -310,4 +310,7 @@ public class PerformanceService {
         return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
+    public List<PerformanceResponse> getPerformancesByKeyword(String keyword) {
+        return performanceMapper.getPerformancesByKeyword(keyword);
+    }
 }
