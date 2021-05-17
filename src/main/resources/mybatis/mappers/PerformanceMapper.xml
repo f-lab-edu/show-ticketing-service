@@ -186,4 +186,27 @@
         WHERE performanceId = #{id}
     </select>
 
+    <select id="getPickedPerformances" resultMap="performanceResponse">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.imageFilePath AS imageFilePath,
+            v.name AS venueName,
+            vh.name AS hallName
+        FROM performance p
+        INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN venueHall vh ON p.hallId = vh.id
+        WHERE p.id IN ( SELECT performanceId
+                        FROM pick
+                        WHERE userId = #{userId})
+        <if test="showType != null">
+            AND p.showType = #{showType}
+        </if>
+        <if test="pagination.lastPerfId != null">
+            AND p.id <![CDATA[<]]> #{pagination.lastPerfId}
+        </if>
+        ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
+    </select>
+
 </mapper>

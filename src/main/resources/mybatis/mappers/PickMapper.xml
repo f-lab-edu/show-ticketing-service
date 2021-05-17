@@ -21,4 +21,13 @@
         WHERE userId = #{userId} AND performanceId = #{performanceId}
     </delete>
 
+    <delete id="deletePicks" parameterType="map">
+        DELETE FROM pick
+        WHERE userId = #{userId}
+        AND performanceId IN
+        <foreach collection="perfIds" item="perfId" open="(" close=")" separator=",">
+            #{perfId}
+        </foreach>
+    </delete>
+
 </mapper>
