@@ -6,6 +6,10 @@ public class CacheConstant {
 
     public static final String PERFORMANCE = "performance";
 
+    public static final String PERFORMANCE_TIME = "performanceTime";
+
+    public static final String PERFORMANCE_SEAT = "performanceSeat";
+
     public static final String PERFORMANCE_LIST = "performanceList";
 
     public static final String MAIN_PERFORMANCE_LIST = "mainPerformanceList";
