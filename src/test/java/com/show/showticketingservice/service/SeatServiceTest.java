@@ -1,6 +1,5 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.performance.SeatNotExistsException;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import static com.show.showticketingservice.model.enumerations.RatingType.VIP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +22,9 @@ public class SeatServiceTest {
 
     @Mock
     private SeatMapper seatMapper;
+
+    @Mock
+    private PerformanceService performanceService;
 
     @InjectMocks
     private SeatService seatService;
@@ -64,24 +65,13 @@ public class SeatServiceTest {
     @DisplayName("공연 시간 id를 통해 공연 좌석 조회를 성공합니다.")
     public void getPerfSeatSuccess() {
         when(seatMapper.getPerfSeatsAndPrices(perfTimeId)).thenReturn(seatAndPriceResponses);
-        when(seatMapper.isSeatsExists(perfTimeId)).thenReturn(true);
+        doNothing().when(performanceService).checkPerfTimeIdExists(perfTimeId);
 
         List<SeatAndPriceResponse> resultSeatResponses = seatService.getPerfSeatsAndPrices(perfTimeId);
 
         verify(seatMapper, times(1)).getPerfSeatsAndPrices(perfTimeId);
-        verify(seatMapper, times(1)).isSeatsExists(perfTimeId);
+        verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
         assertEquals(seatAndPriceResponses, resultSeatResponses);
     }
 
-    @Test
-    @DisplayName("공연 시간 id에 좌석이 등록되어 있지 않거나 전부 예약되었을 시 조회를 실패합니다.")
-    public void failIfPerfIdDoseNotExistOrAllReservedWhenGetPerfSeats() {
-        when(seatMapper.isSeatsExists(perfTimeId)).thenReturn(false);
-
-        assertThrows(SeatNotExistsException.class, () -> {
-            seatService.getPerfSeatsAndPrices(perfTimeId);
-        });
-
-        verify(seatMapper, times(1)).isSeatsExists(perfTimeId);
-    }
 }

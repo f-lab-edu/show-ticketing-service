@@ -12,6 +12,4 @@ public interface SeatMapper {
 
     List<SeatAndPriceResponse> getPerfSeatsAndPrices(int perfTimeId);
 
-    boolean isSeatsExists(int perfTimeId);
-
 }

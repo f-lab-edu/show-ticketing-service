@@ -26,12 +26,4 @@
         WHERE s.perfTimeId = #{perfTimeId}
     </select>
 
-    <select id="isSeatsExists" resultType="boolean">
-        SELECT EXISTS
-        (
-            SELECT * FROM seat
-            WHERE perfTimeId = #{perfTimeId} AND reserved = false
-        )
-    </select>
-
 </mapper>

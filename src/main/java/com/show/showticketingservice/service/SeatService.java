@@ -1,6 +1,5 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.performance.SeatNotExistsException;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import com.show.showticketingservice.tool.constants.CacheConstant;
@@ -15,16 +14,12 @@ public class SeatService {
 
     private final SeatMapper seatMapper;
 
+    private final PerformanceService performanceService;
+
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT_LIST, key = "#perfTimeId")
     public List<SeatAndPriceResponse> getPerfSeatsAndPrices(int perfTimeId) {
-        checkPerfSeatsExists(perfTimeId);
+        performanceService.checkPerfTimeIdExists(perfTimeId);
         return seatMapper.getPerfSeatsAndPrices(perfTimeId);
-    }
-
-    public void checkPerfSeatsExists(int perfTimeId) {
-        if(!seatMapper.isSeatsExists(perfTimeId)) {
-            throw new SeatNotExistsException();
-        }
     }
 
 }
