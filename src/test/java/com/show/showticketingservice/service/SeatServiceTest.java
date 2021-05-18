@@ -1,5 +1,6 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.performance.PerformanceTimeNotExistsException;
 import com.show.showticketingservice.mapper.SeatMapper;
 import com.show.showticketingservice.model.seat.SeatAndPriceResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static com.show.showticketingservice.model.enumerations.RatingType.VIP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,15 +65,27 @@ public class SeatServiceTest {
 
     @Test
     @DisplayName("공연 시간 id를 통해 공연 좌석 조회를 성공합니다.")
-    public void getPerfSeatSuccess() {
-        when(seatMapper.getPerfSeatsAndPrices(perfTimeId)).thenReturn(seatAndPriceResponses);
+    public void getPerfSeatsAndPricesSuccess() {
         doNothing().when(performanceService).checkPerfTimeIdExists(perfTimeId);
+        when(seatMapper.getPerfSeatsAndPrices(perfTimeId)).thenReturn(seatAndPriceResponses);
 
         List<SeatAndPriceResponse> resultSeatResponses = seatService.getPerfSeatsAndPrices(perfTimeId);
 
-        verify(seatMapper, times(1)).getPerfSeatsAndPrices(perfTimeId);
         verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
+        verify(seatMapper, times(1)).getPerfSeatsAndPrices(perfTimeId);
         assertEquals(seatAndPriceResponses, resultSeatResponses);
+    }
+
+    @Test
+    @DisplayName("공연 시간 id가 존재하지 않을 시 좌석 조회를 실패합니다.")
+    public void failIfPerfTimeIdDoseNotExistWhenGetPerfSeatsAndPrices() {
+        doThrow(new PerformanceTimeNotExistsException("공연 시간 id가 존재하지 않습니다.")).when(performanceService).checkPerfTimeIdExists(perfTimeId);
+
+        assertThrows(PerformanceTimeNotExistsException.class, () -> {
+            seatService.getPerfSeatsAndPrices(perfTimeId);
+        });
+
+        verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
     }
 
 }

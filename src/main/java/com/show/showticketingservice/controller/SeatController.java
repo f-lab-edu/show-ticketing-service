@@ -17,7 +17,7 @@ public class SeatController {
 
     @GetMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-    public List<SeatAndPriceResponse> getPerfSeatsAndPrices(@RequestParam(value="perfTimeId", defaultValue="0") int perfTimeId) {
+    public List<SeatAndPriceResponse> getPerfSeatsAndPrices(@RequestParam int perfTimeId) {
         return seatService.getPerfSeatsAndPrices(perfTimeId);
     }
 
