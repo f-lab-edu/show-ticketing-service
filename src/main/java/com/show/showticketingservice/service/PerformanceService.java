@@ -32,6 +32,8 @@ import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYP
 @RequiredArgsConstructor
 public class PerformanceService {
 
+    private static final long MAX_SCHEDULE_TIME = 24_00_00;
+
     private final PerformanceMapper performanceMapper;
 
     private final PerformanceTimeMapper performanceTimeMapper;
@@ -176,7 +178,7 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
 
-        if (endTime - startTime > 24_00_00) {
+        if (endTime - startTime > MAX_SCHEDULE_TIME) {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
