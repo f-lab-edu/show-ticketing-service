@@ -7,8 +7,7 @@ import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.ShowType;
 import com.show.showticketingservice.model.performance.PerformancePeriod;
 import com.show.showticketingservice.model.performance.PerformanceResponse;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,187 +30,215 @@ public class PerformanceServiceTest {
     @InjectMocks
     PerformanceService performanceService;
 
-    @Test
-    @DisplayName("첫 페이지의 모든 공연 타입 정보 리스트 조회를 성공합니다.")
-    public void getPerformanceListSuccess() {
+    @Nested
+    @DisplayName("공연 리스트 조회 테스트")
+    class GetPerformancesTest {
 
-        PerformancePeriod performancePeriod = PerformancePeriod.builder()
-                .firstDay("2021-05-04")
-                .lastDay("2021-06-04")
-                .build();
+        @Test
+        @DisplayName("첫 페이지의 모든 공연 타입 정보 리스트 조회를 성공합니다.")
+        public void getPerformanceListSuccess() {
 
-        PerformanceResponse performanceResponse = PerformanceResponse.builder()
-                .id(1)
-                .venueName("공연장1")
-                .hallName("A홀")
-                .title("피터팬")
-                .imageFilePath(null)
-                .performancePeriod(performancePeriod)
-                .build();
+            PerformancePeriod performancePeriod = PerformancePeriod.builder()
+                    .firstDay("2021-05-04")
+                    .lastDay("2021-06-04")
+                    .build();
 
-        ShowType showType = null;
-        Integer lastPerfId = null;
-        PerformancePagingCriteria performancePagingCriteria = new PerformancePagingCriteria(lastPerfId);
+            PerformanceResponse performanceResponse = PerformanceResponse.builder()
+                    .id(1)
+                    .venueName("공연장1")
+                    .hallName("A홀")
+                    .title("피터팬")
+                    .imageFilePath(null)
+                    .performancePeriod(performancePeriod)
+                    .build();
 
-        List<PerformanceResponse> performanceResponses = new ArrayList<>();
-        performanceResponses.add(performanceResponse);
+            ShowType showType = null;
+            Integer lastPerfId = null;
+            PerformancePagingCriteria performancePagingCriteria = new PerformancePagingCriteria(lastPerfId);
 
-        when(performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)).thenReturn(true);
-        when(performanceMapper.getPerformances(showType, performancePagingCriteria)).thenReturn(performanceResponses);
-        List<PerformanceResponse> resultPerformanceResponses = performanceService.getPerformances(showType, performancePagingCriteria);
+            List<PerformanceResponse> performanceResponses = new ArrayList<>();
+            performanceResponses.add(performanceResponse);
 
-        verify(performanceMapper, times(1)).isPerfIdAndShowTypeExists(showType, lastPerfId);
-        verify(performanceMapper, times(1)).getPerformances(showType, performancePagingCriteria);
-        assertEquals(performanceResponses, resultPerformanceResponses);
-    }
+            when(performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)).thenReturn(true);
+            when(performanceMapper.getPerformances(showType, performancePagingCriteria)).thenReturn(performanceResponses);
+            List<PerformanceResponse> resultPerformanceResponses = performanceService.getPerformances(showType, performancePagingCriteria);
 
-    @Test
-    @DisplayName("페이지 기능을 처리할 공연 id가 존재하지 않습니다.")
-    public void getPerformanceListFailPageFunctionIdNotExists() {
-        PerformancePeriod performancePeriod = PerformancePeriod.builder()
-                .firstDay("2021-05-04")
-                .lastDay("2021-06-04")
-                .build();
+            verify(performanceMapper, times(1)).isPerfIdAndShowTypeExists(showType, lastPerfId);
+            verify(performanceMapper, times(1)).getPerformances(showType, performancePagingCriteria);
+            assertEquals(performanceResponses, resultPerformanceResponses);
+        }
 
-        PerformanceResponse performanceResponse = PerformanceResponse.builder()
-                .id(100)
-                .venueName("공연장1")
-                .hallName("A홀")
-                .title("피터팬")
-                .imageFilePath(null)
-                .performancePeriod(performancePeriod)
-                .build();
+        @Test
+        @DisplayName("페이지 기능을 처리할 공연 id가 존재하지 않습니다.")
+        public void getPerformanceListFailPageFunctionIdNotExists() {
+            PerformancePeriod performancePeriod = PerformancePeriod.builder()
+                    .firstDay("2021-05-04")
+                    .lastDay("2021-06-04")
+                    .build();
 
-        ShowType showType = null;
-        Integer lastPerfId = null;
-        PerformancePagingCriteria performancePagingCriteria = new PerformancePagingCriteria(lastPerfId);
+            PerformanceResponse performanceResponse = PerformanceResponse.builder()
+                    .id(100)
+                    .venueName("공연장1")
+                    .hallName("A홀")
+                    .title("피터팬")
+                    .imageFilePath(null)
+                    .performancePeriod(performancePeriod)
+                    .build();
 
-        List<PerformanceResponse> performanceResponses = new ArrayList<>();
-        performanceResponses.add(performanceResponse);
+            ShowType showType = null;
+            Integer lastPerfId = null;
+            PerformancePagingCriteria performancePagingCriteria = new PerformancePagingCriteria(lastPerfId);
 
-        when(performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)).thenReturn(false);
+            List<PerformanceResponse> performanceResponses = new ArrayList<>();
+            performanceResponses.add(performanceResponse);
 
-        assertThrows(PerformanceNotExistsException.class, () -> {
-            performanceService.getPerformances(showType, performancePagingCriteria);
-        });
+            when(performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)).thenReturn(false);
 
-        verify(performanceMapper, times(1)).isPerfIdAndShowTypeExists(showType, lastPerfId);
-
-    }
-
-    @Test
-    @DisplayName("공연명에만 매칭되는 키워드를 통한 공연 검색 성공 (lastPerfId를 입력하지 않은 첫번째 페이지)")
-    public void searchingPerformancesWithPerfName() {
-
-        List<PerformanceResponse> perfList = new ArrayList<>();
-        perfList.add(getPerformance(1, "공연1", "장소1"));
-        perfList.add(getPerformance(2, "공연2", "장소2"));
-
-        Integer lastPerfId = null;
-        PerformancePagingCriteria criteria = new PerformancePagingCriteria(lastPerfId);
-
-        String keyword = "공연";
-
-        willAnswer(invocationOnMock -> {
-            List<PerformanceResponse> perfResult = new ArrayList<>();
-
-            perfList.forEach(p -> {
-                if (p.getTitle().contains(keyword))
-                    perfResult.add(p);
+            assertThrows(PerformanceNotExistsException.class, () -> {
+                performanceService.getPerformances(showType, performancePagingCriteria);
             });
 
-            return perfResult;
-        }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+            verify(performanceMapper, times(1)).isPerfIdAndShowTypeExists(showType, lastPerfId);
 
-        List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
-
-        verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
-        assertEquals(perfList, result);
+        }
     }
 
-    @Test
-    @DisplayName("공연명 또는 공연장소에 매칭되는 키워드를 통한 공연 검색 성공 (lastPerfId를 입력하지 않은 첫번째 페이지)")
-    public void searchingPerformancesWithVenueName() {
+    @Nested
+    @DisplayName("공연 검색 테스트 - getPerformancesByKeyword()")
+    class SearchingPerformances {
 
-        List<PerformanceResponse> perfList = new ArrayList<>();
-        perfList.add(getPerformance(1, "공연1", "장소1"));
-        perfList.add(getPerformance(2, "공연2", "장소2"));
-        perfList.add(getPerformance(3, "공연3", "공연장"));
-        perfList.add(getPerformance(4, "perf", "ven"));
+        private final List<PerformanceResponse> perfList = new ArrayList<>();
 
-        Integer lastPerfId = 3;
-        PerformancePagingCriteria criteria = new PerformancePagingCriteria(lastPerfId);
+        private PerformancePagingCriteria criteria;
 
-        String keyword = "공연";
+        @BeforeEach
+        public void commonInit() {
+            perfList.add(getPerformance(1, "공연1", "장소1"));
+            perfList.add(getPerformance(2, "공연2", "장소2"));
+            perfList.add(getPerformance(3, "공연3", "공연장"));
+            perfList.add(getPerformance(4, "perf1", "ven1"));
+            perfList.add(getPerformance(5, "perf2", "ven2"));
+        }
 
-        willAnswer(invocationOnMock -> {
-            List<PerformanceResponse> perfResult = new ArrayList<>();
+        @Nested
+        @DisplayName("검색 keyword만 입력했을 때 (페이징 미적용)")
+        class SearchWithKeyword {
 
-            perfList.forEach(p -> {
-                if (p.getTitle().contains(keyword) || p.getVenueName().contains(keyword))
-                    perfResult.add(p);
-            });
+            @BeforeEach
+            public void setPagingCriteria() {
+                criteria = new PerformancePagingCriteria(null);
+            }
 
-            return perfResult;
-        }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+            @Test
+            @DisplayName("keyword가 공연명에만 매칭되었을 때 매칭된 공연 리스트 반환 성공")
+            public void matchOnlyWithPerfName() {
+                String keyword = "perf";
 
-        List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
+                willAnswer(invocationOnMock -> {
+                    return searching(keyword);
+                }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
 
-        verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
-        assertEquals(3, result.size());
+                List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
 
-        perfList.remove(3);
-        assertEquals(perfList, result);
-    }
+                verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+                assertEquals(2, result.size());
+            }
 
-    @Test
-    @DisplayName("공연명 키워드와 paging 적용을 위한 lastPerfId를 통한 공연 검색 성공 (id가 3보다 작은 공연만 반환. 결과는 id 역순)")
-    public void searchingPerformancesWithPerfNameAndPaging() {
+            @Test
+            @DisplayName("keyword가 공연명 또는 공연장소에 매칭되었을 때 매칭된 모든 공연 리스트 반환 성공")
+            public void matchWithPerfNameOrVenueName() {
+                String keyword = "공연";
 
-        List<PerformanceResponse> perfList = new ArrayList<>();
-        perfList.add(getPerformance(1, "공연1", "장소1"));
-        perfList.add(getPerformance(2, "공연2", "장소2"));
-        perfList.add(getPerformance(3, "공연3", "공연장"));
+                willAnswer(invocationOnMock -> {
+                    return searching(keyword);
+                }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
 
-        Integer lastPerfId = 3;
-        PerformancePagingCriteria criteria = new PerformancePagingCriteria(lastPerfId);
+                List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
 
-        String keyword = "공연";
+                verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+                assertEquals(3, result.size());
+            }
 
-        willAnswer(invocationOnMock -> {
-            List<PerformanceResponse> perfResult = new ArrayList<>();
+            @Test
+            @DisplayName("keyword가 공연명과 공연장소 모두 매칭되지 않을 때 빈 리스트 반환")
+            public void noMatchWithPerfNameNeitherVenueName() {
+                String keyword = "명성황후";
 
-            perfList.forEach(p -> {
-                if (p.getId() < lastPerfId &&
-                        (p.getTitle().contains(keyword) || p.getVenueName().contains(keyword)))
-                    perfResult.add(p);
-            });
+                willAnswer(invocationOnMock -> {
+                    return searching(keyword);
+                }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
 
-            return perfResult;
-        }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+                List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
 
-        List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
+                verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+                assertEquals(0, result.size());
+            }
 
-        verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
-        assertEquals(2, result.size());
+            @Test
+            @DisplayName("아무것도 입력되지 않은 빈(공백) keyword로 검색 시 실패 - NoKeywordException 예외")
+            public void searchWithBlankKeyword() {
 
-        perfList.remove(2);
-        assertEquals(perfList, result);
-    }
+                String keyword = "  ";
 
-    @Test
-    @DisplayName("빈 키워드로 공연 검색 시 실패")
-    public void searchingPerformancesWithBlankKeyword() {
+                assertThrows(NoKeywordException.class, () -> {
+                    performanceService.getPerformancesByKeyword(keyword, criteria);
+                });
 
-        String keyword = "  ";
+                verify(performanceMapper, times(0)).getPerformancesByKeyword(keyword, criteria);
+            }
 
-        PerformancePagingCriteria criteria = new PerformancePagingCriteria(null);
+            public List<PerformanceResponse> searching(String keyword) {
 
-        assertThrows(NoKeywordException.class, () -> {
-            performanceService.getPerformancesByKeyword(keyword, criteria);
-        });
+                List<PerformanceResponse> perfResult = new ArrayList<>();
 
-        verify(performanceMapper, times(0)).getPerformancesByKeyword(keyword, criteria);
+                perfList.forEach(p -> {
+                    if (p.getTitle().contains(keyword) || p.getVenueName().contains(keyword))
+                        perfResult.add(p);
+                });
+
+                return perfResult;
+            }
+
+        }
+
+        @Nested
+        @DisplayName("검색 keyword와 lastPerfId를 입력했을 때 (커서 페이징 적용)")
+        class SearchWithKeywordAndPagingCriteria {
+
+            @Test
+            @DisplayName("공연명 또는 공연장명과 매칭되는 공연 검색 성공 (결과는 id 역순으로 반환되므로 id가 lastPerfId 보다 작은 공연만 반환)")
+            public void searchingPerformancesWithPerfNameAndPaging() {
+
+                Integer lastPerfId = 3;
+                criteria = new PerformancePagingCriteria(lastPerfId);
+
+                String keyword = "공연";
+
+                willAnswer(invocationOnMock -> {
+                    return searching(keyword, lastPerfId);
+                }).given(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+
+                List<PerformanceResponse> result = performanceService.getPerformancesByKeyword(keyword, criteria);
+
+                verify(performanceMapper).getPerformancesByKeyword(keyword, criteria);
+                assertEquals(2, result.size());
+            }
+
+            private List<PerformanceResponse> searching(String keyword, Integer lastPerfId) {
+
+                List<PerformanceResponse> perfResult = new ArrayList<>();
+
+                perfList.forEach(p -> {
+                    if (p.getId() < lastPerfId &&
+                            (p.getTitle().contains(keyword) || p.getVenueName().contains(keyword)))
+                        perfResult.add(p);
+                });
+
+                return perfResult;
+            }
+
+        }
+
     }
 
     private PerformanceResponse getPerformance(int id, String title, String VenueName) {
