@@ -55,6 +55,8 @@ public class RedisCacheConfig {
 
         redisCacheConfigMap.put(CacheConstant.VENUE, redisCacheConfig.entryTtl(Duration.ofHours(2L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE, redisCacheConfig.entryTtl(Duration.ofDays(1L)));
+        redisCacheConfigMap.put(CacheConstant.PERFORMANCE_TIME, redisCacheConfig.entryTtl(Duration.ofMinutes(5L)));
+        redisCacheConfigMap.put(CacheConstant.PERFORMANCE_SEAT, redisCacheConfig.entryTtl(Duration.ofSeconds(3L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(5L)));
         redisCacheConfigMap.put(CacheConstant.MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(15L)));
         redisCacheConfigMap.put(CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(20L)));

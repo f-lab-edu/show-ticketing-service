@@ -22,6 +22,7 @@ public class VenueHallService {
 
     private final VenueHallMapper venueHallMapper;
 
+    @Transactional
     public void insertVenueHalls(List<VenueHallRequest> venueHallRequests, int venueId) {
 
         checkDuplicationVenueHallRequestNames(venueHallRequests);

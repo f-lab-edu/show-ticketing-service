@@ -1,9 +1,6 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
-import com.show.showticketingservice.exception.performance.NoKeywordException;
+import com.show.showticketingservice.exception.performance.*;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.mapper.SeatMapper;
@@ -58,6 +55,7 @@ public class PerformanceService {
         }
     }
 
+    @Transactional
     @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
@@ -74,7 +72,10 @@ public class PerformanceService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -250,6 +251,7 @@ public class PerformanceService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
         checkValidPerformanceId(performanceId);
@@ -264,6 +266,7 @@ public class PerformanceService {
       - ALL_TYPE_MAIN_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지인 경우
       - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
      */
+    @Transactional
     @Caching(cacheable = {
             @Cacheable(
                     cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
@@ -297,16 +300,42 @@ public class PerformanceService {
         }
     }
 
-    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
         checkValidPerformanceId(performanceId);
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
 
-    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);
+    }
+
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(int performanceId) {
+        checkValidPerformanceId(performanceId);
+        return performanceMapper.getPerformanceTitleAndTimes(performanceId);
+    }
+
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT, key = "#performanceId + #perfTimeId")
+    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
+        checkValidPerformanceId(performanceId);
+        checkPerfDateExists(performanceId, perfTimeId);
+        return performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+    }
+
+    public void checkPerfDateExists(int performanceId, int perfTimeId) {
+        if(!performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)) {
+            throw new PerformanceTimeNotExistsException("공연 날짜가 존재하지 않습니다.");
+        }
     }
 
     public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {

@@ -77,4 +77,16 @@ public class PerformanceController {
         performanceService.deletePerformance(performanceId);
     }
 
+    @GetMapping("/{performanceId}/times")
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(@PathVariable int performanceId) {
+        return performanceService.getPerformanceTitleAndTimes(performanceId);
+    }
+
+    @GetMapping("/{performanceId}/times/{perfTimeId}")
+    @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
+    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(@PathVariable int performanceId, @PathVariable int perfTimeId) {
+        return performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+    }
+
 }
