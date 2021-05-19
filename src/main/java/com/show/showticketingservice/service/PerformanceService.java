@@ -22,11 +22,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
+
 import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
 public class PerformanceService {
+
+    private static final long MAX_SCHEDULE_TIME = 24_00_00;
 
     private final PerformanceMapper performanceMapper;
 
@@ -176,7 +179,7 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
 
-        if (endTime - startTime > 24_00_00) {
+        if (endTime - startTime > MAX_SCHEDULE_TIME) {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
@@ -339,4 +342,10 @@ public class PerformanceService {
         return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
+    public List<PerformanceResponse> getPerformancesByKeyword(String keyword, PerformancePagingCriteria performancePagingCriteria) {
+        if (keyword == null || keyword.isBlank())
+            throw new NoKeywordException();
+
+        return performanceMapper.getPerformancesByKeyword(keyword, performancePagingCriteria);
+    }
 }
