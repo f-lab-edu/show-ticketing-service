@@ -338,6 +338,12 @@ public class PerformanceService {
         }
     }
 
+    public void checkPerfTimeIdExists(int perfTimeId) {
+        if (!performanceTimeMapper.isPerfTimeIdExists(perfTimeId)) {
+            throw new PerformanceTimeNotExistsException("공연 시간 id가 존재하지 않습니다.");
+        }
+    }
+
     public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
