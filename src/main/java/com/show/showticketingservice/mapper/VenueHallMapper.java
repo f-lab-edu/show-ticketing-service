@@ -1,8 +1,8 @@
 package com.show.showticketingservice.mapper;
 
+import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallRequest;
 import com.show.showticketingservice.model.venueHall.VenueHallResponse;
-import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
 import com.show.showticketingservice.model.venueHall.VenueHallUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

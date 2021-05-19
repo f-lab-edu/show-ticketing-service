@@ -209,4 +209,28 @@
         LIMIT #{pagination.amount}
     </select>
 
+    <select id="getPerformancesByKeyword" resultMap="performanceResponse">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.imageFilePath AS imageFilePath,
+            v.name AS venueName,
+            vh.name AS hallName
+        FROM performance p
+        INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN venueHall vh ON p.hallId = vh.id
+        WHERE
+        <if test="pagination.lastPerfId != null">
+            p.id <![CDATA[<]]> #{pagination.lastPerfId} AND
+        </if>
+        (
+            p.title LIKE CONCAT('%', #{keyword}, '%') OR
+            p.venueId IN (  SELECT id
+                            FROM venue
+                            WHERE name LIKE CONCAT('%', #{keyword}, '%'))
+        )
+        ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
+    </select>
+
 </mapper>

@@ -20,4 +20,6 @@ public class CacheConstant {
 
     public static final String ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY = "'allTypeMainPerformanceListKey'";
 
+    public static final String PERFORMANCE_SEAT_LIST = "performanceSeatList";
+
 }
