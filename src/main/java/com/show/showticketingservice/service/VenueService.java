@@ -63,7 +63,6 @@ public class VenueService {
         }
     }
 
-    @Transactional
     @CacheEvict(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public void deleteVenue(int venueId) {
         checkVenueIdExists(venueId);
@@ -77,7 +76,6 @@ public class VenueService {
         }
     }
 
-    @Transactional(readOnly = true)
     public VenueListResponse getVenueList(int page) {
 
         int venueTotalCount = venueMapper.getVenueTotalCount();
@@ -102,7 +100,6 @@ public class VenueService {
         return new VenueListResponse(venueTotalPage, venueResponseList);
     }
 
-    @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public VenueDetailInfoResponse getVenueInfo(int venueId) {
 

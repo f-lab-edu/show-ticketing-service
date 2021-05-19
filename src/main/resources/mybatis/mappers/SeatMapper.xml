@@ -18,12 +18,4 @@
         </foreach>
     </insert>
 
-    <select id="getPerfSeatsAndPrices" resultType="com.show.showticketingservice.model.seat.SeatAndPriceResponse">
-        SELECT
-            sp.ratingType, sp.price, s.id, s.rowNum, s.colNum, s.reserved
-        FROM seat s
-        INNER JOIN seatPrice sp ON s.priceId = sp.id
-        WHERE s.perfTimeId = #{perfTimeId}
-    </select>
-
 </mapper>

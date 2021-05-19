@@ -78,12 +78,4 @@
         )
     </select>
 
-    <select id="isPerfTimeIdExists" resultType="boolean">
-        SELECT EXISTS
-        (
-        SELECT * FROM performanceTime
-        WHERE id = #{perfTimeId}
-        )
-    </select>
-
 </mapper>

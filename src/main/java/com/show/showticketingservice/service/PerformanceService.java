@@ -16,20 +16,16 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
 public class PerformanceService {
-
-    private static final long MAX_SCHEDULE_TIME = 24_00_00;
 
     private final PerformanceMapper performanceMapper;
 
@@ -55,7 +51,6 @@ public class PerformanceService {
         }
     }
 
-    @Transactional
     @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
@@ -179,7 +174,7 @@ public class PerformanceService {
             throw new PerformanceTimeConflictException("공연 스케줄 시간을 잘못 입력하였습니다.");
         }
 
-        if (endTime - startTime > MAX_SCHEDULE_TIME) {
+        if(endTime - startTime > 24_00_00) {
             throw new PerformanceTimeConflictException("공연 시간은 24시간을 초과할 수 없습니다.");
         }
 
@@ -240,7 +235,7 @@ public class PerformanceService {
     }
 
     public void checkValidPerformanceId(int performanceId) {
-        if (!performanceMapper.isPerformanceIdExists(performanceId)) {
+        if(!performanceMapper.isPerformanceIdExists(performanceId)) {
             throw new PerformanceNotExistsException();
         }
     }
@@ -251,7 +246,6 @@ public class PerformanceService {
         }
     }
 
-    @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
         checkValidPerformanceId(performanceId);
@@ -266,7 +260,6 @@ public class PerformanceService {
       - ALL_TYPE_MAIN_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지인 경우
       - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
      */
-    @Transactional
     @Caching(cacheable = {
             @Cacheable(
                     cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
@@ -309,7 +302,6 @@ public class PerformanceService {
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
 
-    @Transactional
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
@@ -338,20 +330,8 @@ public class PerformanceService {
         }
     }
 
-    public void checkPerfTimeIdExists(int perfTimeId) {
-        if (!performanceTimeMapper.isPerfTimeIdExists(perfTimeId)) {
-            throw new PerformanceTimeNotExistsException("공연 시간 id가 존재하지 않습니다.");
-        }
-    }
-
     public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
     }
 
-    public List<PerformanceResponse> getPerformancesByKeyword(String keyword, PerformancePagingCriteria performancePagingCriteria) {
-        if (keyword == null || keyword.isBlank())
-            throw new NoKeywordException();
-
-        return performanceMapper.getPerformancesByKeyword(keyword, performancePagingCriteria);
-    }
 }

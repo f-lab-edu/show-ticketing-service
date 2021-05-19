@@ -5,7 +5,6 @@ import com.show.showticketingservice.model.venue.VenueRequest;
 import com.show.showticketingservice.model.venue.VenueResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 @Mapper

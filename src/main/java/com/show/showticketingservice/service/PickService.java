@@ -35,7 +35,6 @@ public class PickService {
         }
     }
 
-    @Transactional
     public void deletePick(int userId, int performanceId) {
         pickMapper.deletePick(userId, performanceId);
     }

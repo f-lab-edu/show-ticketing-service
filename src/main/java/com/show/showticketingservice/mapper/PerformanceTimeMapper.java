@@ -18,7 +18,4 @@ public interface PerformanceTimeMapper {
     List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId);
 
     boolean isPerfDateExists(int performanceId, int perfTimeId);
-
-    boolean isPerfTimeIdExists(int perfTimeId);
-
 }
