@@ -12,6 +12,8 @@ import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -80,6 +82,7 @@ public class SeatPriceService {
         });
     }
 
+    @Transactional
     @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void insertSeatsPrice(List<SeatPriceRequest> seatPriceRequests, int performanceId) {
 

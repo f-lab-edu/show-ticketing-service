@@ -1,9 +1,10 @@
 package com.show.showticketingservice.mapper;
 
-import com.show.showticketingservice.model.user.UserUpdateRequest;
 import com.show.showticketingservice.model.user.UserRequest;
 import com.show.showticketingservice.model.user.UserResponse;
-import org.apache.ibatis.annotations.*;
+import com.show.showticketingservice.model.user.UserUpdateRequest;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
