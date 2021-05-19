@@ -6,11 +6,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PerformanceTimeResponse {
+public class PerformancePeriod {
 
-    private int id;
+    private String firstDay;
 
-    private String startTime;
-
-    private String endTime;
+    private String lastDay;
 }

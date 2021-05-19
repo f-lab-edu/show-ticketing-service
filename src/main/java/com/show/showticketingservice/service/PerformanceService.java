@@ -1,22 +1,18 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.performance.PerformanceAlreadyExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
-import com.show.showticketingservice.exception.performance.PerformanceTimeConflictException;
+import com.show.showticketingservice.exception.performance.*;
 import com.show.showticketingservice.mapper.PerformanceMapper;
 import com.show.showticketingservice.mapper.PerformanceTimeMapper;
 import com.show.showticketingservice.mapper.SeatMapper;
+import com.show.showticketingservice.model.criteria.PerformancePagingCriteria;
 import com.show.showticketingservice.model.enumerations.ShowType;
-import com.show.showticketingservice.model.performance.PerformanceRequest;
-import com.show.showticketingservice.model.performance.PerformanceDetailInfoResponse;
-import com.show.showticketingservice.model.performance.PerformanceTimeRequest;
-import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
-import com.show.showticketingservice.model.performance.SeatRequest;
+import com.show.showticketingservice.model.performance.*;
 import com.show.showticketingservice.model.venueHall.VenueHallColumnSeat;
-import com.show.showticketingservice.model.performance.PerformanceUpdateRequest;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
+import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +53,7 @@ public class PerformanceService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
         fileService.checkFileContentType(image);
@@ -71,6 +69,10 @@ public class PerformanceService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
         checkPerfTimeRequestConflict(performanceTimeRequests);
@@ -224,6 +226,7 @@ public class PerformanceService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest) {
 
         checkValidPerformanceId(performanceId);
@@ -248,18 +251,92 @@ public class PerformanceService {
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public PerformanceDetailInfoResponse getPerformanceDetailInfo(int performanceId) {
+        checkValidPerformanceId(performanceId);
         return performanceMapper.getPerformanceDetailInfo(performanceId);
     }
 
+    /*
+    공연 정보 리스트 조회 캐시 기능
+    cacheNames
+      - MAIN_PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지인 경우
+      - PERFORMANCE_LIST : 공연 타입을 선택했고 첫 번째 페이지를 제외한 경우
+      - ALL_TYPE_MAIN_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지인 경우
+      - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
+     */
     @Transactional
+    @Caching(cacheable = {
+            @Cacheable(
+                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
+                    condition = "#showType != null && #lastPerfId == null",
+                    key = "#showType.toString()"
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.PERFORMANCE_LIST,
+                    condition = "#showType != null && #lastPerfId != null",
+                    key = "#showType.toString() + #lastPerfId"
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST,
+                    condition = "#showType == null && #lastPerfId == null",
+                    key = ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY
+            ),
+            @Cacheable(
+                    cacheNames = CacheConstant.ALL_TYPE_PERFORMANCE_LIST,
+                    condition = "#showType == null && #lastPerfId != null",
+                    key = "#lastPerfId"
+            )
+    })
+    public List<PerformanceResponse> getPerformances(ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        checkValidPerfIdAndShowType(showType, performancePagingCriteria.getLastPerfId());
+        return performanceMapper.getPerformances(showType, performancePagingCriteria);
+    }
+
+    private void checkValidPerfIdAndShowType(ShowType showType, Integer lastPerfId) {
+        if (!performanceMapper.isPerfIdAndShowTypeExists(showType, lastPerfId)) {
+            throw new PerformanceNotExistsException();
+        }
+    }
+
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
         checkValidPerformanceId(performanceId);
         performanceTimeMapper.deletePerformanceTimes(performanceId, timeIds);
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    })
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
         performanceMapper.deletePerformance(performanceId);
     }
+
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+    public PerformanceTitleAndTimesResponse getPerformanceTitleAndTimes(int performanceId) {
+        checkValidPerformanceId(performanceId);
+        return performanceMapper.getPerformanceTitleAndTimes(performanceId);
+    }
+
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT, key = "#performanceId + #perfTimeId")
+    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
+        checkValidPerformanceId(performanceId);
+        checkPerfDateExists(performanceId, perfTimeId);
+        return performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+    }
+
+    public void checkPerfDateExists(int performanceId, int perfTimeId) {
+        if(!performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)) {
+            throw new PerformanceTimeNotExistsException("공연 날짜가 존재하지 않습니다.");
+        }
+    }
+
+    public List<PerformanceResponse> getPickedPerformances(int userId, ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
+        return performanceMapper.getPickedPerformances(userId, showType, performancePagingCriteria);
+    }
+
 }

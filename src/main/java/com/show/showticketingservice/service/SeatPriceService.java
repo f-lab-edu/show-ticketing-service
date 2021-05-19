@@ -8,7 +8,9 @@ import com.show.showticketingservice.mapper.SeatPriceMapper;
 import com.show.showticketingservice.model.enumerations.RatingType;
 import com.show.showticketingservice.model.performance.SeatPriceRowNumData;
 import com.show.showticketingservice.model.performance.SeatPriceRequest;
+import com.show.showticketingservice.tool.constants.CacheConstant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +83,7 @@ public class SeatPriceService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
     public void insertSeatsPrice(List<SeatPriceRequest> seatPriceRequests, int performanceId) {
 
         checkSeatPriceAlreadyExistsException(performanceId);

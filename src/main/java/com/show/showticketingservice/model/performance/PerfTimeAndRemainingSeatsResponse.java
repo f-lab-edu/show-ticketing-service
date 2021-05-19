@@ -2,15 +2,17 @@ package com.show.showticketingservice.model.performance;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PerformanceTimeResponse {
+public class PerfTimeAndRemainingSeatsResponse {
 
-    private int id;
+    private int perfTimeId;
 
     private String startTime;
 
-    private String endTime;
+    List<RemainingSeatsResponse> remainingSeatsResponses;
 }

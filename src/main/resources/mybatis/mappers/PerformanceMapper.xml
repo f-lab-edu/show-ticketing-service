@@ -57,6 +57,7 @@
     </delete>
 
     <resultMap id="performanceTimeResponse" type="com.show.showticketingservice.model.performance.PerformanceTimeResponse">
+        <result column="perfTimeId" property="id"/>
         <result column="startTime" property="startTime"/>
         <result column="endTime" property="endTime"/>
     </resultMap>
@@ -91,6 +92,7 @@
             p.ageLimit AS ageLimit,
             p.showType AS showType,
             p.imageFilePath AS imageFilePath,
+            pt.id AS perfTimeId,
             pt.startTime AS startTime,
             pt.endTime AS endTime,
             v.id AS venueId,
@@ -102,11 +104,109 @@
             s.price AS price,
             vh.name AS hallName
         FROM performance p
-        INNER JOIN performanceTime pt ON p.id = pt.performanceId
+        LEFT OUTER JOIN performanceTime pt ON p.id = pt.performanceId
+        LEFT OUTER JOIN seatPrice s ON p.id = s.performanceId
         INNER JOIN venue v ON p.venueId = v.id
-        INNER JOIN seatPrice s ON p.id = s.performanceId
         INNER JOIN venueHall vh ON p.hallId = vh.id
         WHERE p.id = #{performanceId}
+    </select>
+
+    <resultMap id="PerformanceTitleAndTimesResponse" type="com.show.showticketingservice.model.performance.PerformanceTitleAndTimesResponse">
+        <result column="title" property="title"/>
+        <collection property="performanceTimeResponses" resultMap="performanceTimeResponse"/>
+    </resultMap>
+
+    <select id="getPerformanceTitleAndTimes" resultMap="PerformanceTitleAndTimesResponse">
+        SELECT
+            p.title AS title,
+            pt.id AS perfTimeId,
+            DATE(pt.startTime) AS startTime,
+            DATE(pt.endTime) AS endTime
+        FROM performance p
+        LEFT OUTER JOIN performanceTime pt ON p.id = pt.performanceId
+        WHERE p.id = #{performanceId}
+    </select>
+
+    <select id="isPerfIdAndShowTypeExists" resultType="boolean">
+        SELECT EXISTS
+        (
+        SELECT * FROM performance
+        <if test="lastPerfId != null and showType != null">
+            WHERE id = #{lastPerfId} AND showType = #{showType}
+        </if>
+        <if test="lastPerfId != null and showType == null">
+            WHERE id = #{lastPerfId}
+        </if>
+        <if test="lastPerfId == null and showType != null">
+            WHERE showType = #{showType}
+        </if>
+        )
+    </select>
+
+    <resultMap id="performanceResponse" type="com.show.showticketingservice.model.performance.PerformanceResponse">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="imageFilePath" property="imageFilePath"/>
+        <result column="venueName" property="venueName"/>
+        <result column="hallName" property="hallName"/>
+        <association property="performancePeriod"
+                     column="id"
+                     javaType="com.show.showticketingservice.model.performance.PerformancePeriod"
+                     select="getPerfTime">
+        </association>
+    </resultMap>
+
+    <select id="getPerformances" resultMap="performanceResponse" parameterType="map">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.imageFilePath AS imageFilePath,
+            v.name AS venueName,
+            vh.name AS hallName
+        FROM performance p
+        INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN venueHall vh ON p.hallId = vh.id
+        <if test="pagination.lastPerfId != null and showType != null">
+            WHERE p.id <![CDATA[<]]> #{pagination.lastPerfId} AND showType = #{showType}
+        </if>
+        <if test="pagination.lastPerfId != null and showType == null">
+            WHERE p.id <![CDATA[<]]> #{pagination.lastPerfId}
+        </if>
+        <if test="pagination.lastPerfId == null and showType != null">
+            WHERE showType = #{showType}
+        </if>
+        ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
+    </select>
+
+    <select id="getPerfTime" resultType="com.show.showticketingservice.model.performance.PerformancePeriod">
+        SELECT
+            DATE(MIN(startTime)) AS firstDay, DATE(MAX(startTime)) AS lastDay
+        FROM performanceTime
+        WHERE performanceId = #{id}
+    </select>
+
+    <select id="getPickedPerformances" resultMap="performanceResponse">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.imageFilePath AS imageFilePath,
+            v.name AS venueName,
+            vh.name AS hallName
+        FROM performance p
+        INNER JOIN venue v ON p.venueId = v.id
+        INNER JOIN venueHall vh ON p.hallId = vh.id
+        WHERE p.id IN ( SELECT performanceId
+                        FROM pick
+                        WHERE userId = #{userId})
+        <if test="showType != null">
+            AND p.showType = #{showType}
+        </if>
+        <if test="pagination.lastPerfId != null">
+            AND p.id <![CDATA[<]]> #{pagination.lastPerfId}
+        </if>
+        ORDER BY p.id DESC
+        LIMIT #{pagination.amount}
     </select>
 
 </mapper>
