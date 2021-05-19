@@ -52,6 +52,7 @@ public class RedisCacheConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new HashMap<>();
+
         redisCacheConfigMap.put(CacheConstant.VENUE, redisCacheConfig.entryTtl(Duration.ofHours(2L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE, redisCacheConfig.entryTtl(Duration.ofDays(1L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE_TIME, redisCacheConfig.entryTtl(Duration.ofMinutes(5L)));
@@ -61,6 +62,7 @@ public class RedisCacheConfig {
         redisCacheConfigMap.put(CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(20L)));
         redisCacheConfigMap.put(CacheConstant.ALL_TYPE_PERFORMANCE_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(10L)));
         redisCacheConfigMap.put(CacheConstant.PERFORMANCE_SEAT_LIST, redisCacheConfig.entryTtl(Duration.ofSeconds(3L)));
+
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(redisCacheConfigMap)
                 .build();

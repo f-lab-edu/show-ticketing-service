@@ -66,10 +66,17 @@ public class PerformanceExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoKeywordException.class)
+    public ResponseEntity<ExceptionResponse> noKeywordException(final NoKeywordException e, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(PerformanceTimeNotExistsException.class)
     public ResponseEntity<ExceptionResponse> performanceTimeNotExistsException(final PerformanceTimeNotExistsException e, WebRequest request) {
         log.error("The performance time does not exist", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
 }
