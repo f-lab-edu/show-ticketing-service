@@ -103,3 +103,14 @@ CREATE TABLE pick
     FOREIGN KEY (userId)        REFERENCES user(id)         ON DELETE CASCADE,
     FOREIGN KEY (performanceId) REFERENCES performance(id)  ON DELETE CASCADE
 );
+
+CREATE TABLE reservation
+  (
+      `id`          INT UNSIGNED    NOT NULL    AUTO_INCREMENT,
+      `userId`      INT UNSIGNED    NOT NULL,
+      `seatId`      INT UNSIGNED    NOT NULL,
+      `reserveDate` DATE            NULL,
+      PRIMARY KEY (id),
+      FOREIGN KEY (userId) REFERENCES user(id)  ON DELETE CASCADE,
+      FOREIGN KEY (seatId) REFERENCES seat(id)  ON DELETE CASCADE
+  );

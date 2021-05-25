@@ -26,4 +26,13 @@
         WHERE s.perfTimeId = #{perfTimeId}
     </select>
 
+    <update id="setSeatsReserved" parameterType="java.util.List">
+        UPDATE seat
+        SET reserved = TRUE
+        WHERE id IN
+        <foreach collection="seatIds" item="seatId" open="(" close=")" separator=", ">
+            #{seatId}
+        </foreach>
+    </update>
+
 </mapper>

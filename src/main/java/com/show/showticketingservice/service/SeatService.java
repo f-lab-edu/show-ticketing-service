@@ -22,4 +22,7 @@ public class SeatService {
         return seatMapper.getPerfSeatsAndPrices(perfTimeId);
     }
 
+    public void setSeatsReserved(List<Integer> seatIds) {
+        seatMapper.setSeatsReserved(seatIds);
+    }
 }

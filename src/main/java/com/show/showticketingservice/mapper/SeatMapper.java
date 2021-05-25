@@ -13,4 +13,6 @@ public interface SeatMapper {
 
     List<SeatAndPriceResponse> getPerfSeatsAndPrices(int perfTimeId);
 
+    void setSeatsReserved(List<Integer> seatIds);
+
 }
