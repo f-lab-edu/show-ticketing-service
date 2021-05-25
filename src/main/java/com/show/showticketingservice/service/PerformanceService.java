@@ -16,14 +16,12 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static com.show.showticketingservice.tool.constants.CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY;
+import static com.show.showticketingservice.tool.constants.CacheConstant.MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +42,12 @@ public class PerformanceService {
     private final SeatMapper seatMapper;
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
+    })
     public void insertPerformance(PerformanceRequest performanceRequest) {
         checkPerformanceExists(performanceRequest.getTitle(), performanceRequest.getShowType());
         performanceMapper.insertPerformance(performanceRequest);
@@ -56,7 +60,13 @@ public class PerformanceService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
+    })
     public void updatePosterImage(int performanceId, MultipartFile image) {
 
         fileService.checkFileContentType(image);
@@ -74,7 +84,11 @@ public class PerformanceService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
-            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
     })
     public void insertPerformanceTimes(List<PerformanceTimeRequest> performanceTimeRequests, int performanceId) {
 
@@ -229,7 +243,13 @@ public class PerformanceService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
+    })
     public void updatePerformanceInfo(int performanceId, PerformanceUpdateRequest perfUpdateRequest) {
 
         checkValidPerformanceId(performanceId);
@@ -269,24 +289,24 @@ public class PerformanceService {
     @Transactional
     @Caching(cacheable = {
             @Cacheable(
-                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
-                    condition = "#showType != null && #lastPerfId == null",
+                    cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST,
+                    condition = "#showType != null && #performancePagingCriteria.lastPerfId == null",
                     key = "#showType.toString()"
             ),
             @Cacheable(
-                    cacheNames = CacheConstant.PERFORMANCE_LIST,
-                    condition = "#showType != null && #lastPerfId != null",
-                    key = "#showType.toString() + #lastPerfId"
+                    cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST,
+                    condition = "#showType != null && #performancePagingCriteria.lastPerfId != null",
+                    key = "#showType.toString() + #performancePagingCriteria.lastPerfId"
             ),
             @Cacheable(
-                    cacheNames = CacheConstant.ALL_TYPE_MAIN_PERFORMANCE_LIST,
-                    condition = "#showType == null && #lastPerfId == null",
-                    key = ALL_TYPE_MAIN_PERFORMANCE_LIST_KEY
+                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
+                    condition = "#showType == null && #performancePagingCriteria.lastPerfId == null",
+                    key = MAIN_PERFORMANCE_LIST_KEY
             ),
             @Cacheable(
-                    cacheNames = CacheConstant.ALL_TYPE_PERFORMANCE_LIST,
-                    condition = "#showType == null && #lastPerfId != null",
-                    key = "#lastPerfId"
+                    cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST,
+                    condition = "#showType == null && #performancePagingCriteria.lastPerfId != null",
+                    key = "#performancePagingCriteria.lastPerfId"
             )
     })
     public List<PerformanceResponse> getPerformances(ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
@@ -302,7 +322,11 @@ public class PerformanceService {
 
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
-            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
     })
     public void deletePerformanceTimes(int performanceId, List<Integer> timeIds) {
         checkValidPerformanceId(performanceId);
@@ -312,7 +336,11 @@ public class PerformanceService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE, key = "#performanceId"),
-            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId")
+            @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_TIME, key = "#performanceId"),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST, allEntries = true),
+            @CacheEvict(cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST, allEntries = true)
     })
     public void deletePerformance(int performanceId) {
         checkValidPerformanceId(performanceId);
@@ -325,7 +353,7 @@ public class PerformanceService {
         return performanceMapper.getPerformanceTitleAndTimes(performanceId);
     }
 
-    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_SEAT, key = "#performanceId + #perfTimeId")
+    @Cacheable(cacheNames = CacheConstant.PERFORMANCE_REMAINING_SEAT_NUM, key = "#performanceId + #perfTimeId")
     public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
         checkValidPerformanceId(performanceId);
         checkPerfDateExists(performanceId, perfTimeId);
