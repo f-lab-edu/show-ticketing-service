@@ -35,4 +35,15 @@
         </foreach>
     </update>
 
+    <select id="getReservableSeatsNum" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM seat
+        WHERE id IN
+        <foreach collection="seatIds" item="seatId" open="(" close=")" separator=", ">
+            #{seatId}
+        </foreach>
+        AND perfTimeId = #{perfTimeId}
+        AND reserved = FALSE
+    </select>
+
 </mapper>

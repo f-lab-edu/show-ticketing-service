@@ -25,4 +25,9 @@ public class SeatService {
     public void setSeatsReserved(List<Integer> seatIds) {
         seatMapper.setSeatsReserved(seatIds);
     }
+
+    public int getReservableSeatsNum(int perfTimeId, List<Integer> seatIds) {
+        return seatMapper.getReservableSeatsNum(perfTimeId, seatIds);
+    }
+
 }
