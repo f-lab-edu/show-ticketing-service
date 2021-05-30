@@ -6,7 +6,7 @@ public class CacheConstant {
 
     public static final String PERFORMANCE_TIME = "performanceTime";
 
-    public static final String PERFORMANCE_REMAINING_SEAT_NUM = "performanceRemainingSeatsNum";
+    public static final String PERFORMANCE_REMAINING_SEAT_NUM = "performanceRemainingSeatNum";
 
     public static final String MAIN_PERFORMANCE_LIST_KEY = "'mainPerformanceListKey'";
 
