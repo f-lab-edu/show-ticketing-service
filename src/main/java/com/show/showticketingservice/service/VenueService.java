@@ -44,7 +44,6 @@ public class VenueService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public void updateVenueInfo(int venueId, VenueUpdateRequest venueUpdateRequest) {
 
         checkVenueIdExists(venueId);
@@ -64,7 +63,6 @@ public class VenueService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public void deleteVenue(int venueId) {
         checkVenueIdExists(venueId);
 
@@ -103,7 +101,6 @@ public class VenueService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = CacheConstant.VENUE, key = "#venueId")
     public VenueDetailInfoResponse getVenueInfo(int venueId) {
 
         VenueResponse venueResponse = venueMapper.getVenueInfo(venueId);
