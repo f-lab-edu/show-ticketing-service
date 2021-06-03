@@ -6,10 +6,7 @@ import com.show.showticketingservice.exception.reservation.SeatsNotReservableExc
 import com.show.showticketingservice.mapper.ReservationMapper;
 import com.show.showticketingservice.model.reservation.ReservationRequest;
 import lombok.AllArgsConstructor;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,6 +34,11 @@ class ReservationServiceTest {
     @InjectMocks
     private ReservationService reservationService;
 
+    @BeforeEach
+    public void init() {
+        reservationService.setMaxReservationQuantity(4);
+    }
+
     @Nested
     @DisplayName("[좌석 예매 테스트]")
     class MakeReservationTest {
@@ -46,8 +48,6 @@ class ReservationServiceTest {
         int perfTimeId = 1;
 
         private List<Integer> seatNums = new ArrayList<>();
-
-        private List<Seat> seatDB = new ArrayList<>();
 
         @AfterEach
         public void clearSeatNums() {
