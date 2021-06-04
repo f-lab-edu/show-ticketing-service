@@ -318,32 +318,30 @@ public class PerformanceServiceTest {
         int performanceId = 1;
         int perfTimeId = 2;
 
-        List<RemainingSeatsResponse> remainingSeatsRespons = new ArrayList<>();
+        List<RemainingSeatsResponse> remainingSeatsResponses = new ArrayList<>();
         RemainingSeatsResponse remainingSeatsResponse = RemainingSeatsResponse.builder()
                 .ratingType(VIP)
                 .remainingSeats(20)
                 .build();
-        remainingSeatsRespons.add(remainingSeatsResponse);
+        remainingSeatsResponses.add(remainingSeatsResponse);
 
-        List<PerfTimeAndRemainingSeatsResponse> perfTimeAndRemainingSeatsRespons = new ArrayList<>();
         PerfTimeAndRemainingSeatsResponse perfTimeAndRemainingSeatsResponse = PerfTimeAndRemainingSeatsResponse.builder()
                 .perfTimeId(1)
                 .startTime("12:00:00")
-                .remainingSeatsResponses(remainingSeatsRespons)
+                .remainingSeatsResponses(remainingSeatsResponses)
                 .build();
-        perfTimeAndRemainingSeatsRespons.add(perfTimeAndRemainingSeatsResponse);
 
-        when(performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId)).thenReturn(perfTimeAndRemainingSeatsRespons);
+        when(performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId)).thenReturn(perfTimeAndRemainingSeatsResponse);
         when(performanceMapper.isPerformanceIdExists(performanceId)).thenReturn(true);
         when(performanceTimeMapper.isPerfDateExists(performanceId, perfTimeId)).thenReturn(true);
 
-        List<PerfTimeAndRemainingSeatsResponse> resultPerfTimeAndRemainingSeatsRespons = performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
+        PerfTimeAndRemainingSeatsResponse resultPerfTimeAndRemainingSeatsResponse = performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
 
         verify(performanceTimeMapper, times(1)).getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
         verify(performanceMapper, times(1)).isPerformanceIdExists(performanceId);
         verify(performanceTimeMapper, times(1)).isPerfDateExists(performanceId, perfTimeId);
 
-        assertEquals(perfTimeAndRemainingSeatsRespons, resultPerfTimeAndRemainingSeatsRespons);
+        assertEquals(perfTimeAndRemainingSeatsResponse, resultPerfTimeAndRemainingSeatsResponse);
     }
 
     @Test

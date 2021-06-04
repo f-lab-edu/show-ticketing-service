@@ -354,7 +354,7 @@ public class PerformanceService {
     }
 
     @Cacheable(cacheNames = CacheConstant.PERFORMANCE_REMAINING_SEAT_NUM, key = "#performanceId + #perfTimeId")
-    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
+    public PerfTimeAndRemainingSeatsResponse getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId) {
         checkValidPerformanceId(performanceId);
         checkPerfDateExists(performanceId, perfTimeId);
         return performanceTimeMapper.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);

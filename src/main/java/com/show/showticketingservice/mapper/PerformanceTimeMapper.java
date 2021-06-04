@@ -15,7 +15,7 @@ public interface PerformanceTimeMapper {
 
     void deletePerformanceTimes(int performanceId, List<Integer> timeIds);
 
-    List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId);
+    PerfTimeAndRemainingSeatsResponse getPerfTimeAndRemainingSeats(int performanceId, int perfTimeId);
 
     boolean isPerfDateExists(int performanceId, int perfTimeId);
 

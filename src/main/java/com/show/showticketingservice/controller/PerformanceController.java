@@ -85,7 +85,7 @@ public class PerformanceController {
 
     @GetMapping("/{performanceId}/times/{perfTimeId}")
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-    public List<PerfTimeAndRemainingSeatsResponse> getPerfTimeAndRemainingSeats(@PathVariable int performanceId, @PathVariable int perfTimeId) {
+    public PerfTimeAndRemainingSeatsResponse getPerfTimeAndRemainingSeats(@PathVariable int performanceId, @PathVariable int perfTimeId) {
         return performanceService.getPerfTimeAndRemainingSeats(performanceId, perfTimeId);
     }
 
