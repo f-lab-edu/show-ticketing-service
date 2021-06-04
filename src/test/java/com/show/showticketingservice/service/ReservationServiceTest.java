@@ -8,7 +8,6 @@ import com.show.showticketingservice.model.reservation.ReservationRequest;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,6 +21,8 @@ import static org.mockito.Mockito.times;
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
 
+    private int max_reservation_quantity = 4;
+
     @Mock
     private ReservationMapper reservationMapper;
 
@@ -31,12 +32,11 @@ class ReservationServiceTest {
     @Mock
     private SeatService seatService;
 
-    @InjectMocks
     private ReservationService reservationService;
 
     @BeforeEach
     public void init() {
-        reservationService.setMaxReservationQuantity(4);
+        reservationService = new ReservationService(max_reservation_quantity, reservationMapper, performanceService,seatService);
     }
 
     @Nested
@@ -55,7 +55,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[예매 좌석 수: 2 / 성공] 최대 예매 가능 좌석 수(4개)를 이내로 예매할 시 예매 성공")
+        @DisplayName("[예매 요청 좌석 수 검사 1] 최대 예매 가능 좌석 수(4개) 이내로 예매 요청 할 경우 예매 성공 (예매 요청 좌석 수: 2) ")
         public void multipleSeatsReservation() {
             insertSeatNums(2);
             ReservationRequest request = new ReservationRequest(perfTimeId, seatNums);
@@ -70,7 +70,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[예매 좌석 수: 5 / 실패] 최대 예매 가능 좌석 수(4개)를 초과하여 예매할 경우")
+        @DisplayName("[예매 요청 좌석 수 검사 2] 최대 예매 가능 좌석 수(4개)를 초과하여 예매 요청할 경우 예매 실패 (예매 요청 좌석 수: 5) ")
         public void SingleSeatReservation() {
             insertSeatNums(5);
             ReservationRequest request = new ReservationRequest(perfTimeId, seatNums);
@@ -85,7 +85,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[공연 스케줄 유효 검사 / 실패] 존재하지 않는 공연 스케줄에 대해 예매 요청한 경우")
+        @DisplayName("[공연 스케줄 유효 검사] 존재하지 않는 공연 스케줄에 대해 예매 요청한 경우 예매 실패")
         public void reserveWithNoExistingPerfTime() {
             insertSeatNums(2);
             ReservationRequest request = new ReservationRequest(perfTimeId, seatNums);
@@ -102,7 +102,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[예매 요청 좌석 유효 검사 1 / 실패] 존재하지 않는 좌석을 포함하여 예매 요청한 경우")
+        @DisplayName("[예매 요청 좌석 유효 검사 1] 존재하지 않는 좌석을 포함하여 예매 요청한 경우 예매 실패")
         public void reserveWithNoExistingSeat() {
 
             List<Seat> seatDB = initSeatDB();
@@ -125,7 +125,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[예매 요청 좌석 유효 검사 2 / 실패] 이미 예매 된 좌석을 포함하여 예매 요청한 경우")
+        @DisplayName("[예매 요청 좌석 유효 검사 2] 이미 예매 된 좌석을 포함하여 예매 요청한 경우 예매 실패")
         public void reserveWithAlreadyReservedSeat() {
             List<Seat> seatDB = initSeatDB();
 
@@ -147,7 +147,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("[예매 요청 좌석 유효 검사 3 / 실패] 스케줄(또는 공연)이 다른 좌석이 포함된 경우")
+        @DisplayName("[예매 요청 좌석 유효 검사 3] 스케줄(또는 공연)이 다른 좌석을 포함하여 예매 요청한 경우 예매 실패")
         public void reserveWithDifferentPerfTimeSeat() {
             List<Seat> seatDB = initSeatDB();
 

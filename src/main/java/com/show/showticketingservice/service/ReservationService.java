@@ -4,7 +4,6 @@ import com.show.showticketingservice.exception.reservation.ReserveAllowedQuantit
 import com.show.showticketingservice.exception.reservation.SeatsNotReservableException;
 import com.show.showticketingservice.mapper.ReservationMapper;
 import com.show.showticketingservice.model.reservation.ReservationRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ReservationService {
 
-    private static int MAX_RESERVATION_QUANTITY;
+    private final int MAX_RESERVATION_QUANTITY;
 
     private final ReservationMapper reservationMapper;
 
@@ -23,9 +21,14 @@ public class ReservationService {
 
     private final SeatService seatService;
 
-    @Value("${service.value.max-reservation-quantity}")
-    public void setMaxReservationQuantity(int quantity) {
-        ReservationService.MAX_RESERVATION_QUANTITY = quantity;
+    public ReservationService(@Value("${service.value.max-reservation-quantity}") int quantity,
+                              ReservationMapper reservationMapper,
+                              PerformanceService performanceService,
+                              SeatService seatService) {
+        this.MAX_RESERVATION_QUANTITY = quantity;
+        this.reservationMapper = reservationMapper;
+        this.performanceService = performanceService;
+        this.seatService = seatService;
     }
 
     @Transactional
