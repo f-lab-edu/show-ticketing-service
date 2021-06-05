@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class ReservationService {
 
-    private final int MAX_RESERVATION_QUANTITY;
+    private final int maxReservationQuantity;
 
     private final ReservationMapper reservationMapper;
 
@@ -25,7 +25,7 @@ public class ReservationService {
                               ReservationMapper reservationMapper,
                               PerformanceService performanceService,
                               SeatService seatService) {
-        this.MAX_RESERVATION_QUANTITY = quantity;
+        this.maxReservationQuantity = quantity;
         this.reservationMapper = reservationMapper;
         this.performanceService = performanceService;
         this.seatService = seatService;
@@ -33,7 +33,7 @@ public class ReservationService {
 
     @Transactional
     public void reserveSeats(int userId, ReservationRequest reservationRequest) {
-        if (reservationRequest.getSeatIds().size() > MAX_RESERVATION_QUANTITY)
+        if (reservationRequest.getSeatIds().size() > maxReservationQuantity)
             throw new ReserveAllowedQuantityExceededException("최대 예매 가능 좌석 수는 4자리 입니다.");
 
         performanceService.checkPerfTimeIdExists(reservationRequest.getPerfTimeId());
