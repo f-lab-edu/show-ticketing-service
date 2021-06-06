@@ -112,6 +112,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*ControllerTest.java</exclude>
+                        <exclude>**/*ApplicationTests.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
