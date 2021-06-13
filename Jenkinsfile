@@ -10,7 +10,6 @@ pipeline {
         stage('checkout') {
             steps {
                 checkout scm
-                echo 'git checkout success'
             }
         }
 
@@ -18,7 +17,6 @@ pipeline {
             steps {
                 script {
                     sh 'mvn clean package -DskipTests=true'
-                    echo 'build success'
                 }
             }
         }
@@ -29,6 +27,15 @@ pipeline {
                     sh 'mvn surefire:test'
                     junit '**/target/surefire-reports/TEST-*.xml'
                 }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                sh 'scp -P ${DEST_SERVER_PORT} target/*.jar ${DEST_SERVER}:${DEST_PATH}'
             }
         }
 
