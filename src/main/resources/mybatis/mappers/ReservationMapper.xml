@@ -11,4 +11,19 @@
         </foreach>
     </insert>
 
+    <delete id="cancelReservedSeats" parameterType="java.util.List">
+        DELETE FROM reservation
+        WHERE id IN
+        <foreach collection="reservationIds" item="reservationId" open="(" close=")" separator=",">
+            #{reservationId}
+        </foreach>
+    </delete>
+
+    <select id="getReservedSeatsNum" parameterType="java.util.List" resultType="int">
+        SELECT COUNT(id) FROM reservation WHERE id IN
+        <foreach collection="reservationIds" item="reservationId" open="(" close=")" separator=",">
+            #{reservationId}
+        </foreach>
+    </select>
+
 </mapper>

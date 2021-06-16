@@ -9,4 +9,7 @@ public interface ReservationMapper {
 
     void reserveSeats(int userId, List<Integer> seatIds);
 
+    void cancelReservedSeats(List<Integer> reservationIds);
+
+    int getReservedSeatsNum(List<Integer> reservationIds);
 }

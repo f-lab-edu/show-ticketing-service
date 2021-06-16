@@ -1,5 +1,6 @@
 package com.show.showticketingservice.tool.advice;
 
+import com.show.showticketingservice.exception.reservation.ReservationIdNotExistsException;
 import com.show.showticketingservice.exception.reservation.ReserveAllowedQuantityExceededException;
 import com.show.showticketingservice.exception.reservation.SeatsNotReservableException;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
@@ -24,6 +25,13 @@ public class ReservationExceptionAdvice {
     @ExceptionHandler(SeatsNotReservableException.class)
     public ResponseEntity<ExceptionResponse> seatsNotReservableException(final SeatsNotReservableException e, WebRequest request) {
         log.error("reservation failed - request reservation with invalid seats", e);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ReservationIdNotExistsException.class)
+    public ResponseEntity<ExceptionResponse> reservationIdNotExistsException(final ReservationIdNotExistsException e, WebRequest request) {
+        log.error("reservation cancel fail", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
