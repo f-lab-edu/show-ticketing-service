@@ -2,7 +2,6 @@ package com.show.showticketingservice.tool.advice;
 
 import com.show.showticketingservice.exception.authentication.*;
 import com.show.showticketingservice.model.responses.ExceptionResponse;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +27,9 @@ public class AuthenticationExceptionAdvice {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DuplicateRequestException.class)
-    public ResponseEntity<ExceptionResponse> alreadyLoginException(final DuplicateRequestException e, WebRequest request) {
-        log.error("login Failed", e);
+    @ExceptionHandler(UserAlreadyLoggedInException.class)
+    public ResponseEntity<ExceptionResponse> alreadyLoginException(final UserAlreadyLoggedInException e, WebRequest request) {
+        log.error("User has Already logged in", e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }

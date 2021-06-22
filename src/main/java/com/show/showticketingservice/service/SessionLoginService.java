@@ -1,10 +1,10 @@
 package com.show.showticketingservice.service;
 
+import com.show.showticketingservice.exception.authentication.UserAlreadyLoggedInException;
 import com.show.showticketingservice.model.enumerations.UserType;
 import com.show.showticketingservice.model.user.UserLoginRequest;
 import com.show.showticketingservice.model.user.UserResponse;
 import com.show.showticketingservice.model.user.UserSession;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class SessionLoginService implements LoginService {
     public UserType login(UserLoginRequest userLoginRequest) {
 
         if (httpSession.getAttribute(USER) != null) {
-            throw new DuplicateRequestException("이미 로그인 된 상태입니다.");
+            throw new UserAlreadyLoggedInException();
         }
 
         UserResponse userResponse = userService.getUser(userLoginRequest.getUserId(), userLoginRequest.getPassword());
