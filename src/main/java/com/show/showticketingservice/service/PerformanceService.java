@@ -377,7 +377,7 @@ public class PerformanceService {
     }
 
     public List<PerformanceResponse> getPerformancesByKeyword(String keyword, PerformancePagingCriteria performancePagingCriteria) {
-        if (keyword == null || keyword.isBlank())
+        if (keyword == null || keyword.trim().isEmpty())
             throw new NoKeywordException();
 
         return performanceMapper.getPerformancesByKeyword(keyword, performancePagingCriteria);
