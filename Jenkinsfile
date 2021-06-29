@@ -39,6 +39,15 @@ pipeline {
             }
         }
 
+        stage('Deploy for Test') {
+                    when {
+                        branch 'testBranch/jh'
+                    }
+                    steps {
+                        sh 'scp -P ${DEST_SERVER_PORT} target/*.jar ${DEST_SERVER}:${DEST_PATH}'
+                    }
+                }
+
    }
 
 }
