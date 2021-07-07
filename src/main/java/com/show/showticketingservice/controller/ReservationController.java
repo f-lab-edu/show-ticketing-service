@@ -27,8 +27,8 @@ public class ReservationController {
 
     @DeleteMapping
     @UserAuthenticationNecessary(role = AccessRoles.GENERAL)
-    public void cancelReservedSeats(@RequestBody @Valid ReservationInfoToCancelRequest reservationInfoToCancelRequest) {
-        reservationService.cancelReservedSeats(reservationInfoToCancelRequest);
+    public void cancelSeats(@CurrentUser UserSession userSession, @RequestBody @Valid ReservationInfoToCancelRequest reservationInfoToCancelRequest) {
+        reservationService.cancelSeats(userSession.getUserId(), reservationInfoToCancelRequest);
     }
 
 }

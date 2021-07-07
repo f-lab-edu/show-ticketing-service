@@ -1,15 +1,15 @@
 package com.show.showticketingservice.service;
 
-import com.show.showticketingservice.exception.reservation.ReservationIdNotExistsException;
+import com.show.showticketingservice.exception.reservation.ReservationNumNotExistsException;
 import com.show.showticketingservice.exception.reservation.ReserveAllowedQuantityExceededException;
 import com.show.showticketingservice.exception.reservation.SeatsNotReservableException;
 import com.show.showticketingservice.mapper.ReservationMapper;
 import com.show.showticketingservice.model.reservation.ReservationInfoToCancelRequest;
 import com.show.showticketingservice.model.reservation.ReservationRequest;
+import com.show.showticketingservice.model.user.UserSession;
 import com.show.showticketingservice.tool.constants.CacheConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,20 +59,18 @@ public class ReservationService {
             @CacheEvict(cacheNames = CacheConstant.PERFORMANCE_REMAINING_SEAT_NUM, key = "#reservationInfoToCancelRequest.performanceId + #reservationInfoToCancelRequest.perfTimeId")
     })
     @Transactional
-    public void cancelReservedSeats(ReservationInfoToCancelRequest reservationInfoToCancelRequest) {
-        performanceService.checkValidPerformanceId(reservationInfoToCancelRequest.getPerformanceId());
-        performanceService.checkPerfTimeIdExists(reservationInfoToCancelRequest.getPerfTimeId());
+    public void cancelSeats(int userId, ReservationInfoToCancelRequest reservationInfoToCancelRequest) {
 
-        checkReservationIdExists(reservationInfoToCancelRequest.getReservationIds());
+        checkReservationIdExists(userId, reservationInfoToCancelRequest);
 
-        seatService.setReservedSeatsCancel(reservationInfoToCancelRequest.getReservationIds());
+        seatService.setSeatsCancel(reservationInfoToCancelRequest.getReservationIds());
 
-        reservationMapper.cancelReservedSeats(reservationInfoToCancelRequest.getReservationIds());
+        reservationMapper.cancelSeats(reservationInfoToCancelRequest.getReservationIds());
     }
 
-    private void checkReservationIdExists(List<Integer> reservationIds ) {
-        if(reservationIds.size() != reservationMapper.getReservedSeatsNum(reservationIds)) {
-            throw new ReservationIdNotExistsException("예약한 id가 존재하지 않습니다.");
+    private void checkReservationIdExists(int userId, ReservationInfoToCancelRequest reservationInfoToCancelRequest ) {
+        if(reservationInfoToCancelRequest.getReservationIds().size() != reservationMapper.getSeatNumToCancel(userId, reservationInfoToCancelRequest)) {
+            throw new ReservationNumNotExistsException("예매하신 예약 id가 존재하지 않거나 공연 정보와 관련된 예약 id 존재하지 않습니다.");
         }
     }
 }

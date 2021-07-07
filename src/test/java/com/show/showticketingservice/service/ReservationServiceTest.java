@@ -2,7 +2,7 @@ package com.show.showticketingservice.service;
 
 import com.show.showticketingservice.exception.performance.PerformanceNotExistsException;
 import com.show.showticketingservice.exception.performance.PerformanceTimeNotExistsException;
-import com.show.showticketingservice.exception.reservation.ReservationIdNotExistsException;
+import com.show.showticketingservice.exception.reservation.ReservationNumNotExistsException;
 import com.show.showticketingservice.exception.reservation.ReserveAllowedQuantityExceededException;
 import com.show.showticketingservice.exception.reservation.SeatsNotReservableException;
 import com.show.showticketingservice.mapper.ReservationMapper;
@@ -217,8 +217,12 @@ class ReservationServiceTest {
 
         private int perfTimeId;
 
+        private int userId;
+
         @BeforeEach
         public void init() {
+
+            userId = 1;
 
             performanceId = 1;
 
@@ -235,65 +239,92 @@ class ReservationServiceTest {
         @DisplayName("예매 취소를 성공합니다.")
         public void success() {
 
-            given(reservationMapper.getReservedSeatsNum(reservationIds)).willReturn(2);
+            given(reservationMapper.getSeatNumToCancel(userId, reservationInfoToCancelRequest)).willReturn(reservationIds.size());
 
-            reservationService.cancelReservedSeats(reservationInfoToCancelRequest);
+            reservationService.cancelSeats(userId, reservationInfoToCancelRequest);
 
-            verify(performanceService, times(1)).checkValidPerformanceId(performanceId);
-            verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
-            verify(reservationMapper, times(1)).getReservedSeatsNum(reservationIds);
-            verify(seatService, times(1)).setReservedSeatsCancel(reservationIds);
-            verify(reservationMapper, times(1)).cancelReservedSeats(reservationIds);
+            verify(reservationMapper, times(1)).getSeatNumToCancel(userId, reservationInfoToCancelRequest);
+            verify(seatService, times(1)).setSeatsCancel(reservationIds);
+            verify(reservationMapper, times(1)).cancelSeats(reservationIds);
 
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 공연 ID인 경우 예매 취소를 실패합니다.")
-        public void invalidPerformanceId() {
-            willThrow(new PerformanceNotExistsException()).given(performanceService).checkValidPerformanceId(performanceId);
-
-            assertThrows(PerformanceNotExistsException.class, () -> {
-                reservationService.cancelReservedSeats(reservationInfoToCancelRequest);
-            });
-
-            verify(performanceService, times(1)).checkValidPerformanceId(performanceId);
-            verify(performanceService, times(0)).checkPerfTimeIdExists(perfTimeId);
-            verify(reservationMapper, times(0)).getReservedSeatsNum(reservationIds);
-            verify(seatService, times(0)).setReservedSeatsCancel(reservationIds);
-            verify(reservationMapper, times(0)).cancelReservedSeats(reservationIds);
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 공연 시간 ID인 경우 예매 취소를 실패합니다.")
-        public void invalidPerfTimeId() {
-            willThrow(new PerformanceTimeNotExistsException("공연 시간 id가 존재하지 않습니다.")).given(performanceService).checkPerfTimeIdExists(perfTimeId);
-
-            assertThrows(PerformanceTimeNotExistsException.class, () -> {
-                reservationService.cancelReservedSeats(reservationInfoToCancelRequest);
-            });
-
-            verify(performanceService, times(1)).checkValidPerformanceId(performanceId);
-            verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
-            verify(reservationMapper, times(0)).getReservedSeatsNum(reservationIds);
-            verify(seatService, times(0)).setReservedSeatsCancel(reservationIds);
-            verify(reservationMapper, times(0)).cancelReservedSeats(reservationIds);
         }
 
         @Test
         @DisplayName("존재하지 않는 예약 ID인 경우 예매 취소를 실패합니다.")
-        public void invalidReservationId() {
+        public void invalidReservationIds() {
 
-            given(reservationMapper.getReservedSeatsNum(reservationIds)).willReturn(1);
+            List<Integer> wrongReservationIds = new ArrayList<>();
+            wrongReservationIds.add(5);
+            wrongReservationIds.add(6);
 
-            assertThrows(ReservationIdNotExistsException.class, () -> {
-                reservationService.cancelReservedSeats(reservationInfoToCancelRequest);
+            reservationInfoToCancelRequest = new ReservationInfoToCancelRequest(perfTimeId, performanceId, wrongReservationIds);
+
+            given(reservationMapper.getSeatNumToCancel(userId, reservationInfoToCancelRequest)).willReturn(0);
+
+            assertThrows(ReservationNumNotExistsException.class, () -> {
+                reservationService.cancelSeats(userId, reservationInfoToCancelRequest);
             });
 
-            verify(performanceService, times(1)).checkValidPerformanceId(performanceId);
-            verify(performanceService, times(1)).checkPerfTimeIdExists(perfTimeId);
-            verify(reservationMapper, times(1)).getReservedSeatsNum(reservationIds);
-            verify(seatService, times(0)).setReservedSeatsCancel(reservationIds);
-            verify(reservationMapper, times(0)).cancelReservedSeats(reservationIds);
+            verify(reservationMapper, times(1)).getSeatNumToCancel(userId, reservationInfoToCancelRequest);
+            verify(seatService, times(0)).setSeatsCancel(reservationIds);
+            verify(reservationMapper, times(0)).cancelSeats(reservationIds);
+        }
+
+        @Test
+        @DisplayName("예매한 공연장 ID와 관련 없는 공연장 ID를 요청할 경우 예매 취소를 실패합니다.")
+        public void invalidPerformanceId() {
+
+            int wrongPerformanceId = 5;
+
+            reservationInfoToCancelRequest = new ReservationInfoToCancelRequest(perfTimeId, wrongPerformanceId, reservationIds);
+
+            given(reservationMapper.getSeatNumToCancel(userId, reservationInfoToCancelRequest)).willReturn(0);
+
+            assertThrows(ReservationNumNotExistsException.class, () -> {
+                reservationService.cancelSeats(userId, reservationInfoToCancelRequest);
+            });
+
+            verify(reservationMapper, times(1)).getSeatNumToCancel(userId, reservationInfoToCancelRequest);
+            verify(seatService, times(0)).setSeatsCancel(reservationIds);
+            verify(reservationMapper, times(0)).cancelSeats(reservationIds);
+        }
+
+        @Test
+        @DisplayName("예매한 공연 시간 ID와 관련 없는 공연 시간 ID를 요청할 경우 예매 취소를 실패합니다.")
+        public void invalidPerfTimeId() {
+
+            int wrongPerfTimeId = 5;
+
+            reservationInfoToCancelRequest = new ReservationInfoToCancelRequest(wrongPerfTimeId, performanceId, reservationIds);
+
+            given(reservationMapper.getSeatNumToCancel(userId, reservationInfoToCancelRequest)).willReturn(0);
+
+            assertThrows(ReservationNumNotExistsException.class, () -> {
+                reservationService.cancelSeats(userId, reservationInfoToCancelRequest);
+            });
+
+            verify(reservationMapper, times(1)).getSeatNumToCancel(userId, reservationInfoToCancelRequest);
+            verify(seatService, times(0)).setSeatsCancel(reservationIds);
+            verify(reservationMapper, times(0)).cancelSeats(reservationIds);
+        }
+
+        @Test
+        @DisplayName("User가 예매한 예매 ID가 아닌 경우 예매 취소를 실패합니다.")
+        public void invalidUserId() {
+
+            int wrongUserId = 10;
+
+            reservationInfoToCancelRequest = new ReservationInfoToCancelRequest(perfTimeId, performanceId, reservationIds);
+
+            given(reservationMapper.getSeatNumToCancel(wrongUserId, reservationInfoToCancelRequest)).willReturn(0);
+
+            assertThrows(ReservationNumNotExistsException.class, () -> {
+                reservationService.cancelSeats(wrongUserId, reservationInfoToCancelRequest);
+            });
+
+            verify(reservationMapper, times(1)).getSeatNumToCancel(wrongUserId, reservationInfoToCancelRequest);
+            verify(seatService, times(0)).setSeatsCancel(reservationIds);
+            verify(reservationMapper, times(0)).cancelSeats(reservationIds);
         }
     }
 

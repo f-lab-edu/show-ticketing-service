@@ -46,7 +46,7 @@
         AND reserved = FALSE
     </select>
 
-    <update id="setReservedSeatsCancel" parameterType="java.util.List">
+    <update id="setSeatsCancel" parameterType="java.util.List">
         UPDATE seat
         SET reserved = FALSE
         WHERE id IN

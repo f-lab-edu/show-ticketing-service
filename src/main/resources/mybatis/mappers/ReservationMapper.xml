@@ -11,7 +11,7 @@
         </foreach>
     </insert>
 
-    <delete id="cancelReservedSeats" parameterType="java.util.List">
+    <delete id="cancelSeats" parameterType="map">
         DELETE FROM reservation
         WHERE id IN
         <foreach collection="reservationIds" item="reservationId" open="(" close=")" separator=",">
@@ -19,11 +19,17 @@
         </foreach>
     </delete>
 
-    <select id="getReservedSeatsNum" parameterType="java.util.List" resultType="int">
-        SELECT COUNT(id) FROM reservation WHERE id IN
-        <foreach collection="reservationIds" item="reservationId" open="(" close=")" separator=",">
+    <select id="getSeatNumToCancel" parameterType="map" resultType="int">
+        SELECT COUNT(r.id) FROM reservation r
+        INNER JOIN seat st ON st.id = r.seatId
+        INNER JOIN performanceTime pt ON st.perfTimeId = pt.id
+        WHERE r.id IN
+        <foreach collection="reservationInfo.reservationIds" item="reservationId" open="(" close=")" separator=",">
             #{reservationId}
         </foreach>
+        AND pt.id = #{reservationInfo.perfTimeId}
+        AND pt.performanceId = #{reservationInfo.performanceId}
+        AND r.userId = #{userId}
     </select>
 
 </mapper>

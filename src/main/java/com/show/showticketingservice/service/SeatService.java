@@ -30,7 +30,7 @@ public class SeatService {
         return seatMapper.getReservableSeatsNum(perfTimeId, seatIds);
     }
 
-    public void setReservedSeatsCancel(List<Integer> reservationIds) {
-        seatMapper.setReservedSeatsCancel(reservationIds);
+    public void setSeatsCancel(List<Integer> reservationIds) {
+        seatMapper.setSeatsCancel(reservationIds);
     }
 }
