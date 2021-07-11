@@ -16,12 +16,12 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
-import static com.show.showticketingservice.tool.constants.CacheConstant.MAIN_PERFORMANCE_LIST_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -287,28 +287,28 @@ public class PerformanceService {
       - ALL_TYPE_PERFORMANCE_LIST : 모든 타입의 공연을 선택했고 첫 번째 페이지를 제외한 경우
      */
     @Transactional
-    @Caching(cacheable = {
-            @Cacheable(
-                    cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST,
-                    condition = "#showType != null && #performancePagingCriteria.lastPerfId == null",
-                    key = "#showType.toString()"
-            ),
-            @Cacheable(
-                    cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST,
-                    condition = "#showType != null && #performancePagingCriteria.lastPerfId != null",
-                    key = "#showType.toString() + #performancePagingCriteria.lastPerfId"
-            ),
-            @Cacheable(
-                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
-                    condition = "#showType == null && #performancePagingCriteria.lastPerfId == null",
-                    key = MAIN_PERFORMANCE_LIST_KEY
-            ),
-            @Cacheable(
-                    cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST,
-                    condition = "#showType == null && #performancePagingCriteria.lastPerfId != null",
-                    key = "#performancePagingCriteria.lastPerfId"
-            )
-    })
+//    @Caching(cacheable = {
+//            @Cacheable(
+//                    cacheNames = CacheConstant.MAIN_TYPED_PERFORMANCE_LIST,
+//                    condition = "#showType != null && #performancePagingCriteria.lastPerfId == null",
+//                    key = "#showType.toString()"
+//            ),
+//            @Cacheable(
+//                    cacheNames = CacheConstant.PAGED_TYPED_PERFORMANCE_LIST,
+//                    condition = "#showType != null && #performancePagingCriteria.lastPerfId != null",
+//                    key = "#showType.toString() + #performancePagingCriteria.lastPerfId"
+//            ),
+//            @Cacheable(
+//                    cacheNames = CacheConstant.MAIN_PERFORMANCE_LIST,
+//                    condition = "#showType == null && #performancePagingCriteria.lastPerfId == null",
+//                    key = MAIN_PERFORMANCE_LIST_KEY
+//            ),
+//            @Cacheable(
+//                    cacheNames = CacheConstant.PAGED_PERFORMANCE_LIST,
+//                    condition = "#showType == null && #performancePagingCriteria.lastPerfId != null",
+//                    key = "#performancePagingCriteria.lastPerfId"
+//            )
+//    })
     public List<PerformanceResponse> getPerformances(ShowType showType, PerformancePagingCriteria performancePagingCriteria) {
         checkValidPerfIdAndShowType(showType, performancePagingCriteria.getLastPerfId());
         return performanceMapper.getPerformances(showType, performancePagingCriteria);
