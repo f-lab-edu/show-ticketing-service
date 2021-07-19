@@ -46,4 +46,18 @@
         AND reserved = FALSE
     </select>
 
+    <update id="setSeatsCancel" parameterType="java.util.List">
+        UPDATE seat
+        SET reserved = FALSE
+        WHERE id IN
+        (
+            SELECT seatId
+            FROM reservation
+            WHERE id IN
+            <foreach collection="reservationIds" item="reservationId" open="(" close=")" separator=", ">
+                #{reservationId}
+            </foreach>
+        )
+    </update>
+
 </mapper>
