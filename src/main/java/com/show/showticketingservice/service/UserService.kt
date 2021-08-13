@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@RequiredArgsConstructor
-class UserService {
+class UserService(
 
-    private val userMapper: UserMapper? = null
-    private val passwordEncryptor: PasswordEncryptor? = null
+        private val userMapper: UserMapper,
+        private val passwordEncryptor: PasswordEncryptor
+
+) {
 
     @Transactional
     fun signUp(userRequest: UserRequest) {
@@ -26,41 +27,46 @@ class UserService {
         insertUser(userRequest)
     }
 
-    fun insertUser(userRequest: UserRequest) {
-        userMapper!!.insertUser(userRequest.pwEncryptedUser(passwordEncryptor!!.encrypt(userRequest.password)))
+    private fun insertUser(userRequest: UserRequest) {
+        userMapper.insertUser(userRequest.pwEncryptedUser(passwordEncryptor.encrypt(userRequest.password)))
     }
 
     @Transactional(readOnly = true)
     fun checkIdExists(userId: String?) {
-        if (userMapper!!.isIdExists(userId)) {
+        if (userMapper.isIdExists(userId)) {
             throw UserIdAlreadyExistsException()
         }
     }
 
     fun getUser(userIdRequest: String?, passwordRequest: String): UserResponse {
-        val userResponse = userMapper!!.getUserByUserId(userIdRequest) ?: throw UserIdNotExistsException()
+        val userResponse = userMapper.getUserByUserId(userIdRequest) ?: throw UserIdNotExistsException()
+
         if (!isPasswordMatches(passwordRequest, userResponse.password)) {
             throw UserPasswordWrongException()
         }
+
         return userResponse
     }
 
     private fun isPasswordMatches(passwordRequest: String, userPassword: String): Boolean {
-        return passwordEncryptor!!.isMatched(passwordRequest, userPassword)
+        return passwordEncryptor.isMatched(passwordRequest, userPassword)
     }
 
     @Transactional
     fun deleteUser(userSession: UserSession, passwordRequest: String) {
-        val hashPassword = userMapper!!.getUserPasswordById(userSession.userId)
+        val hashPassword = userMapper.getUserPasswordById(userSession.userId)
+
         if (!isPasswordMatches(passwordRequest, hashPassword)) {
             throw UserPasswordWrongException()
         }
+
         userMapper.deleteUserById(userSession.userId)
     }
 
     @Transactional
     fun updateUserInfo(userSession: UserSession, userUpdateRequest: UserUpdateRequest) {
-        val newEncryptedPassword = passwordEncryptor!!.encrypt(userUpdateRequest.newPassword)
-        userMapper!!.updateUserInfo(userSession.userId, userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword))
+        val newEncryptedPassword = passwordEncryptor.encrypt(userUpdateRequest.newPassword)
+        userMapper.updateUserInfo(userSession.userId, userUpdateRequest.pwEncryptedUserUpdateRequest(newEncryptedPassword))
     }
+
 }
