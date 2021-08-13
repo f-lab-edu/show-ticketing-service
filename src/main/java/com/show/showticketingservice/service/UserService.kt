@@ -9,7 +9,6 @@ import com.show.showticketingservice.model.user.UserResponse
 import com.show.showticketingservice.model.user.UserSession
 import com.show.showticketingservice.model.user.UserUpdateRequest
 import com.show.showticketingservice.tool.encryptor.PasswordEncryptor
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
