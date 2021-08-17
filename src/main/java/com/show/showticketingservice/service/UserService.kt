@@ -31,13 +31,13 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun checkIdExists(userId: String?) {
+    fun checkIdExists(userId: String) {
         if (userMapper.isIdExists(userId)) {
             throw UserIdAlreadyExistsException()
         }
     }
 
-    fun getUser(userIdRequest: String?, passwordRequest: String): UserResponse {
+    fun getUser(userIdRequest: String, passwordRequest: String): UserResponse {
         val userResponse = userMapper.getUserByUserId(userIdRequest) ?: throw UserIdNotExistsException()
 
         if (!isPasswordMatches(passwordRequest, userResponse.password)) {
