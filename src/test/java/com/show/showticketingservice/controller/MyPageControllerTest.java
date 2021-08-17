@@ -144,11 +144,7 @@ class MyPageControllerTest {
         insertUser(testUser);
         loginUser(testUser);
 
-        UserUpdateRequest invalidRequest = UserUpdateRequest.builder()
-                .newPassword("invalidPw")
-                .newPhoneNum(updateRequest.getNewPhoneNum())
-                .newAddress(updateRequest.getNewAddress())
-                .build();
+        UserUpdateRequest invalidRequest = new UserUpdateRequest("invalidPw", updateRequest.getNewPhoneNum(), updateRequest.getNewAddress());
 
         String content = objectMapper.writeValueAsString(invalidRequest);
 
@@ -167,11 +163,7 @@ class MyPageControllerTest {
         insertUser(testUser);
         loginUser(testUser);
 
-        UserUpdateRequest invalidRequest = UserUpdateRequest.builder()
-                .newPassword(updateRequest.getNewPassword())
-                .newPhoneNum("010123-456")
-                .newAddress(updateRequest.getNewAddress())
-                .build();
+        UserUpdateRequest invalidRequest = new UserUpdateRequest(updateRequest.getNewPassword(), "010123-456", updateRequest.getNewAddress());
 
         String content = objectMapper.writeValueAsString(invalidRequest);
 

@@ -2,7 +2,7 @@ package com.show.showticketingservice.model.user
 
 import com.show.showticketingservice.model.enumerations.UserType
 
-class UserResponse(
+data class UserResponse(
 
         val id: Int,
 
