@@ -37,10 +37,10 @@ class UserService(
         }
     }
 
-    fun getUser(userIdRequest: String, passwordRequest: String): UserResponse {
-        val userResponse = userMapper.getUserByUserId(userIdRequest) ?: throw UserIdNotExistsException()
+    fun getUser(userId: String, password: String): UserResponse {
+        val userResponse = userMapper.getUserByUserId(userId) ?: throw UserIdNotExistsException()
 
-        if (!isPasswordMatches(passwordRequest, userResponse.password)) {
+        if (!isPasswordMatches(password, userResponse.password)) {
             throw UserPasswordWrongException()
         }
 
